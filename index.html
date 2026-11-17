@@ -943,7 +943,7 @@
       min-width: 0;
     }
     .guardia-drawer-content {
-      padding: 7px 6px;
+      padding: 6px 4px;
       display: flex;
       flex-direction: column;
       gap: 6px;
@@ -957,20 +957,21 @@
       flex-wrap: wrap;
       align-items: center;
       justify-content: space-between;
-      gap: 4px;
-      font-size: 10px;
+      gap: 3px;
+      font-size: 9.5px;
       font-weight: 800;
       color: var(--accent-cyan);
+      padding: 0 2px;
     }
 
-    /* Fila compacta dentro de la propia columna del día */
+    /* Fila compacta dentro de la propia columna del día: nombre completo arriba, nota y botones debajo */
     .inline-guardia-row {
       display: flex;
       flex-direction: column;
       align-items: stretch;
       gap: 4px;
-      padding: 6px;
-      border-radius: 9px;
+      padding: 5px;
+      border-radius: 8px;
       background: var(--bg-expanded-slot);
       border: 1px solid var(--border-subtle);
       min-width: 0;
@@ -983,53 +984,56 @@
     .inline-guardia-person-bar {
       display: flex;
       align-items: center;
-      justify-content: space-between;
       gap: 4px;
+      width: 100%;
       min-width: 0;
     }
-    .inline-guardia-person {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      min-width: 0;
-      flex: 1;
-    }
-    .inline-guardia-person strong {
-      font-size: 11px;
+    .inline-guardia-person-bar strong {
+      font-size: 10.5px;
+      font-weight: 800;
+      line-height: 1.2;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      min-width: 0;
+      flex: 1;
     }
     @media (min-width: 768px) {
-      .inline-guardia-person strong { font-size: 11.5px; }
+      .inline-guardia-person-bar strong { font-size: 11.5px; }
     }
     .inline-guardia-note-wrap {
       display: flex;
-      flex-wrap: wrap;
-      align-items: center;
+      flex-direction: column;
+      align-items: stretch;
       gap: 4px;
       width: 100%;
       min-width: 0;
     }
     .inline-guardia-input {
-      padding: 4px 6px !important;
-      font-size: 10.5px !important;
-      border-radius: 7px !important;
-      flex: 1 1 68px;
+      padding: 4px 5px !important;
+      font-size: 10px !important;
+      border-radius: 6px !important;
       min-width: 0;
+      width: 100%;
+    }
+    .inline-guardia-actions-row {
+      display: flex;
+      align-items: center;
+      gap: 4px;
       width: 100%;
     }
     .inline-guardia-save-btn {
       background: linear-gradient(135deg, #10b981, #0891b2);
       border: none;
       color: #ffffff;
-      font-size: 10px;
+      font-size: 9.5px;
       font-weight: 800;
-      padding: 4px 7px;
-      border-radius: 7px;
+      padding: 4px 4px;
+      border-radius: 6px;
       cursor: pointer;
       white-space: nowrap;
-      flex: 1 0 auto;
+      flex: 1;
+      min-width: 0;
       text-align: center;
       transition: transform 0.14s ease, opacity 0.2s ease;
     }
@@ -1043,8 +1047,8 @@
       background: rgba(244, 63, 94, 0.12);
       border: 1px solid rgba(244, 63, 94, 0.35);
       color: var(--accent-rose);
-      width: 19px;
-      height: 19px;
+      width: 21px;
+      height: 21px;
       border-radius: 6px;
       font-size: 10px;
       font-weight: 800;
@@ -5203,17 +5207,9 @@
           const btnId   = `guard-save-${wIdx}-${dIdx}-${mIdx}`;
           return `
             <div class="inline-guardia-row">
-              <div class="inline-guardia-person-bar">
-                <div class="inline-guardia-person">
-                  <span class="dot-sm" style="background:#06b6d4; flex-shrink:0;"></span>
-                  <strong style="color:var(--text-strong);">${escapeHtml(m.name)}</strong>
-                </div>
-                <button
-                  type="button"
-                  onclick="removeInlineGuardMember(${wIdx}, ${dIdx}, ${mIdx})"
-                  class="inline-guardia-del-btn"
-                  title="Quitar de guardia"
-                >✕</button>
+              <div class="inline-guardia-person-bar" title="${escapeHtml(m.name)}">
+                <span class="dot-sm" style="background:#06b6d4; flex-shrink:0;"></span>
+                <strong style="color:var(--text-strong);">${escapeHtml(m.name)}</strong>
               </div>
               <div class="inline-guardia-note-wrap">
                 <input
@@ -5224,12 +5220,20 @@
                   placeholder="Nota..."
                   onkeydown="if(event.key==='Enter'){ event.preventDefault(); saveGuardMemberNote(${wIdx}, ${dIdx}, ${mIdx}); }"
                 />
-                <button
-                  id="${btnId}"
-                  type="button"
-                  onclick="saveGuardMemberNote(${wIdx}, ${dIdx}, ${mIdx})"
-                  class="inline-guardia-save-btn"
-                >Guardar</button>
+                <div class="inline-guardia-actions-row">
+                  <button
+                    id="${btnId}"
+                    type="button"
+                    onclick="saveGuardMemberNote(${wIdx}, ${dIdx}, ${mIdx})"
+                    class="inline-guardia-save-btn"
+                  >Guardar</button>
+                  <button
+                    type="button"
+                    onclick="removeInlineGuardMember(${wIdx}, ${dIdx}, ${mIdx})"
+                    class="inline-guardia-del-btn"
+                    title="Quitar de guardia"
+                  >✕</button>
+                </div>
               </div>
             </div>
           `;
