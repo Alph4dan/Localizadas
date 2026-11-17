@@ -5541,6 +5541,7 @@
           auditLogs: [],
           dbSnapshots: []
         });
+        recordSnapshot('Estado inicial cargado (Ene–Mar 2026)', 'Sistema');
         await writeToIndexedDB(buildCurrentStatePayload());
       }
 
@@ -5755,8 +5756,7 @@
       const cfg = getCloudConfig();
       const docClone = document.documentElement.outerHTML;
       const cfgReplacement = `const DEFAULT_CLOUD_CONFIG = ${JSON.stringify(cfg, null, 6)};`;
-      const updatedSource = '<!DOCTYPE html>
-' + docClone.replace(
+      const updatedSource = '<!DOCTYPE html>\n' + docClone.replace(
         /const DEFAULT_CLOUD_CONFIG = \{[\s\S]*?\};/,
         cfgReplacement
       );
