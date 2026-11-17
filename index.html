@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <meta id="meta-theme-color" name="theme-color" content="#eef3f9" />
   <title>Localizadas Trasplante · Anestesiología</title>
-  <style>
+<style>
     :root, [data-theme="dark"] {
       --bg-deep: #060d18;
       --bg-surface: #0c1729;
@@ -1390,6 +1390,128 @@
     }
 
     .hidden { display: none !important; }
+
+    /* === BADGES DE ESTADO CLOUD DB, USUARIOS INHABILITADOS Y SNAPSHOTS === */
+    .db-status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      border: 1px solid var(--border-glass);
+      background: var(--bg-sub);
+      color: var(--text-sub);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .db-status-pill:hover {
+      border-color: var(--accent-cyan);
+      color: var(--text-strong);
+    }
+    .db-status-pill.cloud-ok {
+      background: rgba(16, 185, 129, 0.14);
+      border-color: rgba(16, 185, 129, 0.4);
+      color: var(--accent-emerald);
+    }
+    .db-status-pill.syncing {
+      background: rgba(6, 182, 212, 0.16);
+      border-color: rgba(6, 182, 212, 0.45);
+      color: var(--accent-cyan);
+    }
+
+    .compact-name.inactive-doc {
+      border-left-color: #f43f5e;
+      background: rgba(244, 63, 94, 0.12);
+      color: var(--accent-rose);
+      text-decoration: line-through;
+    }
+
+    .doc-card.inactive-user {
+      opacity: 0.76;
+      border-color: rgba(244, 63, 94, 0.35);
+      background: var(--bg-sub);
+    }
+
+    .status-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 10.5px;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 999px;
+    }
+    .status-chip.active {
+      background: rgba(16, 185, 129, 0.16);
+      color: var(--accent-emerald);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+    }
+    .status-chip.inactive {
+      background: rgba(244, 63, 94, 0.15);
+      color: var(--accent-rose);
+      border: 1px solid rgba(244, 63, 94, 0.35);
+    }
+
+    .user-admin-row {
+      background: var(--bg-doc-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      padding: 11px 13px;
+      margin-bottom: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    @media (min-width: 640px) {
+      .user-admin-row {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+      }
+    }
+    .user-admin-row.is-disabled {
+      border-color: rgba(244, 63, 94, 0.35);
+      background: rgba(244, 63, 94, 0.04);
+    }
+
+    .snapshot-row {
+      background: var(--bg-doc-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      padding: 11px 13px;
+      margin-bottom: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    @media (min-width: 640px) {
+      .snapshot-row {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+      }
+    }
+
+    .admin-form-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+    @media (min-width: 640px) {
+      .admin-form-grid {
+        grid-template-columns: 2fr 1fr 1fr auto;
+        align-items: end;
+      }
+    }
+
+    .drop-zone.drag-over {
+      border-color: #10b981;
+      background: rgba(16, 185, 129, 0.12);
+      transform: scale(1.01);
+    }
+
   </style>
 </head>
 <body>
@@ -1407,14 +1529,20 @@
   <!-- CONTENEDOR PRINCIPAL -->
   <div class="app-shell">
 
-    <!-- CABECERA PARALLAX HERO + TOGGLE MODO OSCURO/CLARO + NAVEGACIÓN DE MESES -->
+    <!-- CABECERA PARALLAX HERO + ESTADO BD + TOGGLE MODO OSCURO/CLARO + NAVEGACIÓN DE MESES -->
     <header id="hero-header" class="glass-panel">
       <div class="hero-top">
         <div style="flex:1;">
           <div class="hero-title-row">
-            <div class="pill-badge">
-              <span class="pulse-dot"></span>
-              Anestesiología · Trasplantes
+            <div style="display:flex; flex-wrap:wrap; align-items:center; gap:6px;">
+              <div class="pill-badge" style="margin-bottom:0;">
+                <span class="pulse-dot"></span>
+                Anestesiología · Trasplantes
+              </div>
+              <button type="button" id="db-status-pill" onclick="manualSyncNow()" class="db-status-pill" title="Estado de sincronización de base de datos (pulsa para sincronizar)">
+                <span id="db-status-icon">💾</span>
+                <span id="db-status-text">BD Local</span>
+              </button>
             </div>
 
             <!-- Toggle Modo Oscuro / Claro -->
@@ -1424,7 +1552,7 @@
               <span id="theme-label">Claro</span>
             </button>
           </div>
-          <h1>Localizadas <span class="gradient-text">Trasplante</span></h1>
+          <h1 style="margin-top:6px;">Localizadas <span class="gradient-text">Trasplante</span></h1>
           <p class="hero-sub">
             Toca las localizadas de un día para cambiar turnos o pulsa <strong>+</strong> en <strong>Guardia</strong> para ver y anotar quién está de guardia.
           </p>
@@ -1433,7 +1561,7 @@
         <!-- Navegación Desktop -->
         <nav class="desk-nav">
           <button onclick="switchTab('calendario')" id="nav-desk-calendario" class="nav-btn active">📅 Calendario</button>
-          <button onclick="switchTab('equipo')" id="nav-desk-equipo" class="nav-btn">🩺 Equipo (14)</button>
+          <button onclick="switchTab('equipo')" id="nav-desk-equipo" class="nav-btn">🩺 Equipo (<span id="nav-team-count-desk">14</span>)</button>
           <button onclick="switchTab('admin')" id="nav-desk-admin" class="nav-btn">
             🔐 Admin <span id="badge-changes-desk" class="count-pill mono">0</span>
           </button>
@@ -1461,12 +1589,12 @@
           <div id="stat-period" class="stat-val">4-ene ➔ 28-mar</div>
         </div>
         <div class="stat-box">
-          <div class="stat-label">Plantilla</div>
-          <div class="stat-val text-emerald mono">14 / 14 Médicos</div>
+          <div class="stat-label">Plantilla Activa</div>
+          <div id="stat-team-active" class="stat-val text-emerald mono">14 / 14 Activos</div>
         </div>
         <div class="stat-box">
-          <div class="stat-label">Cambios</div>
-          <div class="stat-val text-cyan mono"><span id="stat-changes">0</span> reg.</div>
+          <div class="stat-label">Cambios / Versiones</div>
+          <div class="stat-val text-cyan mono"><span id="stat-changes">0</span> reg. · <span id="stat-snapshots">0</span> ptos</div>
         </div>
       </div>
     </header>
@@ -1506,8 +1634,9 @@
 
         <div class="legend-bar">
           <div class="legend-items">
-            <span class="legend-item"><span class="dot-sm" style="background:#10b981;"></span> Verificado</span>
+            <span class="legend-item"><span class="dot-sm" style="background:#10b981;"></span> Activo</span>
             <span class="legend-item"><span class="dot-sm" style="background:#f59e0b;"></span> Modificado</span>
+            <span class="legend-item"><span class="dot-sm" style="background:#f43f5e;"></span> De baja / Inhabilitado</span>
             <span class="legend-item">➕ Pulsa <strong>+</strong> bajo cada día para abrir <strong>Guardia</strong></span>
           </div>
           <button onclick="resetFilters()" id="btn-reset-filters" class="link-btn hidden">Limpiar filtros</button>
@@ -1516,6 +1645,7 @@
 
       <!-- Contenedor Dinámico de Semanas Compactas -->
       <div id="calendar-container">
+
 
       <section class="week-block">
         <div class="week-header">
@@ -4132,11 +4262,12 @@
         </div>
       </section>
     
+
       </div>
     </main>
 
     <!-- =================================================================== -->
-    <!-- PESTAÑA 2: EQUIPO DE TRASPLANTES (14 ANESTESISTAS)                  -->
+    <!-- PESTAÑA 2: EQUIPO DE TRASPLANTES                                    -->
     <!-- =================================================================== -->
     <section id="view-equipo" class="hidden">
       <div class="glass-panel">
@@ -4144,12 +4275,13 @@
           <div>
             <h2 style="font-size:18px; font-weight:800; color:var(--text-strong);">Plantilla Oficial · Grupo de Trasplantes</h2>
             <p style="font-size:12.5px; color:var(--text-muted); margin-top:3px;">
-              Lista cerrada de 14 anestesistas autorizados para cubrir los 4 puestos de localizada y recuento dinámico en tiempo real.
+              Médicos habilitados para cubrir las localizadas y guardias, con recuento actualizado en tiempo real.
             </p>
           </div>
-          <span class="pill-badge" style="margin:0;">✓ Verificación estricta activa</span>
+          <span id="team-active-pill" class="pill-badge" style="margin:0;">✓ 14 médicos activos</span>
         </div>
         <div id="doctors-grid" class="team-grid">
+
 
 
 
@@ -4574,12 +4706,13 @@
     
 
 
+
         </div>
       </div>
     </section>
 
     <!-- =================================================================== -->
-    <!-- PESTAÑA 3: ZONA DE ADMINISTRADOR CON USUARIO Y CONTRASEÑA           -->
+    <!-- PESTAÑA 3: ZONA DE ADMINISTRADOR (BD CLOUD, EXCEL, USUARIOS, RESTORE)-->
     <!-- =================================================================== -->
     <section id="view-admin" class="hidden">
 
@@ -4589,7 +4722,7 @@
           <div style="font-size:34px; margin-bottom:8px;">🔐</div>
           <h2 style="font-size:19px; font-weight:800; color:var(--text-strong);">Zona de Administrador</h2>
           <p style="font-size:12px; color:var(--text-muted); margin-top:4px; margin-bottom:16px;">
-            Introduce usuario y contraseña para subir archivos Excel futuros, actualizar turnos o revisar el registro de auditoría.
+            Introduce usuario y contraseña para subir nuevos Excel, gestionar usuarios (altas/bajas), configurar la base de datos o restaurar versiones anteriores.
           </p>
 
           <form onsubmit="handleAdminLogin(event)" style="text-align:left;">
@@ -4622,10 +4755,10 @@
             <span class="dot-sm" style="background:#10b981; width:9px; height:9px;"></span>
             <div>
               <strong style="font-size:13.5px; color:var(--text-strong);">Sesión de Administrador Activa</strong>
-              <div style="font-size:11px; color:var(--text-muted);">Gestión de archivos Excel y auditoría del servicio</div>
+              <div style="font-size:11px; color:var(--text-muted);">Gestión integral de Excel, Base de Datos, Usuarios y Restauración</div>
             </div>
           </div>
-          <div style="display:flex; gap:8px;">
+          <div style="display:flex; flex-wrap:wrap; gap:8px;">
             <button onclick="toggleChangePassBox()" class="btn-mini">🔑 Cambiar clave</button>
             <button onclick="logoutAdmin()" class="btn-danger-sm">Cerrar sesión</button>
           </div>
@@ -4650,47 +4783,198 @@
           </div>
         </div>
 
-        <!-- Subida Dinámica de Excel -->
+        <!-- 1. SUBIDA DINÁMICA DE MÚLTIPLES ARCHIVOS EXCEL -->
         <div class="glass-panel">
           <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:10px;">
             <div>
-              <h2 style="font-size:18px; font-weight:800; color:var(--text-strong);">📤 Subir Archivo Excel (.xlsx / .xls)</h2>
+              <h2 style="font-size:18px; font-weight:800; color:var(--text-strong);">📤 Añadir Documentos Excel (.xlsx / .xls)</h2>
               <p style="font-size:12.5px; color:var(--text-muted); margin-top:3px;">
-                Lee dinámicamente cualquier Excel futuro o modificado (detectando automáticamente columnas, celdas combinadas, fechas, grupos de guardia y nuevos meses).
+                Sube uno o varios archivos Excel de nuevos trimestres/meses. Se leen de forma dinámica (todas las hojas, celdas combinadas, fechas y nombres) y se <strong>añaden a los datos ya existentes</strong>.
               </p>
             </div>
-            <button onclick="exportCurrentToExcel()" class="btn-primary-sm">📥 Exportar Excel Actualizado</button>
+            <button onclick="exportCurrentToExcel()" class="btn-primary-sm">📥 Exportar Todo a Excel</button>
           </div>
 
-          <label for="excel-upload" class="drop-zone">
+          <label id="excel-drop-zone" for="excel-upload" class="drop-zone">
             <div style="font-size:28px; margin-bottom:6px;">📊</div>
-            <div style="font-size:14px; font-weight:800; color:var(--text-strong);">Pulsa aquí o arrastra tu archivo Excel</div>
-            <div style="font-size:11.5px; color:var(--text-muted); margin-top:4px;">Soporta cuadrantes nuevos (Abril, Mayo, Junio...) o un trimestre actual modificado</div>
-            <input id="excel-upload" type="file" accept=".xlsx,.xls,.csv" class="hidden" onchange="handleExcelUpload(event)" />
+            <div style="font-size:14px; font-weight:800; color:var(--text-strong);">Pulsa aquí o arrastra uno o varios archivos Excel</div>
+            <div style="font-size:11.5px; color:var(--text-muted); margin-top:4px;">Añade Abril–Junio, Julio–Septiembre, Octubre–Diciembre o actualizaciones sin perder lo anterior</div>
+            <input id="excel-upload" type="file" accept=".xlsx,.xls,.csv" multiple class="hidden" onchange="handleExcelUpload(event)" />
           </label>
 
           <div class="radio-row">
             <label class="radio-label">
               <input type="radio" name="import-mode" value="merge" checked />
-              <span><strong>Ampliar / Actualizar calendario</strong> (añade meses futuros y actualiza semanas existentes)</span>
+              <span><strong>Añadir a los datos existentes</strong> (conserva los meses actuales y suma/actualiza las semanas nuevas)</span>
             </label>
             <label class="radio-label">
               <input type="radio" name="import-mode" value="replace" />
-              <span><strong>Reemplazar todo</strong> (sustituye el calendario completo por este archivo)</span>
+              <span><strong>Reemplazar calendario completo</strong> (crea antes un punto de restauración automático)</span>
             </label>
           </div>
 
           <div id="upload-report" class="hidden" style="margin-top:14px; padding:12px; border-radius:14px; background:rgba(16,185,129,0.12); border:1px solid rgba(16,185,129,0.35); font-size:12.5px;"></div>
         </div>
 
-        <!-- Registro de Auditoría -->
+        <!-- 2. GESTIÓN DE USUARIOS (AÑADIR, EDITAR, INHABILITAR POR BAJA) -->
+        <div class="glass-panel">
+          <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:10px; margin-bottom:12px;">
+            <div>
+              <h2 style="font-size:18px; font-weight:800; color:var(--text-strong);">🩺 Gestión de Usuarios (Anestesistas de Trasplante)</h2>
+              <p style="font-size:12.5px; color:var(--text-muted); margin-top:2px;">
+                Añade nuevos médicos manualmente, modifica su grupo o <strong>inhabilita temporalmente</strong> a quien esté de baja para que no aparezca en los desplegables de cambios.
+              </p>
+            </div>
+            <span id="admin-users-summary" class="status-chip active">14 activos · 0 inhabilitados</span>
+          </div>
+
+          <!-- Formulario para añadir nuevo usuario manualmente -->
+          <div style="background:var(--bg-sub); border:1px solid var(--border-subtle); border-radius:14px; padding:12px; margin-bottom:14px;">
+            <div style="font-size:12.5px; font-weight:800; color:var(--text-strong); margin-bottom:8px;">➕ Añadir nuevo médico al grupo</div>
+            <div class="admin-form-grid">
+              <div>
+                <label class="field-label" style="margin-bottom:3px;">Nombre (ej. M. Pérez)</label>
+                <input id="new-doc-name" type="text" placeholder="Ej. M. Pérez" />
+              </div>
+              <div>
+                <label class="field-label" style="margin-bottom:3px;">Grupo Laboral</label>
+                <select id="new-doc-gl">
+                  <option value="A">Grupo A</option>
+                  <option value="B">Grupo B</option>
+                  <option value="C">Grupo C</option>
+                  <option value="D">Grupo D</option>
+                </select>
+              </div>
+              <div>
+                <label class="field-label" style="margin-bottom:3px;">Grupo Guardia</label>
+                <select id="new-doc-gg">
+                  <option value="1">Guardia #1</option>
+                  <option value="2">Guardia #2</option>
+                  <option value="3">Guardia #3</option>
+                  <option value="4">Guardia #4</option>
+                  <option value="5">Guardia #5</option>
+                  <option value="6">Guardia #6</option>
+                  <option value="7">Guardia #7</option>
+                  <option value="8">Guardia #8</option>
+                  <option value="9">Guardia #9</option>
+                  <option value="Sin grupo" selected>Sin grupo</option>
+                  <option value="Sin guardias">Sin guardias</option>
+                </select>
+              </div>
+              <div>
+                <button type="button" onclick="addNewDoctorUser()" class="btn-save" style="width:100%; padding:9px 14px; font-size:12.5px;">
+                  + Añadir Usuario
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Lista de usuarios existentes con opciones de Editar / Inhabilitar / Eliminar -->
+          <div id="admin-users-list"></div>
+        </div>
+
+        <!-- 3. BASE DE DATOS EN LA NUBE (VERCEL + FIREBASE / SUPABASE / UPSTASH) -->
+        <div class="glass-panel">
+          <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:10px; margin-bottom:10px;">
+            <div>
+              <h2 style="font-size:18px; font-weight:800; color:var(--text-strong);">☁️ Base de Datos Compartida (GitHub + Vercel)</h2>
+              <p style="font-size:12.5px; color:var(--text-muted); margin-top:2px;">
+                Conecta una base de datos gratuita en la nube para que todos los móviles compartan los mismos datos, Excel subidos y cambios en tiempo real.
+              </p>
+            </div>
+            <span id="cloud-db-badge" class="status-chip inactive">💾 Solo local (IndexedDB)</span>
+          </div>
+
+          <div style="background:var(--bg-sub); border:1px solid var(--border-subtle); border-radius:14px; padding:12px;">
+            <div style="display:grid; grid-template-columns:1fr; gap:8px;">
+              <div>
+                <label class="field-label">Proveedor de Base de Datos Cloud</label>
+                <select id="cloud-provider-select" onchange="onCloudProviderChange()">
+                  <option value="local">💾 Solo Local (IndexedDB en este navegador)</option>
+                  <option value="firebase">🔥 Firebase Realtime Database (URL directa — Recomendado)</option>
+                  <option value="supabase">⚡ Supabase (Integración oficial Vercel Storage)</option>
+                  <option value="upstash">🚀 Vercel KV / Upstash Redis (REST API)</option>
+                </select>
+              </div>
+
+              <div id="cloud-fields-firebase" class="hidden" style="margin-top:8px;">
+                <label class="field-label">URL de Firebase Realtime Database</label>
+                <input id="cloud-firebase-url" type="text" placeholder="https://tu-proyecto-default-rtdb.europe-west1.firebasedatabase.app" />
+                <p style="font-size:11px; color:var(--text-muted); margin-top:4px;">
+                  Crea un proyecto gratis en <strong>console.firebase.google.com</strong> → Realtime Database → Copia la URL y pega aquí.
+                </p>
+              </div>
+
+              <div id="cloud-fields-supabase" class="hidden" style="margin-top:8px; display:flex; flex-direction:column; gap:8px;">
+                <div>
+                  <label class="field-label">Supabase Project URL</label>
+                  <input id="cloud-supabase-url" type="text" placeholder="https://xyzcompany.supabase.co" />
+                </div>
+                <div>
+                  <label class="field-label">Supabase Anon Public Key</label>
+                  <input id="cloud-supabase-key" type="text" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6..." />
+                </div>
+                <p style="font-size:11px; color:var(--text-muted);">
+                  En Vercel → <strong>Storage → Create Database → Supabase</strong>. Crea una tabla <code>trasplante_db</code> con columnas <code>id</code> (text, primary key) y <code>payload</code> (jsonb).
+                </p>
+              </div>
+
+              <div id="cloud-fields-upstash" class="hidden" style="margin-top:8px; display:flex; flex-direction:column; gap:8px;">
+                <div>
+                  <label class="field-label">UPSTASH_REDIS_REST_URL (Vercel Storage)</label>
+                  <input id="cloud-upstash-url" type="text" placeholder="https://eu1-xxx.upstash.io" />
+                </div>
+                <div>
+                  <label class="field-label">UPSTASH_REDIS_REST_TOKEN</label>
+                  <input id="cloud-upstash-token" type="password" placeholder="AXxxxxxxxxxxxx" />
+                </div>
+              </div>
+            </div>
+
+            <div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:12px;">
+              <button type="button" onclick="saveCloudConfigAndSync()" class="btn-save" style="padding:9px 14px; font-size:12px;">
+                ☁️ Guardar y Sincronizar Base de Datos
+              </button>
+              <button type="button" onclick="downloadConfiguredHtmlForVercel()" class="btn-primary-sm">
+                📦 Descargar index.html listo para GitHub/Vercel
+              </button>
+            </div>
+            <p style="font-size:11px; color:var(--text-muted); margin-top:8px;">
+              💡 <strong>Truco para Vercel:</strong> Tras guardar la URL de tu base de datos aquí, pulsa <em>"Descargar index.html listo para GitHub/Vercel"</em> y súbelo a tu repositorio. Así todos tus compañeros se conectarán automáticamente sin configurar nada.
+            </p>
+          </div>
+        </div>
+
+        <!-- 4. PUNTOS DE RESTAURACIÓN EN BASE DE DATOS (HISTORIAL DE VERSIONES) -->
+        <div class="glass-panel">
+          <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:10px; margin-bottom:12px;">
+            <div>
+              <h2 style="font-size:18px; font-weight:800; color:var(--text-strong);">⏪ Puntos de Restauración (Versiones en BD)</h2>
+              <p style="font-size:12.5px; color:var(--text-muted); margin-top:2px;">
+                Cada cambio realizado por los usuarios o subida de Excel guarda una copia automática en la base de datos para poder volver atrás en cualquier momento.
+              </p>
+            </div>
+            <div style="display:flex; flex-wrap:wrap; gap:6px;">
+              <button type="button" onclick="createManualSnapshot()" class="btn-primary-sm">💾 Guardar punto ahora</button>
+              <button type="button" onclick="exportFullJsonBackup()" class="btn-mini">⬇ Backup .JSON</button>
+              <label class="btn-mini" style="cursor:pointer;">
+                ⬆ Cargar .JSON
+                <input type="file" accept=".json" class="hidden" onchange="importFullJsonBackup(event)" />
+              </label>
+            </div>
+          </div>
+
+          <div id="snapshots-list-container"></div>
+        </div>
+
+        <!-- 5. REGISTRO DE AUDITORÍA DE MOVIMIENTOS -->
         <div class="glass-panel">
           <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:10px; margin-bottom:14px;">
             <div>
-              <h2 style="font-size:18px; font-weight:800; color:var(--text-strong);">📋 Registro de Cambios (Auditoría)</h2>
-              <p style="font-size:12.5px; color:var(--text-muted); margin-top:2px;">Historial completo de modificaciones realizadas en las localizadas y guardias.</p>
+              <h2 style="font-size:18px; font-weight:800; color:var(--text-strong);">📋 Registro Detallado de Cambios (Auditoría)</h2>
+              <p style="font-size:12.5px; color:var(--text-muted); margin-top:2px;">Historial cronológico de todos los movimientos realizados por los usuarios.</p>
             </div>
-            <button onclick="restoreInitialData()" class="btn-danger-sm">Restaurar datos originales</button>
+            <button onclick="restoreInitialData()" class="btn-danger-sm">Restaurar datos originales de fábrica</button>
           </div>
           <div id="audit-log-container"></div>
         </div>
@@ -4710,7 +4994,7 @@
     </button>
     <button onclick="switchTab('equipo')" id="nav-mob-equipo" class="mob-btn">
       <span style="font-size:18px;">🩺</span>
-      <span>Equipo (14)</span>
+      <span>Equipo (<span id="nav-team-count-mob">14</span>)</span>
     </button>
     <button onclick="switchTab('admin')" id="nav-mob-admin" class="mob-btn">
       <span style="font-size:18px;">🔐</span>
@@ -4744,7 +5028,7 @@
         </div>
 
         <div class="field-group">
-          <label for="modal-new-doctor" class="field-label">Sustituir por (Grupo Trasplante) <span style="color:var(--accent-rose);">*</span></label>
+          <label for="modal-new-doctor" class="field-label">Sustituir por (Médicos Activos) <span style="color:var(--accent-rose);">*</span></label>
           <select id="modal-new-doctor"></select>
           <p id="modal-duplicate-warning" class="hidden" style="font-size:11px; color:var(--accent-amber); margin-top:4px;">
             ⚠️ Este médico ya está asignado en otro puesto este mismo día.
@@ -4781,18 +5065,96 @@
   </div>
 
   <!-- ===================================================================== -->
-  <!-- JAVASCRIPT DE APLICACIÓN, GUARDIA INLINE CON "+", TEMA Y EXCEL        -->
+  <!-- MODAL EDITAR USUARIO (PANEL ADMIN)                                    -->
+  <!-- ===================================================================== -->
+  <div id="edit-user-modal" class="modal-backdrop hidden" onclick="if(event.target===this) closeEditUserModal()">
+    <div class="modal-box">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;">
+        <div>
+          <h3 style="font-size:19px; font-weight:800; color:var(--text-strong);">✏️ Modificar Usuario</h3>
+          <p style="font-size:12px; color:var(--text-muted);">Actualiza los datos, grupo o disponibilidad del facultativo</p>
+        </div>
+        <button onclick="closeEditUserModal()" class="icon-btn" style="width:34px; height:34px;">✕</button>
+      </div>
+
+      <div class="field-group">
+        <label for="edit-doc-name" class="field-label">Nombre del médico</label>
+        <input id="edit-doc-name" type="text" />
+      </div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:11px;">
+        <div>
+          <label for="edit-doc-gl" class="field-label">Grupo Laboral</label>
+          <select id="edit-doc-gl">
+            <option value="A">Grupo A</option>
+            <option value="B">Grupo B</option>
+            <option value="C">Grupo C</option>
+            <option value="D">Grupo D</option>
+          </select>
+        </div>
+        <div>
+          <label for="edit-doc-gg" class="field-label">Grupo Guardia</label>
+          <select id="edit-doc-gg">
+            <option value="1">Guardia #1</option>
+            <option value="2">Guardia #2</option>
+            <option value="3">Guardia #3</option>
+            <option value="4">Guardia #4</option>
+            <option value="5">Guardia #5</option>
+            <option value="6">Guardia #6</option>
+            <option value="7">Guardia #7</option>
+            <option value="8">Guardia #8</option>
+            <option value="9">Guardia #9</option>
+            <option value="Sin grupo">Sin grupo</option>
+            <option value="Sin guardias">Sin guardias</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label class="weekend-sync-box" style="margin-top:4px;">
+          <input type="checkbox" id="edit-doc-active" style="width:16px; height:16px; accent-color:#10b981;" onchange="document.getElementById('edit-doc-reason-wrap').classList.toggle('hidden', this.checked)" />
+          <span><strong>Usuario Activo</strong> (desmarca para inhabilitar por baja/ausencia)</span>
+        </label>
+      </div>
+
+      <div id="edit-doc-reason-wrap" class="field-group hidden">
+        <label for="edit-doc-reason" class="field-label">Motivo de inhabilitación / baja (opcional)</label>
+        <input id="edit-doc-reason" type="text" placeholder="Ej. Baja médica, excedencia, permiso..." />
+      </div>
+
+      <div class="modal-actions">
+        <button onclick="closeEditUserModal()" class="btn-cancel">Cancelar</button>
+        <button onclick="saveEditedDoctorUser()" class="btn-save">Guardar Cambios</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- JAVASCRIPT: BD CLOUD/INDEXEDDB, EXCEL DINÁMICO, USUARIOS Y RESTORE    -->
   <!-- ===================================================================== -->
   <script>
-    const OFFICIAL_DOCTORS = [{"nombre": "J. Ruíz", "grupoLaboral": "A", "grupoGuardia": "9", "lj": 12, "defLj": 0, "vsd": 9, "findes": 3, "defVsd": 0}, {"nombre": "A. Callejo", "grupoLaboral": "A", "grupoGuardia": "3", "lj": 12, "defLj": 0, "vsd": 9, "findes": 3, "defVsd": 0}, {"nombre": "A. Juez", "grupoLaboral": "A", "grupoGuardia": "3", "lj": 12, "defLj": 0, "vsd": 9, "findes": 3, "defVsd": 0}, {"nombre": "E. García", "grupoLaboral": "A", "grupoGuardia": "Sin grupo", "lj": 12, "defLj": 0, "vsd": 6, "findes": 2, "defVsd": -1}, {"nombre": "D. Benguría", "grupoLaboral": "B", "grupoGuardia": "8", "lj": 11, "defLj": -1, "vsd": 9, "findes": 3, "defVsd": 0}, {"nombre": "F. López", "grupoLaboral": "B", "grupoGuardia": "Sin grupo", "lj": 11, "defLj": -1, "vsd": 9, "findes": 3, "defVsd": 0}, {"nombre": "M. Saiz", "grupoLaboral": "B", "grupoGuardia": "6", "lj": 12, "defLj": 0, "vsd": 9, "findes": 3, "defVsd": 0}, {"nombre": "F. Torcal", "grupoLaboral": "C", "grupoGuardia": "6", "lj": 12, "defLj": 0, "vsd": 9, "findes": 3, "defVsd": 0}, {"nombre": "V. Zarza", "grupoLaboral": "C", "grupoGuardia": "9", "lj": 12, "defLj": 0, "vsd": 9, "findes": 3, "defVsd": 0}, {"nombre": "N. González", "grupoLaboral": "C", "grupoGuardia": "4", "lj": 12, "defLj": 0, "vsd": 9, "findes": 3, "defVsd": 0}, {"nombre": "S. Kadaoui", "grupoLaboral": "D", "grupoGuardia": "Sin guardias", "lj": 11, "defLj": -1, "vsd": 6, "findes": 2, "defVsd": -1}, {"nombre": "C. Lugo", "grupoLaboral": "D", "grupoGuardia": "3", "lj": 11, "defLj": -1, "vsd": 9, "findes": 3, "defVsd": 0}, {"nombre": "C. Olea", "grupoLaboral": "D", "grupoGuardia": "9", "lj": 12, "defLj": 0, "vsd": 9, "findes": 3, "defVsd": 0}, {"nombre": "Z. Xia", "grupoLaboral": "D", "grupoGuardia": "Sin grupo", "lj": 12, "defLj": 0, "vsd": 9, "findes": 3, "defVsd": 0}];
-    const OFFICIAL_NAMES_SET = new Set(OFFICIAL_DOCTORS.map(d => d.nombre.trim()));
+    // Configuración de Base de Datos Cloud (se puede configurar desde Admin y exportar ya rellena)
+    const DEFAULT_CLOUD_CONFIG = {
+      provider: 'local', // 'local' | 'firebase' | 'supabase' | 'upstash'
+      firebaseUrl: '',
+      supabaseUrl: '',
+      supabaseKey: '',
+      upstashUrl: '',
+      upstashToken: ''
+    };
+
+    const INITIAL_DOCTORS = [{"nombre": "J. Ruíz", "grupoLaboral": "A", "grupoGuardia": "9", "lj": 12, "defLj": 0, "vsd": 9, "findes": 3, "defVsd": 0, "id": "doc_1", "active": true, "inactiveReason": ""}, {"nombre": "A. Callejo", "grupoLaboral": "A", "grupoGuardia": "3", "lj": 12, "defLj": 0, "vsd": 9, "findes": 3, "defVsd": 0, "id": "doc_2", "active": true, "inactiveReason": ""}, {"nombre": "A. Juez", "grupoLaboral": "A", "grupoGuardia": "3", "lj": 12, "defLj": 0, "vsd": 9, "findes": 3, "defVsd": 0, "id": "doc_3", "active": true, "inactiveReason": ""}, {"nombre": "E. García", "grupoLaboral": "A", "grupoGuardia": "Sin grupo", "lj": 12, "defLj": 0, "vsd": 6, "findes": 2, "defVsd": -1, "id": "doc_4", "active": true, "inactiveReason": ""}, {"nombre": "D. Benguría", "grupoLaboral": "B", "grupoGuardia": "8", "lj": 11, "defLj": -1, "vsd": 9, "findes": 3, "defVsd": 0, "id": "doc_5", "active": true, "inactiveReason": ""}, {"nombre": "F. López", "grupoLaboral": "B", "grupoGuardia": "Sin grupo", "lj": 11, "defLj": -1, "vsd": 9, "findes": 3, "defVsd": 0, "id": "doc_6", "active": true, "inactiveReason": ""}, {"nombre": "M. Saiz", "grupoLaboral": "B", "grupoGuardia": "6", "lj": 12, "defLj": 0, "vsd": 9, "findes": 3, "defVsd": 0, "id": "doc_7", "active": true, "inactiveReason": ""}, {"nombre": "F. Torcal", "grupoLaboral": "C", "grupoGuardia": "6", "lj": 12, "defLj": 0, "vsd": 9, "findes": 3, "defVsd": 0, "id": "doc_8", "active": true, "inactiveReason": ""}, {"nombre": "V. Zarza", "grupoLaboral": "C", "grupoGuardia": "9", "lj": 12, "defLj": 0, "vsd": 9, "findes": 3, "defVsd": 0, "id": "doc_9", "active": true, "inactiveReason": ""}, {"nombre": "N. González", "grupoLaboral": "C", "grupoGuardia": "4", "lj": 12, "defLj": 0, "vsd": 9, "findes": 3, "defVsd": 0, "id": "doc_10", "active": true, "inactiveReason": ""}, {"nombre": "S. Kadaoui", "grupoLaboral": "D", "grupoGuardia": "Sin guardias", "lj": 11, "defLj": -1, "vsd": 6, "findes": 2, "defVsd": -1, "id": "doc_11", "active": true, "inactiveReason": ""}, {"nombre": "C. Lugo", "grupoLaboral": "D", "grupoGuardia": "3", "lj": 11, "defLj": -1, "vsd": 9, "findes": 3, "defVsd": 0, "id": "doc_12", "active": true, "inactiveReason": ""}, {"nombre": "C. Olea", "grupoLaboral": "D", "grupoGuardia": "9", "lj": 12, "defLj": 0, "vsd": 9, "findes": 3, "defVsd": 0, "id": "doc_13", "active": true, "inactiveReason": ""}, {"nombre": "Z. Xia", "grupoLaboral": "D", "grupoGuardia": "Sin grupo", "lj": 12, "defLj": 0, "vsd": 9, "findes": 3, "defVsd": 0, "id": "doc_14", "active": true, "inactiveReason": ""}];
     const INITIAL_WEEKS = [{"weekLabel": "4-ene a 10-ene", "year": 2026, "days": [{"dayName": "Lunes", "date": "4-ene", "monthKey": "2026-01", "monthLabel": "Enero 2026", "guardGroup": "3", "slots": ["Navidad", "", "", ""], "guardMembers": [{"name": "A. Callejo", "note": ""}, {"name": "A. Juez", "note": ""}, {"name": "C. Lugo", "note": ""}]}, {"dayName": "Martes", "date": "5-ene", "monthKey": "2026-01", "monthLabel": "Enero 2026", "guardGroup": "4", "slots": ["Navidad", "", "", ""], "guardMembers": [{"name": "N. González", "note": ""}]}, {"dayName": "Miércoles", "date": "6-ene", "monthKey": "2026-01", "monthLabel": "Enero 2026", "guardGroup": "5", "slots": ["Navidad", "", "", ""], "guardMembers": []}, {"dayName": "Jueves", "date": "7-ene", "monthKey": "2026-01", "monthLabel": "Enero 2026", "guardGroup": "6", "slots": ["M. Saiz", "Z. Xia", "N. González", "S. Kadaoui"], "guardMembers": [{"name": "F. Torcal", "note": ""}, {"name": "M. Saiz", "note": ""}]}, {"dayName": "Viernes", "date": "8-ene", "monthKey": "2026-01", "monthLabel": "Enero 2026", "guardGroup": "7", "slots": ["J. Ruíz", "Z. Xia", "C. Olea", "D. Benguría"], "guardMembers": []}, {"dayName": "Sábado", "date": "9-ene", "monthKey": "2026-01", "monthLabel": "Enero 2026", "guardGroup": "8", "slots": ["J. Ruíz", "Z. Xia", "C. Olea", "D. Benguría"], "guardMembers": [{"name": "D. Benguría", "note": ""}]}, {"dayName": "Domingo", "date": "10-ene", "monthKey": "2026-01", "monthLabel": "Enero 2026", "guardGroup": "9", "slots": ["J. Ruíz", "Z. Xia", "C. Olea", "D. Benguría"], "guardMembers": [{"name": "V. Zarza", "note": ""}, {"name": "J. Ruíz", "note": ""}, {"name": "C. Olea", "note": ""}]}]}, {"weekLabel": "11-ene a 17-ene", "year": 2026, "days": [{"dayName": "Lunes", "date": "11-ene", "monthKey": "2026-01", "monthLabel": "Enero 2026", "guardGroup": "1", "slots": ["F. Torcal", "V. Zarza", "N. González", "S. Kadaoui"], "guardMembers": []}, {"dayName": "Martes", "date": "12-ene", "monthKey": "2026-01", "monthLabel": "Enero 2026", "guardGroup": "2", "slots": ["D. Benguría", "F. López", "M. Saiz", "Z. Xia"], "guardMembers": []}, {"dayName": "Miércoles", "date": "13-ene", "monthKey": "2026-01", "monthLabel": "Enero 2026", "guardGroup": "3", "slots": ["J. Ruíz", "A. Callejo", "A. Juez", "E. García"], "guardMembers": [{"name": "A. Callejo", "note": ""}, {"name": "A. Juez", "note": ""}, {"name": "C. Lugo", "note": ""}]}, {"dayName": "Jueves", "date": "14-ene", "monthKey": "2026-01", "monthLabel": "Enero 2026", "guardGroup": "4", "slots": ["S. Kadaoui", "C. Lugo", "C. Olea", "Z. Xia"], "guardMembers": [{"name": "N. González", "note": ""}]}, {"dayName": "Viernes", "date": "15-ene", "monthKey": "2026-01", "monthLabel": "Enero 2026", "guardGroup": "5", "slots": ["M. Saiz", "F. Torcal", "S. Kadaoui", "Z. Xia"], "guardMembers": []}, {"dayName": "Sábado", "date": "16-ene", "monthKey": "2026-01", "monthLabel": "Enero 2026", "guardGroup": "6", "slots": ["M. Saiz", "F. Torcal", "S. Kadaoui", "Z. Xia"], "guardMembers": [{"name": "F. Torcal", "note": ""}, {"name": "M. Saiz", "note": ""}]}, {"dayName": "Domingo", "date": "17-ene", "monthKey": "2026-01", "monthLabel": "Enero 2026", "guardGroup": "7", "slots": ["M. Saiz", "F. Torcal", "S. Kadaoui", "Z. Xia"], "guardMembers": []}]}, {"weekLabel": "18-ene a 24-ene", "year": 2026, "days": [{"dayName": "Lunes", "date": "18-ene", "monthKey": "2026-01", "monthLabel": "Enero 2026", "guardGroup": "8", "slots": ["S. Kadaoui", "C. Lugo", "C. Olea", "Z. Xia"], "guardMembers": [{"name": "D. Benguría", "note": ""}]}, {"dayName": "Martes", "date": "19-ene", "monthKey": "2026-01", "monthLabel": "Enero 2026", "guardGroup": "9", "slots": ["F. Torcal", "V. Zarza", "N. González", "J. Ruíz"], "guardMembers": [{"name": "V. Zarza", "note": ""}, {"name": "J. Ruíz", "note": ""}, {"name": "C. Olea", "note": ""}]}, {"dayName": "Miércoles", "date": "20-ene", "monthKey": "2026-01", "monthLabel": "Enero 2026", "guardGroup": "1", "slots": ["D. Benguría", "F. López", "M. Saiz", "A. Callejo"], "guardMembers": []}, {"dayName": "Jueves", "date": "21-ene", "monthKey": "2026-01", "monthLabel": "Enero 2026", "guardGroup": "2", "slots": ["J. Ruíz", "S. Kadaoui", "A. Juez", "E. García"], "guardMembers": []}, {"dayName": "Viernes", "date": "22-ene", "monthKey": "2026-01", "monthLabel": "Enero 2026", "guardGroup": "3", "slots": ["A. Callejo", "A. Juez", "C. Lugo", "N. González"], "guardMembers": [{"name": "A. Callejo", "note": ""}, {"name": "A. Juez", "note": ""}, {"name": "C. Lugo", "note": ""}]}, {"dayName": "Sábado", "date": "23-ene", "monthKey": "2026-01", "monthLabel": "Enero 2026", "guardGroup": "4", "slots": ["A. Callejo", "A. Juez", "C. Lugo", "N. González"], "guardMembers": [{"name": "N. González", "note": ""}]}, {"dayName": "Domingo", "date": "24-ene", "monthKey": "2026-01", "monthLabel": "Enero 2026", "guardGroup": "5", "slots": ["A. Callejo", "A. Juez", "C. Lugo", "N. González"], "guardMembers": []}]}, {"weekLabel": "25-ene a 31-ene", "year": 2026, "days": [{"dayName": "Lunes", "date": "25-ene", "monthKey": "2026-01", "monthLabel": "Enero 2026", "guardGroup": "6", "slots": ["J. Ruíz", "A. Callejo", "A. Juez", "F. Torcal"], "guardMembers": [{"name": "F. Torcal", "note": ""}, {"name": "M. Saiz", "note": ""}]}, {"dayName": "Martes", "date": "26-ene", "monthKey": "2026-01", "monthLabel": "Enero 2026", "guardGroup": "7", "slots": ["S. Kadaoui", "C. Lugo", "C. Olea", "Z. Xia"], "guardMembers": []}, {"dayName": "Miércoles", "date": "27-ene", "monthKey": "2026-01", "monthLabel": "Enero 2026", "guardGroup": "8", "slots": ["E. García", "V. Zarza", "N. González", "D. Benguría"], "guardMembers": [{"name": "D. Benguría", "note": ""}]}, {"dayName": "Jueves", "date": "28-ene", "monthKey": "2026-01", "monthLabel": "Enero 2026", "guardGroup": "9", "slots": ["D. Benguría", "F. López", "M. Saiz", "C. Olea"], "guardMembers": [{"name": "V. Zarza", "note": ""}, {"name": "J. Ruíz", "note": ""}, {"name": "C. Olea", "note": ""}]}, {"dayName": "Viernes", "date": "29-ene", "monthKey": "2026-01", "monthLabel": "Enero 2026", "guardGroup": "1", "slots": ["A. Callejo", "A. Juez", "C. Lugo", "S. Kadaoui"], "guardMembers": []}, {"dayName": "Sábado", "date": "30-ene", "monthKey": "2026-01", "monthLabel": "Enero 2026", "guardGroup": "2", "slots": ["A. Callejo", "A. Juez", "C. Lugo", "S. Kadaoui"], "guardMembers": []}, {"dayName": "Domingo", "date": "31-ene", "monthKey": "2026-01", "monthLabel": "Enero 2026", "guardGroup": "3", "slots": ["A. Callejo", "A. Juez", "C. Lugo", "S. Kadaoui"], "guardMembers": [{"name": "A. Callejo", "note": ""}, {"name": "A. Juez", "note": ""}, {"name": "C. Lugo", "note": ""}]}]}, {"weekLabel": "1-feb a 7-feb", "year": 2026, "days": [{"dayName": "Lunes", "date": "1-feb", "monthKey": "2026-02", "monthLabel": "Febrero 2026", "guardGroup": "4", "slots": ["D. Benguría", "F. López", "M. Saiz", "F. Torcal"], "guardMembers": [{"name": "N. González", "note": ""}]}, {"dayName": "Martes", "date": "2-feb", "monthKey": "2026-02", "monthLabel": "Febrero 2026", "guardGroup": "5", "slots": ["J. Ruíz", "A. Callejo", "A. Juez", "E. García"], "guardMembers": []}, {"dayName": "Miércoles", "date": "3-feb", "monthKey": "2026-02", "monthLabel": "Febrero 2026", "guardGroup": "6", "slots": ["S. Kadaoui", "C. Lugo", "C. Olea", "F. López"], "guardMembers": [{"name": "F. Torcal", "note": ""}, {"name": "M. Saiz", "note": ""}]}, {"dayName": "Jueves", "date": "4-feb", "monthKey": "2026-02", "monthLabel": "Febrero 2026", "guardGroup": "7", "slots": ["F. Torcal", "V. Zarza", "N. González", "S. Kadaoui"], "guardMembers": []}, {"dayName": "Viernes", "date": "5-feb", "monthKey": "2026-02", "monthLabel": "Febrero 2026", "guardGroup": "8", "slots": ["C. Olea", "J. Ruíz", "F. López", "V. Zarza"], "guardMembers": [{"name": "D. Benguría", "note": ""}]}, {"dayName": "Sábado", "date": "6-feb", "monthKey": "2026-02", "monthLabel": "Febrero 2026", "guardGroup": "9", "slots": ["C. Olea", "J. Ruíz", "F. López", "V. Zarza"], "guardMembers": [{"name": "V. Zarza", "note": ""}, {"name": "J. Ruíz", "note": ""}, {"name": "C. Olea", "note": ""}]}, {"dayName": "Domingo", "date": "7-feb", "monthKey": "2026-02", "monthLabel": "Febrero 2026", "guardGroup": "1", "slots": ["C. Olea", "J. Ruíz", "F. López", "V. Zarza"], "guardMembers": []}]}, {"weekLabel": "8-feb a 14-feb", "year": 2026, "days": [{"dayName": "Lunes", "date": "8-feb", "monthKey": "2026-02", "monthLabel": "Febrero 2026", "guardGroup": "2", "slots": ["F. Torcal", "V. Zarza", "N. González", "M. Saiz"], "guardMembers": []}, {"dayName": "Martes", "date": "9-feb", "monthKey": "2026-02", "monthLabel": "Febrero 2026", "guardGroup": "3", "slots": ["D. Benguría", "F. López", "M. Saiz", "C. Lugo"], "guardMembers": [{"name": "A. Callejo", "note": ""}, {"name": "A. Juez", "note": ""}, {"name": "C. Lugo", "note": ""}]}, {"dayName": "Miércoles", "date": "10-feb", "monthKey": "2026-02", "monthLabel": "Febrero 2026", "guardGroup": "4", "slots": ["J. Ruíz", "A. Callejo", "A. Juez", "E. García"], "guardMembers": [{"name": "N. González", "note": ""}]}, {"dayName": "Jueves", "date": "11-feb", "monthKey": "2026-02", "monthLabel": "Febrero 2026", "guardGroup": "5", "slots": ["A. Callejo", "C. Lugo", "C. Olea", "V. Zarza"], "guardMembers": []}, {"dayName": "Viernes", "date": "12-feb", "monthKey": "2026-02", "monthLabel": "Febrero 2026", "guardGroup": "6", "slots": ["V. Zarza", "F. Torcal", "D. Benguría", "E. García"], "guardMembers": [{"name": "F. Torcal", "note": ""}, {"name": "M. Saiz", "note": ""}]}, {"dayName": "Sábado", "date": "13-feb", "monthKey": "2026-02", "monthLabel": "Febrero 2026", "guardGroup": "7", "slots": ["V. Zarza", "F. Torcal", "D. Benguría", "E. García"], "guardMembers": []}, {"dayName": "Domingo", "date": "14-feb", "monthKey": "2026-02", "monthLabel": "Febrero 2026", "guardGroup": "8", "slots": ["V. Zarza", "F. Torcal", "D. Benguría", "E. García"], "guardMembers": [{"name": "D. Benguría", "note": ""}]}]}, {"weekLabel": "15-feb a 21-feb", "year": 2026, "days": [{"dayName": "Lunes", "date": "15-feb", "monthKey": "2026-02", "monthLabel": "Febrero 2026", "guardGroup": "9", "slots": ["A. Juez", "C. Lugo", "C. Olea", "Z. Xia"], "guardMembers": [{"name": "V. Zarza", "note": ""}, {"name": "J. Ruíz", "note": ""}, {"name": "C. Olea", "note": ""}]}, {"dayName": "Martes", "date": "16-feb", "monthKey": "2026-02", "monthLabel": "Febrero 2026", "guardGroup": "1", "slots": ["F. Torcal", "V. Zarza", "N. González", "E. García"], "guardMembers": []}, {"dayName": "Miércoles", "date": "17-feb", "monthKey": "2026-02", "monthLabel": "Febrero 2026", "guardGroup": "2", "slots": ["D. Benguría", "Z. Xia", "M. Saiz", "F. Torcal"], "guardMembers": []}, {"dayName": "Jueves", "date": "18-feb", "monthKey": "2026-02", "monthLabel": "Febrero 2026", "guardGroup": "3", "slots": ["J. Ruíz", "A. Callejo", "A. Juez", "E. García"], "guardMembers": [{"name": "A. Callejo", "note": ""}, {"name": "A. Juez", "note": ""}, {"name": "C. Lugo", "note": ""}]}, {"dayName": "Viernes", "date": "19-feb", "monthKey": "2026-02", "monthLabel": "Febrero 2026", "guardGroup": "4", "slots": ["M. Saiz", "F. Torcal", "F. López", "N. González"], "guardMembers": [{"name": "N. González", "note": ""}]}, {"dayName": "Sábado", "date": "20-feb", "monthKey": "2026-02", "monthLabel": "Febrero 2026", "guardGroup": "5", "slots": ["M. Saiz", "F. Torcal", "F. López", "N. González"], "guardMembers": []}, {"dayName": "Domingo", "date": "21-feb", "monthKey": "2026-02", "monthLabel": "Febrero 2026", "guardGroup": "6", "slots": ["M. Saiz", "F. Torcal", "F. López", "N. González"], "guardMembers": [{"name": "F. Torcal", "note": ""}, {"name": "M. Saiz", "note": ""}]}]}, {"weekLabel": "22-feb a 28-feb", "year": 2026, "days": [{"dayName": "Lunes", "date": "22-feb", "monthKey": "2026-02", "monthLabel": "Febrero 2026", "guardGroup": "7", "slots": ["J. Ruíz", "A. Callejo", "A. Juez", "E. García"], "guardMembers": []}, {"dayName": "Martes", "date": "23-feb", "monthKey": "2026-02", "monthLabel": "Febrero 2026", "guardGroup": "8", "slots": ["F. López", "C. Lugo", "C. Olea", "Z. Xia"], "guardMembers": [{"name": "D. Benguría", "note": ""}]}, {"dayName": "Miércoles", "date": "24-feb", "monthKey": "2026-02", "monthLabel": "Febrero 2026", "guardGroup": "9", "slots": ["A. Juez", "V. Zarza", "N. González", "C. Olea"], "guardMembers": [{"name": "V. Zarza", "note": ""}, {"name": "J. Ruíz", "note": ""}, {"name": "C. Olea", "note": ""}]}, {"dayName": "Jueves", "date": "25-feb", "monthKey": "2026-02", "monthLabel": "Febrero 2026", "guardGroup": "1", "slots": ["D. Benguría", "F. López", "M. Saiz", "V. Zarza"], "guardMembers": []}, {"dayName": "Viernes", "date": "26-feb", "monthKey": "2026-02", "monthLabel": "Febrero 2026", "guardGroup": "2", "slots": ["N. González", "A. Callejo", "C. Lugo", "A. Juez"], "guardMembers": []}, {"dayName": "Sábado", "date": "27-feb", "monthKey": "2026-02", "monthLabel": "Febrero 2026", "guardGroup": "3", "slots": ["N. González", "A. Callejo", "C. Lugo", "A. Juez"], "guardMembers": [{"name": "A. Callejo", "note": ""}, {"name": "A. Juez", "note": ""}, {"name": "C. Lugo", "note": ""}]}, {"dayName": "Domingo", "date": "28-feb", "monthKey": "2026-02", "monthLabel": "Febrero 2026", "guardGroup": "4", "slots": ["N. González", "A. Callejo", "C. Lugo", "A. Juez"], "guardMembers": [{"name": "N. González", "note": ""}]}]}, {"weekLabel": "1-mar a 7-mar", "year": 2026, "days": [{"dayName": "Lunes", "date": "1-mar", "monthKey": "2026-03", "monthLabel": "Marzo 2026", "guardGroup": "5", "slots": ["D. Benguría", "F. López", "M. Saiz", "Z. Xia"], "guardMembers": []}, {"dayName": "Martes", "date": "2-mar", "monthKey": "2026-03", "monthLabel": "Marzo 2026", "guardGroup": "6", "slots": ["J. Ruíz", "A. Callejo", "F. Torcal", "E. García"], "guardMembers": [{"name": "F. Torcal", "note": ""}, {"name": "M. Saiz", "note": ""}]}, {"dayName": "Miércoles", "date": "3-mar", "monthKey": "2026-03", "monthLabel": "Marzo 2026", "guardGroup": "7", "slots": ["E. García", "C. Lugo", "C. Olea", "Z. Xia"], "guardMembers": []}, {"dayName": "Jueves", "date": "4-mar", "monthKey": "2026-03", "monthLabel": "Marzo 2026", "guardGroup": "8", "slots": ["F. Torcal", "V. Zarza", "N. González", "A. Juez"], "guardMembers": [{"name": "D. Benguría", "note": ""}]}, {"dayName": "Viernes", "date": "5-mar", "monthKey": "2026-03", "monthLabel": "Marzo 2026", "guardGroup": "9", "slots": ["Z. Xia", "F. López", "M. Saiz", "E. García"], "guardMembers": [{"name": "V. Zarza", "note": ""}, {"name": "J. Ruíz", "note": ""}, {"name": "C. Olea", "note": ""}]}, {"dayName": "Sábado", "date": "6-mar", "monthKey": "2026-03", "monthLabel": "Marzo 2026", "guardGroup": "1", "slots": ["Z. Xia", "F. López", "M. Saiz", "E. García"], "guardMembers": []}, {"dayName": "Domingo", "date": "7-mar", "monthKey": "2026-03", "monthLabel": "Marzo 2026", "guardGroup": "2", "slots": ["Z. Xia", "F. López", "M. Saiz", "E. García"], "guardMembers": []}]}, {"weekLabel": "8-mar a 14-mar", "year": 2026, "days": [{"dayName": "Lunes", "date": "8-mar", "monthKey": "2026-03", "monthLabel": "Marzo 2026", "guardGroup": "3", "slots": ["F. Torcal", "V. Zarza", "N. González", "J. Ruíz"], "guardMembers": [{"name": "A. Callejo", "note": ""}, {"name": "A. Juez", "note": ""}, {"name": "C. Lugo", "note": ""}]}, {"dayName": "Martes", "date": "9-mar", "monthKey": "2026-03", "monthLabel": "Marzo 2026", "guardGroup": "4", "slots": ["D. Benguría", "F. López", "M. Saiz", "N. González"], "guardMembers": [{"name": "N. González", "note": ""}]}, {"dayName": "Miércoles", "date": "10-mar", "monthKey": "2026-03", "monthLabel": "Marzo 2026", "guardGroup": "5", "slots": ["J. Ruíz", "A. Callejo", "A. Juez", "E. García"], "guardMembers": []}, {"dayName": "Jueves", "date": "11-mar", "monthKey": "2026-03", "monthLabel": "Marzo 2026", "guardGroup": "6", "slots": ["S. Kadaoui", "C. Lugo", "C. Olea", "F. Torcal"], "guardMembers": [{"name": "F. Torcal", "note": ""}, {"name": "M. Saiz", "note": ""}]}, {"dayName": "Viernes", "date": "12-mar", "monthKey": "2026-03", "monthLabel": "Marzo 2026", "guardGroup": "7", "slots": ["V. Zarza", "J. Ruíz", "D. Benguría", "C. Olea"], "guardMembers": []}, {"dayName": "Sábado", "date": "13-mar", "monthKey": "2026-03", "monthLabel": "Marzo 2026", "guardGroup": "8", "slots": ["V. Zarza", "J. Ruíz", "D. Benguría", "C. Olea"], "guardMembers": [{"name": "D. Benguría", "note": ""}]}, {"dayName": "Domingo", "date": "14-mar", "monthKey": "2026-03", "monthLabel": "Marzo 2026", "guardGroup": "9", "slots": ["V. Zarza", "J. Ruíz", "D. Benguría", "C. Olea"], "guardMembers": [{"name": "V. Zarza", "note": ""}, {"name": "J. Ruíz", "note": ""}, {"name": "C. Olea", "note": ""}]}]}, {"weekLabel": "15-mar a 21-mar", "year": 2026, "days": [{"dayName": "Lunes", "date": "15-mar", "monthKey": "2026-03", "monthLabel": "Marzo 2026", "guardGroup": "1", "slots": ["S. Kadaoui", "C. Lugo", "C. Olea", "Z. Xia"], "guardMembers": []}, {"dayName": "Martes", "date": "16-mar", "monthKey": "2026-03", "monthLabel": "Marzo 2026", "guardGroup": "2", "slots": ["Z. Xia", "V. Zarza", "N. González", "S. Kadaoui"], "guardMembers": []}, {"dayName": "Miércoles", "date": "17-mar", "monthKey": "2026-03", "monthLabel": "Marzo 2026", "guardGroup": "3", "slots": ["D. Benguría", "F. López", "M. Saiz", "A. Callejo"], "guardMembers": [{"name": "A. Callejo", "note": ""}, {"name": "A. Juez", "note": ""}, {"name": "C. Lugo", "note": ""}]}, {"dayName": "Jueves", "date": "18-mar", "monthKey": "2026-03", "monthLabel": "Marzo 2026", "guardGroup": "4", "slots": ["J. Ruíz", "A. Callejo", "A. Juez", "E. García"], "guardMembers": [{"name": "N. González", "note": ""}]}, {"dayName": "Viernes", "date": "19-mar · San José", "monthKey": "2026-03", "monthLabel": "Marzo 2026", "guardGroup": "5", "slots": ["??", "??", "??", "??"], "guardMembers": []}, {"dayName": "Sábado", "date": "20-mar", "monthKey": "2026-03", "monthLabel": "Marzo 2026", "guardGroup": "-", "slots": ["Semana Santa", "", "", ""], "guardMembers": []}, {"dayName": "Domingo", "date": "21-mar", "monthKey": "2026-03", "monthLabel": "Marzo 2026", "guardGroup": "-", "slots": ["Semana Santa", "", "", ""], "guardMembers": []}]}, {"weekLabel": "22-mar a 28-mar", "year": 2026, "days": [{"dayName": "Lunes", "date": "22-mar", "monthKey": "2026-03", "monthLabel": "Marzo 2026", "guardGroup": "-", "slots": ["Semana Santa", "", "", ""], "guardMembers": []}, {"dayName": "Martes", "date": "23-mar", "monthKey": "2026-03", "monthLabel": "Marzo 2026", "guardGroup": "-", "slots": ["Semana Santa", "", "", ""], "guardMembers": []}, {"dayName": "Miércoles", "date": "24-mar", "monthKey": "2026-03", "monthLabel": "Marzo 2026", "guardGroup": "-", "slots": ["Semana Santa", "", "", ""], "guardMembers": []}, {"dayName": "Jueves", "date": "25-mar", "monthKey": "2026-03", "monthLabel": "Marzo 2026", "guardGroup": "-", "slots": ["Semana Santa", "", "", ""], "guardMembers": []}, {"dayName": "Viernes", "date": "26-mar", "monthKey": "2026-03", "monthLabel": "Marzo 2026", "guardGroup": "-", "slots": ["Semana Santa", "", "", ""], "guardMembers": []}, {"dayName": "Sábado", "date": "27-mar", "monthKey": "2026-03", "monthLabel": "Marzo 2026", "guardGroup": "-", "slots": ["Semana Santa", "", "", ""], "guardMembers": []}, {"dayName": "Domingo", "date": "28-mar", "monthKey": "2026-03", "monthLabel": "Marzo 2026", "guardGroup": "-", "slots": ["Semana Santa", "", "", ""], "guardMembers": []}]}];
 
-    const STORAGE_KEY_WEEKS = 'tx_anest_weeks_v5';
-    const STORAGE_KEY_LOGS  = 'tx_anest_logs_v5';
-    const STORAGE_KEY_CREDS = 'tx_anest_admin_creds_v1';
-    const STORAGE_KEY_THEME = 'tx_anest_theme_v2';
-    const SESSION_KEY_AUTH  = 'tx_anest_admin_authed';
+    const STORAGE_KEY_STATE  = 'tx_anest_full_db_v6';
+    const STORAGE_KEY_CLOUD  = 'tx_anest_cloud_cfg_v1';
+    const STORAGE_KEY_CREDS  = 'tx_anest_admin_creds_v1';
+    const STORAGE_KEY_THEME  = 'tx_anest_theme_v2';
+    const SESSION_KEY_AUTH   = 'tx_anest_admin_authed';
+
+    const IDB_NAME = 'LocalizadasTrasplanteDB';
+    const IDB_STORE = 'stateStore';
+    const MAX_SNAPSHOTS = 35;
 
     const MONTH_NAMES_ES = [
       'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
@@ -4803,26 +5165,18 @@
       'jul', 'ago', 'sep', 'oct', 'nov', 'dic'
     ];
 
-    // Personal del grupo de trasplantes que pertenece a cada grupo de guardia del hospital (1-9)
-    const GUARD_GROUP_TRANSPLANT_MEMBERS = {
-      '1': [],
-      '2': [],
-      '3': ['A. Callejo', 'A. Juez', 'C. Lugo'],
-      '4': ['N. González'],
-      '5': [],
-      '6': ['F. Torcal', 'M. Saiz'],
-      '7': [],
-      '8': ['D. Benguría'],
-      '9': ['V. Zarza', 'J. Ruíz', 'C. Olea']
-    };
-
+    let doctorsList = [];
     let weeksData = [];
     let auditLogs = [];
+    let dbSnapshots = [];
+    let lastUpdatedAt = 0;
+
     let selectedMonthFilter = 'ALL';
     let selectedWeekFilter = 'ALL';
-    let expandedGuardiaKeys = new Set(); // "weekIdx-dayIdx"
+    let expandedGuardiaKeys = new Set();
     let activeDayTarget = null;
     let activeSlotIdx = null;
+    let editingUserId = null;
 
     function escapeHtml(str) {
       return String(str || '')
@@ -4842,9 +5196,7 @@
       if (iconEl) iconEl.textContent = cleanTheme === 'light' ? '☀️' : '🌙';
       if (labelEl) labelEl.textContent = cleanTheme === 'light' ? 'Claro' : 'Oscuro';
       if (metaTheme) metaTheme.setAttribute('content', cleanTheme === 'light' ? '#eef3f9' : '#060d18');
-      try {
-        localStorage.setItem(STORAGE_KEY_THEME, cleanTheme);
-      } catch (e) {}
+      try { localStorage.setItem(STORAGE_KEY_THEME, cleanTheme); } catch (e) {}
     }
 
     function toggleTheme() {
@@ -4854,12 +5206,11 @@
 
     function initTheme() {
       let saved = 'light';
-      try {
-        saved = localStorage.getItem(STORAGE_KEY_THEME) || 'light';
-      } catch (e) {}
+      try { saved = localStorage.getItem(STORAGE_KEY_THEME) || 'light'; } catch (e) {}
       applyTheme(saved);
     }
 
+    // === AUTENTICACIÓN ADMIN ===
     function getAdminCreds() {
       try {
         const saved = localStorage.getItem(STORAGE_KEY_CREDS);
@@ -4869,17 +5220,18 @@
     }
 
     function isAdminAuthenticated() {
-      try {
-        return sessionStorage.getItem(SESSION_KEY_AUTH) === 'true';
-      } catch (e) {
-        return false;
-      }
+      try { return sessionStorage.getItem(SESSION_KEY_AUTH) === 'true'; } catch (e) { return false; }
     }
 
     function updateAdminView() {
       const authed = isAdminAuthenticated();
       document.getElementById('admin-login-box').classList.toggle('hidden', authed);
       document.getElementById('admin-panel-content').classList.toggle('hidden', !authed);
+      if (authed) {
+        loadCloudConfigToForm();
+        renderAdminUsersList();
+        renderSnapshotsList();
+      }
     }
 
     function handleAdminLogin(e) {
@@ -4924,9 +5276,524 @@
       } catch (e) {}
     }
 
+    // === CAPA DE BASE DE DATOS: INDEXEDDB + CLOUD (FIREBASE / SUPABASE / UPSTASH) ===
+    function getCloudConfig() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY_CLOUD);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (parsed && parsed.provider && parsed.provider !== 'local') return parsed;
+        }
+      } catch (e) {}
+      return { ...DEFAULT_CLOUD_CONFIG };
+    }
+
+    function setDbStatusBadge(mode, text) {
+      const pill = document.getElementById('db-status-pill');
+      const icon = document.getElementById('db-status-icon');
+      const lbl  = document.getElementById('db-status-text');
+      const adminBadge = document.getElementById('cloud-db-badge');
+      if (!pill) return;
+
+      pill.classList.remove('cloud-ok', 'syncing');
+      if (mode === 'cloud-ok') {
+        pill.classList.add('cloud-ok');
+        icon.textContent = '☁️';
+        if (adminBadge) {
+          adminBadge.className = 'status-chip active';
+          adminBadge.textContent = '☁️ Nube Conectada';
+        }
+      } else if (mode === 'syncing') {
+        pill.classList.add('syncing');
+        icon.textContent = '🔄';
+      } else if (mode === 'error') {
+        icon.textContent = '⚠️';
+        if (adminBadge) {
+          adminBadge.className = 'status-chip inactive';
+          adminBadge.textContent = '⚠️ Error conexión nube (usando local)';
+        }
+      } else {
+        icon.textContent = '💾';
+        if (adminBadge) {
+          adminBadge.className = 'status-chip inactive';
+          adminBadge.textContent = '💾 Solo local (IndexedDB)';
+        }
+      }
+      lbl.textContent = text;
+    }
+
+    function openIndexedDB() {
+      return new Promise((resolve, reject) => {
+        if (!window.indexedDB) { reject(new Error('No IDB')); return; }
+        const req = indexedDB.open(IDB_NAME, 1);
+        req.onupgradeneeded = (e) => {
+          const db = e.target.result;
+          if (!db.objectStoreNames.contains(IDB_STORE)) {
+            db.createObjectStore(IDB_STORE);
+          }
+        };
+        req.onsuccess = () => resolve(req.result);
+        req.onerror = () => reject(req.error);
+      });
+    }
+
+    async function writeToIndexedDB(payload) {
+      try {
+        const db = await openIndexedDB();
+        return new Promise((resolve) => {
+          const tx = db.transaction(IDB_STORE, 'readwrite');
+          tx.objectStore(IDB_STORE).put(payload, 'current');
+          tx.oncomplete = () => resolve(true);
+          tx.onerror = () => resolve(false);
+        });
+      } catch (e) {
+        return false;
+      }
+    }
+
+    async function readFromIndexedDB() {
+      try {
+        const db = await openIndexedDB();
+        return new Promise((resolve) => {
+          const tx = db.transaction(IDB_STORE, 'readonly');
+          const req = tx.objectStore(IDB_STORE).get('current');
+          req.onsuccess = () => resolve(req.result || null);
+          req.onerror = () => resolve(null);
+        });
+      } catch (e) {
+        return null;
+      }
+    }
+
+    async function pushToCloudDB(payload) {
+      const cfg = getCloudConfig();
+      if (!cfg || cfg.provider === 'local') return false;
+      setDbStatusBadge('syncing', 'Guardando...');
+      try {
+        if (cfg.provider === 'firebase' && cfg.firebaseUrl) {
+          const baseUrl = cfg.firebaseUrl.replace(/\/+$/, '');
+          const res = await fetch(`${baseUrl}/trasplante_localizadas.json`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+          setDbStatusBadge('cloud-ok', 'Nube OK');
+          return true;
+        }
+        if (cfg.provider === 'supabase' && cfg.supabaseUrl && cfg.supabaseKey) {
+          const baseUrl = cfg.supabaseUrl.replace(/\/+$/, '');
+          const res = await fetch(`${baseUrl}/rest/v1/trasplante_db`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'apikey': cfg.supabaseKey,
+              'Authorization': `Bearer ${cfg.supabaseKey}`,
+              'Prefer': 'resolution=merge-duplicates'
+            },
+            body: JSON.stringify({ id: 'main', payload })
+          });
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+          setDbStatusBadge('cloud-ok', 'Supabase OK');
+          return true;
+        }
+        if (cfg.provider === 'upstash' && cfg.upstashUrl && cfg.upstashToken) {
+          const baseUrl = cfg.upstashUrl.replace(/\/+$/, '');
+          const res = await fetch(`${baseUrl}/set/trasplante_localizadas`, {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${cfg.upstashToken}`,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+          });
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+          setDbStatusBadge('cloud-ok', 'Vercel KV OK');
+          return true;
+        }
+      } catch (err) {
+        console.warn('Error sincronizando con nube:', err);
+        setDbStatusBadge('error', 'Local (Offline)');
+        return false;
+      }
+      return false;
+    }
+
+    async function pullFromCloudDB() {
+      const cfg = getCloudConfig();
+      if (!cfg || cfg.provider === 'local') return null;
+      setDbStatusBadge('syncing', 'Sincronizando...');
+      try {
+        if (cfg.provider === 'firebase' && cfg.firebaseUrl) {
+          const baseUrl = cfg.firebaseUrl.replace(/\/+$/, '');
+          const res = await fetch(`${baseUrl}/trasplante_localizadas.json`);
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+          const data = await res.json();
+          setDbStatusBadge('cloud-ok', 'Nube OK');
+          return data;
+        }
+        if (cfg.provider === 'supabase' && cfg.supabaseUrl && cfg.supabaseKey) {
+          const baseUrl = cfg.supabaseUrl.replace(/\/+$/, '');
+          const res = await fetch(`${baseUrl}/rest/v1/trasplante_db?id=eq.main&select=payload`, {
+            headers: {
+              'apikey': cfg.supabaseKey,
+              'Authorization': `Bearer ${cfg.supabaseKey}`
+            }
+          });
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+          const rows = await res.json();
+          setDbStatusBadge('cloud-ok', 'Supabase OK');
+          return rows && rows[0] ? rows[0].payload : null;
+        }
+        if (cfg.provider === 'upstash' && cfg.upstashUrl && cfg.upstashToken) {
+          const baseUrl = cfg.upstashUrl.replace(/\/+$/, '');
+          const res = await fetch(`${baseUrl}/get/trasplante_localizadas`, {
+            headers: { 'Authorization': `Bearer ${cfg.upstashToken}` }
+          });
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+          const json = await res.json();
+          setDbStatusBadge('cloud-ok', 'Vercel KV OK');
+          return json && json.result ? JSON.parse(json.result) : null;
+        }
+      } catch (err) {
+        console.warn('No se pudo leer de nube:', err);
+        setDbStatusBadge('error', 'Local (Offline)');
+        return null;
+      }
+      return null;
+    }
+
+    function buildCurrentStatePayload() {
+      return {
+        version: 6,
+        updatedAt: lastUpdatedAt || Date.now(),
+        doctorsList,
+        weeksData,
+        auditLogs,
+        dbSnapshots
+      };
+    }
+
+    function hydrateStateFromObject(obj) {
+      if (!obj || typeof obj !== 'object') return false;
+      doctorsList = Array.isArray(obj.doctorsList) && obj.doctorsList.length > 0
+        ? obj.doctorsList
+        : JSON.parse(JSON.stringify(INITIAL_DOCTORS));
+      weeksData = Array.isArray(obj.weeksData) && obj.weeksData.length > 0
+        ? obj.weeksData
+        : JSON.parse(JSON.stringify(INITIAL_WEEKS));
+      auditLogs = Array.isArray(obj.auditLogs) ? obj.auditLogs : [];
+      dbSnapshots = Array.isArray(obj.dbSnapshots) ? obj.dbSnapshots : [];
+      lastUpdatedAt = obj.updatedAt || Date.now();
+
+      doctorsList.forEach((d, i) => {
+        if (!d.id) d.id = `doc_${i + 1}_${Date.now()}`;
+        if (typeof d.active !== 'boolean') d.active = true;
+        if (typeof d.inactiveReason !== 'string') d.inactiveReason = '';
+      });
+
+      weeksData.forEach(w => {
+        const fallbackYear = w.year || 2026;
+        w.days.forEach(d => {
+          if (!d.monthKey || !d.monthLabel) {
+            const parsed = parseSpanishDateMeta(d.date, fallbackYear);
+            d.monthKey = parsed.monthKey;
+            d.monthLabel = parsed.monthLabel;
+          }
+          normalizeGuardMembers(d);
+        });
+      });
+      return true;
+    }
+
+    async function saveState(syncCloud = true) {
+      lastUpdatedAt = Date.now();
+      const payload = buildCurrentStatePayload();
+      try {
+        localStorage.setItem(STORAGE_KEY_STATE, JSON.stringify(payload));
+      } catch (e) {}
+      await writeToIndexedDB(payload);
+      updateStats();
+      if (syncCloud) {
+        await pushToCloudDB(payload);
+      }
+    }
+
+    async function loadInitialState() {
+      let localObj = null;
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY_STATE);
+        if (raw) localObj = JSON.parse(raw);
+      } catch (e) {}
+
+      const idbObj = await readFromIndexedDB();
+      if (idbObj && (!localObj || (idbObj.updatedAt || 0) >= (localObj.updatedAt || 0))) {
+        localObj = idbObj;
+      }
+
+      if (localObj) {
+        hydrateStateFromObject(localObj);
+      } else {
+        hydrateStateFromObject({
+          updatedAt: 0,
+          doctorsList: JSON.parse(JSON.stringify(INITIAL_DOCTORS)),
+          weeksData: JSON.parse(JSON.stringify(INITIAL_WEEKS)),
+          auditLogs: [],
+          dbSnapshots: []
+        });
+        await writeToIndexedDB(buildCurrentStatePayload());
+      }
+
+      const cfg = getCloudConfig();
+      if (cfg && cfg.provider !== 'local') {
+        const cloudObj = await pullFromCloudDB();
+        if (cloudObj && Array.isArray(cloudObj.weeksData)) {
+          if ((cloudObj.updatedAt || 0) >= (localObj?.updatedAt || 0)) {
+            hydrateStateFromObject(cloudObj);
+            await writeToIndexedDB(cloudObj);
+            try { localStorage.setItem(STORAGE_KEY_STATE, JSON.stringify(cloudObj)); } catch (e) {}
+          } else {
+            await pushToCloudDB(buildCurrentStatePayload());
+          }
+        } else if (localObj) {
+          await pushToCloudDB(buildCurrentStatePayload());
+        }
+      } else {
+        setDbStatusBadge('local', 'BD Local');
+      }
+    }
+
+    async function manualSyncNow() {
+      const cfg = getCloudConfig();
+      if (!cfg || cfg.provider === 'local') {
+        alert('Actualmente estás usando la Base de Datos Local (IndexedDB). Si deseas compartir los datos entre todos los móviles en Vercel, configura Firebase o Supabase en la pestaña Admin.');
+        return;
+      }
+      const cloudObj = await pullFromCloudDB();
+      if (cloudObj && Array.isArray(cloudObj.weeksData)) {
+        hydrateStateFromObject(cloudObj);
+        await writeToIndexedDB(cloudObj);
+        refreshAllViews();
+      }
+    }
+
+    // === PUNTOS DE RESTAURACIÓN (SNAPSHOTS EN BASE DE DATOS) ===
+    function recordSnapshot(actionLabel, author = 'Sistema') {
+      const activeCount = doctorsList.filter(d => d.active !== false).length;
+      const snap = {
+        id: 'snap_' + Date.now() + '_' + Math.floor(Math.random() * 1000),
+        timestamp: new Date().toLocaleString('es-ES', { dateStyle: 'short', timeStyle: 'medium' }),
+        actionLabel,
+        author,
+        summary: `${weeksData.length} sem. · ${activeCount}/${doctorsList.length} médicos activos`,
+        stateData: {
+          doctorsList: JSON.parse(JSON.stringify(doctorsList)),
+          weeksData: JSON.parse(JSON.stringify(weeksData))
+        }
+      };
+      dbSnapshots.unshift(snap);
+      if (dbSnapshots.length > MAX_SNAPSHOTS) {
+        dbSnapshots = dbSnapshots.slice(0, MAX_SNAPSHOTS);
+      }
+    }
+
+    async function createManualSnapshot() {
+      const label = prompt('Nombre o descripción para este punto de restauración:', 'Copia de seguridad manual');
+      if (label === null) return;
+      recordSnapshot(label.trim() || 'Copia de seguridad manual', 'Administrador');
+      await saveState(true);
+      renderSnapshotsList();
+      alert('✅ Punto de restauración guardado en la base de datos.');
+    }
+
+    async function restoreFromSnapshot(snapId) {
+      const snap = dbSnapshots.find(s => s.id === snapId);
+      if (!snap || !snap.stateData) return;
+      if (!confirm(`¿Restaurar el calendario y usuarios al estado guardado el ${snap.timestamp} ("${snap.actionLabel}")?`)) return;
+
+      recordSnapshot(`Antes de restaurar a (${snap.timestamp})`, 'Administrador');
+
+      doctorsList = JSON.parse(JSON.stringify(snap.stateData.doctorsList));
+      weeksData = JSON.parse(JSON.stringify(snap.stateData.weeksData));
+
+      auditLogs.unshift({
+        id: Date.now(),
+        timestamp: new Date().toLocaleString('es-ES', { dateStyle: 'short', timeStyle: 'short' }),
+        weekLabel: 'Restauración BD',
+        dayLabel: snap.timestamp,
+        guardGroup: '-',
+        slotNumber: '-',
+        oldDoctor: 'Estado previo',
+        newDoctor: `Restaurado: ${snap.actionLabel}`,
+        changedBy: 'Administrador',
+        reason: 'Restauración desde historial de base de datos'
+      });
+
+      expandedGuardiaKeys.clear();
+      selectedMonthFilter = 'ALL';
+      selectedWeekFilter = 'ALL';
+      await saveState(true);
+      refreshAllViews();
+      alert('✅ Archivo restaurado correctamente al punto seleccionado.');
+    }
+
+    function renderSnapshotsList() {
+      const container = document.getElementById('snapshots-list-container');
+      if (!container) return;
+      if (dbSnapshots.length === 0) {
+        container.innerHTML = `
+          <div style="padding:16px; border-radius:12px; background:var(--bg-sub); border:1px solid var(--border-subtle); text-align:center; font-size:12px; color:var(--text-muted);">
+            Aún no hay puntos de restauración registrados. Se crearán automáticamente cada vez que un usuario modifique una guardia o subas un Excel.
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = dbSnapshots.map((s, idx) => `
+        <div class="snapshot-row">
+          <div>
+            <div style="display:flex; flex-wrap:wrap; align-items:center; gap:6px;">
+              <span class="mono" style="background:var(--sem-bg); color:var(--sem-text); font-size:10.5px; font-weight:800; padding:2px 7px; border-radius:6px;">
+                ${escapeHtml(s.timestamp)}
+              </span>
+              <strong style="font-size:12.5px; color:var(--text-strong);">${escapeHtml(s.actionLabel)}</strong>
+              ${idx === 0 ? '<span class="status-chip active" style="font-size:9.5px;">Más reciente</span>' : ''}
+            </div>
+            <div style="font-size:11px; color:var(--text-muted); margin-top:3px;">
+              Autor: <strong>${escapeHtml(s.author)}</strong> · ${escapeHtml(s.summary)}
+            </div>
+          </div>
+          <div>
+            <button type="button" onclick="restoreFromSnapshot('${s.id}')" class="btn-mini" style="color:var(--accent-cyan); font-weight:700;">
+              ⏪ Restaurar a este punto
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function exportFullJsonBackup() {
+      const dataStr = JSON.stringify(buildCurrentStatePayload(), null, 2);
+      const blob = new Blob([dataStr], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `Backup_Localizadas_Trasplante_${new Date().toISOString().slice(0,10)}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function importFullJsonBackup(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        try {
+          const obj = JSON.parse(e.target.result);
+          if (!Array.isArray(obj.weeksData)) throw new Error('Formato de backup inválido');
+          recordSnapshot('Antes de cargar backup .JSON', 'Administrador');
+          hydrateStateFromObject(obj);
+          await saveState(true);
+          refreshAllViews();
+          alert('✅ Copia de seguridad .JSON restaurada correctamente.');
+        } catch (err) {
+          alert('Error al importar backup JSON: ' + err.message);
+        }
+        event.target.value = '';
+      };
+      reader.readAsText(file);
+    }
+
+    // === CONFIGURACIÓN CLOUD UI ===
+    function onCloudProviderChange() {
+      const val = document.getElementById('cloud-provider-select').value;
+      document.getElementById('cloud-fields-firebase').classList.toggle('hidden', val !== 'firebase');
+      document.getElementById('cloud-fields-supabase').classList.toggle('hidden', val !== 'supabase');
+      document.getElementById('cloud-fields-upstash').classList.toggle('hidden', val !== 'upstash');
+    }
+
+    function loadCloudConfigToForm() {
+      const cfg = getCloudConfig();
+      const sel = document.getElementById('cloud-provider-select');
+      if (!sel) return;
+      sel.value = cfg.provider || 'local';
+      document.getElementById('cloud-firebase-url').value = cfg.firebaseUrl || '';
+      document.getElementById('cloud-supabase-url').value = cfg.supabaseUrl || '';
+      document.getElementById('cloud-supabase-key').value = cfg.supabaseKey || '';
+      document.getElementById('cloud-upstash-url').value = cfg.upstashUrl || '';
+      document.getElementById('cloud-upstash-token').value = cfg.upstashToken || '';
+      onCloudProviderChange();
+    }
+
+    async function saveCloudConfigAndSync() {
+      const provider = document.getElementById('cloud-provider-select').value;
+      const cfg = {
+        provider,
+        firebaseUrl: document.getElementById('cloud-firebase-url').value.trim(),
+        supabaseUrl: document.getElementById('cloud-supabase-url').value.trim(),
+        supabaseKey: document.getElementById('cloud-supabase-key').value.trim(),
+        upstashUrl: document.getElementById('cloud-upstash-url').value.trim(),
+        upstashToken: document.getElementById('cloud-upstash-token').value.trim()
+      };
+      try { localStorage.setItem(STORAGE_KEY_CLOUD, JSON.stringify(cfg)); } catch (e) {}
+
+      if (provider === 'local') {
+        setDbStatusBadge('local', 'BD Local');
+        alert('✅ Modo Base de Datos Local activado.');
+        return;
+      }
+
+      const ok = await pushToCloudDB(buildCurrentStatePayload());
+      if (ok) {
+        alert('✅ Conexión verificada y datos sincronizados con la base de datos en la nube.');
+      } else {
+        alert('⚠️ No se pudo conectar con la URL/clave proporcionada. Revisa los permisos o la URL e inténtalo de nuevo.');
+      }
+    }
+
+    function downloadConfiguredHtmlForVercel() {
+      const cfg = getCloudConfig();
+      const docClone = document.documentElement.outerHTML;
+      const cfgReplacement = `const DEFAULT_CLOUD_CONFIG = ${JSON.stringify(cfg, null, 6)};`;
+      const updatedSource = '<!DOCTYPE html>
+' + docClone.replace(
+        /const DEFAULT_CLOUD_CONFIG = \{[\s\S]*?\};/,
+        cfgReplacement
+      );
+      const blob = new Blob([updatedSource], { type: 'text/html;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'index.html';
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    // === GESTIÓN DE USUARIOS (AÑADIR, MODIFICAR, INHABILITAR POR BAJA) ===
+    function getActiveDoctors() {
+      return doctorsList.filter(d => d.active !== false);
+    }
+
+    function getDoctorInfo(name) {
+      const clean = (name || '').trim();
+      return doctorsList.find(d => d.nombre.trim() === clean) || null;
+    }
+
+    function isVerifiedDoctor(name) {
+      return !!getDoctorInfo(name);
+    }
+
+    function isDoctorInactive(name) {
+      const doc = getDoctorInfo(name);
+      return doc ? doc.active === false : false;
+    }
+
     function getDefaultGuardMembersForGroup(gg) {
       const cleanKey = String(gg || '').replace(/[^0-9]/g, '');
-      return (GUARD_GROUP_TRANSPLANT_MEMBERS[cleanKey] || []).map(name => ({ name, note: '' }));
+      if (!cleanKey) return [];
+      return doctorsList
+        .filter(d => d.active !== false && String(d.grupoGuardia).trim() === cleanKey)
+        .map(d => ({ name: d.nombre, note: '' }));
     }
 
     function normalizeGuardMembers(day) {
@@ -4942,38 +5809,232 @@
       return day.guardMembers;
     }
 
-    function loadState() {
-      try {
-        const savedWeeks = localStorage.getItem(STORAGE_KEY_WEEKS);
-        const savedLogs = localStorage.getItem(STORAGE_KEY_LOGS);
-        weeksData = savedWeeks ? JSON.parse(savedWeeks) : JSON.parse(JSON.stringify(INITIAL_WEEKS));
-        auditLogs = savedLogs ? JSON.parse(savedLogs) : [];
-      } catch (e) {
-        weeksData = JSON.parse(JSON.stringify(INITIAL_WEEKS));
-        auditLogs = [];
+    async function addNewDoctorUser() {
+      const nameInp = document.getElementById('new-doc-name');
+      const glSel   = document.getElementById('new-doc-gl');
+      const ggSel   = document.getElementById('new-doc-gg');
+      const rawName = nameInp.value.trim();
+
+      if (!rawName) {
+        alert('Escribe el nombre del nuevo médico (por ejemplo: M. Pérez).');
+        nameInp.focus();
+        return;
       }
-      weeksData.forEach(w => {
-        const fallbackYear = w.year || 2026;
-        w.days.forEach(d => {
-          if (!d.monthKey || !d.monthLabel) {
-            const parsed = parseSpanishDateMeta(d.date, fallbackYear);
-            d.monthKey = parsed.monthKey;
-            d.monthLabel = parsed.monthLabel;
-          }
-          normalizeGuardMembers(d);
-        });
+      if (doctorsList.some(d => normalizeText(d.nombre) === normalizeText(rawName))) {
+        alert(`El usuario "${rawName}" ya existe en la plantilla.`);
+        return;
+      }
+
+      recordSnapshot(`Antes de añadir usuario ${rawName}`, 'Administrador');
+
+      doctorsList.push({
+        id: 'doc_' + Date.now(),
+        nombre: rawName,
+        grupoLaboral: glSel.value,
+        grupoGuardia: ggSel.value,
+        active: true,
+        inactiveReason: '',
+        lj: 12,
+        defLj: 0,
+        vsd: 9,
+        findes: 3,
+        defVsd: 0
       });
+
+      auditLogs.unshift({
+        id: Date.now(),
+        timestamp: new Date().toLocaleString('es-ES', { dateStyle: 'short', timeStyle: 'short' }),
+        weekLabel: 'Gestión Usuarios',
+        dayLabel: 'Alta de médico',
+        guardGroup: ggSel.value,
+        slotNumber: '-',
+        oldDoctor: 'No estaba en plantilla',
+        newDoctor: `+ ${rawName} (Grp ${glSel.value})`,
+        changedBy: 'Administrador',
+        reason: 'Nuevo usuario añadido manualmente'
+      });
+
+      nameInp.value = '';
+      await saveState(true);
+      refreshAllViews();
     }
 
-    function saveState() {
-      try {
-        localStorage.setItem(STORAGE_KEY_WEEKS, JSON.stringify(weeksData));
-        localStorage.setItem(STORAGE_KEY_LOGS, JSON.stringify(auditLogs));
-      } catch (e) {}
-      updateStats();
+    async function toggleDoctorActiveStatus(docId) {
+      const doc = doctorsList.find(d => d.id === docId);
+      if (!doc) return;
+
+      const willBeActive = doc.active === false;
+      let reason = '';
+      if (!willBeActive) {
+        const promptRes = prompt(`Vas a inhabilitar a ${doc.nombre} (no aparecerá en los desplegables de guardias/localizadas). Motivo opcional (ej. Baja médica):`, doc.inactiveReason || 'Baja temporal');
+        if (promptRes === null) return;
+        reason = promptRes.trim() || 'Inhabilitado / Baja';
+      }
+
+      recordSnapshot(`Antes de ${willBeActive ? 'reactivar' : 'inhabilitar'} a ${doc.nombre}`, 'Administrador');
+
+      doc.active = willBeActive;
+      doc.inactiveReason = willBeActive ? '' : reason;
+
+      auditLogs.unshift({
+        id: Date.now(),
+        timestamp: new Date().toLocaleString('es-ES', { dateStyle: 'short', timeStyle: 'short' }),
+        weekLabel: 'Gestión Usuarios',
+        dayLabel: willBeActive ? 'Reactivación' : 'Inhabilitación / Baja',
+        guardGroup: doc.grupoGuardia,
+        slotNumber: '-',
+        oldDoctor: `${doc.nombre} (${willBeActive ? 'Inhabilitado' : 'Activo'})`,
+        newDoctor: `${doc.nombre} (${willBeActive ? 'Activo' : 'Inhabilitado'})`,
+        changedBy: 'Administrador',
+        reason: willBeActive ? 'Usuario reactivado para guardias' : reason
+      });
+
+      await saveState(true);
+      refreshAllViews();
     }
 
-    // Parallax Dinámico (Scroll + Ratón)
+    function openEditUserModal(docId) {
+      const doc = doctorsList.find(d => d.id === docId);
+      if (!doc) return;
+      editingUserId = docId;
+
+      document.getElementById('edit-doc-name').value = doc.nombre;
+      document.getElementById('edit-doc-gl').value = doc.grupoLaboral || 'A';
+      document.getElementById('edit-doc-gg').value = String(doc.grupoGuardia || 'Sin grupo');
+      const isAct = doc.active !== false;
+      document.getElementById('edit-doc-active').checked = isAct;
+      document.getElementById('edit-doc-reason').value = doc.inactiveReason || '';
+      document.getElementById('edit-doc-reason-wrap').classList.toggle('hidden', isAct);
+
+      document.getElementById('edit-user-modal').classList.remove('hidden');
+    }
+
+    function closeEditUserModal() {
+      editingUserId = null;
+      document.getElementById('edit-user-modal').classList.add('hidden');
+    }
+
+    async function saveEditedDoctorUser() {
+      if (!editingUserId) return;
+      const doc = doctorsList.find(d => d.id === editingUserId);
+      if (!doc) return;
+
+      const newName = document.getElementById('edit-doc-name').value.trim();
+      const newGl   = document.getElementById('edit-doc-gl').value;
+      const newGg   = document.getElementById('edit-doc-gg').value;
+      const newAct  = document.getElementById('edit-doc-active').checked;
+      const newReas = newAct ? '' : (document.getElementById('edit-doc-reason').value.trim() || 'Inhabilitado / Baja');
+
+      if (!newName) {
+        alert('El nombre del médico no puede estar vacío.');
+        return;
+      }
+
+      recordSnapshot(`Antes de editar usuario ${doc.nombre}`, 'Administrador');
+
+      const oldName = doc.nombre;
+      if (oldName !== newName) {
+        weeksData.forEach(w => {
+          w.days.forEach(day => {
+            day.slots = day.slots.map(s => (s.trim() === oldName ? newName : s));
+            if (Array.isArray(day.guardMembers)) {
+              day.guardMembers.forEach(gm => {
+                if (gm.name.trim() === oldName) gm.name = newName;
+              });
+            }
+          });
+        });
+      }
+
+      doc.nombre = newName;
+      doc.grupoLaboral = newGl;
+      doc.grupoGuardia = newGg;
+      doc.active = newAct;
+      doc.inactiveReason = newReas;
+
+      auditLogs.unshift({
+        id: Date.now(),
+        timestamp: new Date().toLocaleString('es-ES', { dateStyle: 'short', timeStyle: 'short' }),
+        weekLabel: 'Gestión Usuarios',
+        dayLabel: 'Edición de usuario',
+        guardGroup: newGg,
+        slotNumber: '-',
+        oldDoctor: oldName,
+        newDoctor: `${newName} (Grp ${newGl} · ${newAct ? 'Activo' : 'Inhabilitado'})`,
+        changedBy: 'Administrador',
+        reason: newReas || 'Actualización de ficha de usuario'
+      });
+
+      closeEditUserModal();
+      await saveState(true);
+      refreshAllViews();
+    }
+
+    async function deleteDoctorUser(docId) {
+      const doc = doctorsList.find(d => d.id === docId);
+      if (!doc) return;
+      if (!confirm(`¿Eliminar definitivamente a "${doc.nombre}" de la lista de usuarios? (Si solo está de baja temporal, es recomendable usar el botón "Inhabilitar").`)) return;
+
+      recordSnapshot(`Antes de eliminar usuario ${doc.nombre}`, 'Administrador');
+      doctorsList = doctorsList.filter(d => d.id !== docId);
+
+      auditLogs.unshift({
+        id: Date.now(),
+        timestamp: new Date().toLocaleString('es-ES', { dateStyle: 'short', timeStyle: 'short' }),
+        weekLabel: 'Gestión Usuarios',
+        dayLabel: 'Baja definitiva',
+        guardGroup: doc.grupoGuardia,
+        slotNumber: '-',
+        oldDoctor: doc.nombre,
+        newDoctor: 'Eliminado de plantilla',
+        changedBy: 'Administrador',
+        reason: 'Usuario eliminado del grupo'
+      });
+
+      await saveState(true);
+      refreshAllViews();
+    }
+
+    function renderAdminUsersList() {
+      const container = document.getElementById('admin-users-list');
+      const summaryEl = document.getElementById('admin-users-summary');
+      if (!container) return;
+
+      const activeCount = doctorsList.filter(d => d.active !== false).length;
+      const inactiveCount = doctorsList.length - activeCount;
+      if (summaryEl) {
+        summaryEl.textContent = `${activeCount} activos · ${inactiveCount} inhabilitados`;
+      }
+
+      container.innerHTML = doctorsList.map(doc => {
+        const isAct = doc.active !== false;
+        return `
+          <div class="user-admin-row ${isAct ? '' : 'is-disabled'}">
+            <div>
+              <div style="display:flex; flex-wrap:wrap; align-items:center; gap:6px;">
+                <strong style="font-size:14px; color:var(--text-strong);">${escapeHtml(doc.nombre)}</strong>
+                <span class="status-chip ${isAct ? 'active' : 'inactive'}">
+                  ${isAct ? '🟢 Activo' : '⏸️ Inhabilitado'}
+                </span>
+                <span style="font-size:11px; color:var(--text-muted);">
+                  Grp Laboral <strong>${escapeHtml(doc.grupoLaboral)}</strong> · Guardia: <strong>${escapeHtml(String(doc.grupoGuardia))}</strong>
+                </span>
+              </div>
+              ${!isAct && doc.inactiveReason ? `<div style="font-size:11px; color:var(--accent-rose); margin-top:3px;">Motivo: ${escapeHtml(doc.inactiveReason)}</div>` : ''}
+            </div>
+            <div style="display:flex; flex-wrap:wrap; gap:6px;">
+              <button type="button" onclick="openEditUserModal('${doc.id}')" class="btn-mini">✏️ Editar</button>
+              <button type="button" onclick="toggleDoctorActiveStatus('${doc.id}')" class="btn-mini" style="color:${isAct ? 'var(--accent-amber)' : 'var(--accent-emerald)'};">
+                ${isAct ? '⏸️ Inhabilitar' : '▶ Reactivar'}
+              </button>
+              <button type="button" onclick="deleteDoctorUser('${doc.id}')" class="btn-danger-sm" style="padding:5px 9px;">🗑️</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // === PARALLAX DINÁMICO ===
     function initParallax() {
       const grid = document.getElementById('p-grid');
       const orb1 = document.getElementById('p-orb1');
@@ -5015,7 +6076,8 @@
             displayDate: `${pd.d}-${MONTH_SHORT_ES[mIdx]}`,
             monthKey: `${yr}-${String(pd.m).padStart(2, '0')}`,
             monthLabel: `${MONTH_NAMES_ES[mIdx]} ${yr}`,
-            year: yr
+            year: yr,
+            sortValue: yr * 10000 + pd.m * 100 + pd.d
           };
         }
       }
@@ -5031,7 +6093,8 @@
           displayDate: `${dNum}-${MONTH_SHORT_ES[mIdx]}`,
           monthKey: `${yr}-${String(mNum).padStart(2, '0')}`,
           monthLabel: `${MONTH_NAMES_ES[mIdx]} ${yr}`,
-          year: yr
+          year: yr,
+          sortValue: yr * 10000 + mNum * 100 + dNum
         };
       }
 
@@ -5046,7 +6109,8 @@
           displayDate: `${dNum}-${MONTH_SHORT_ES[mIdx]}`,
           monthKey: `${yr}-${String(mNum).padStart(2, '0')}`,
           monthLabel: `${MONTH_NAMES_ES[mIdx]} ${yr}`,
-          year: yr
+          year: yr,
+          sortValue: yr * 10000 + mNum * 100 + dNum
         };
       }
 
@@ -5055,11 +6119,14 @@
         if (lower.includes(MONTH_SHORT_ES[i])) {
           const yrMatch = lower.match(/20\d{2}/);
           const yr = yrMatch ? parseInt(yrMatch[0], 10) : defaultYear;
+          const dayMatch = lower.match(/^(\d{1,2})/);
+          const dNum = dayMatch ? parseInt(dayMatch[1], 10) : 1;
           return {
             displayDate: str,
             monthKey: `${yr}-${String(i + 1).padStart(2, '0')}`,
             monthLabel: `${MONTH_NAMES_ES[i]} ${yr}`,
-            year: yr
+            year: yr,
+            sortValue: yr * 10000 + (i + 1) * 100 + dNum
           };
         }
       }
@@ -5068,16 +6135,9 @@
         displayDate: str,
         monthKey: `${defaultYear}-00`,
         monthLabel: `General ${defaultYear}`,
-        year: defaultYear
+        year: defaultYear,
+        sortValue: defaultYear * 10000
       };
-    }
-
-    function isVerifiedDoctor(name) {
-      return !!name && OFFICIAL_NAMES_SET.has(name.trim());
-    }
-
-    function getDoctorInfo(name) {
-      return OFFICIAL_DOCTORS.find(d => d.nombre.trim() === (name || '').trim()) || null;
     }
 
     function getGuardGroupClass(gg) {
@@ -5157,18 +6217,19 @@
 
       const docFilter = document.getElementById('doctor-filter');
       const prevDoc = docFilter.value;
-      docFilter.innerHTML = '<option value="">👨‍⚕️ Todos (14)</option>';
-      OFFICIAL_DOCTORS.forEach(d => {
+      docFilter.innerHTML = `<option value="">👨‍⚕️ Todos (${doctorsList.length})</option>`;
+      doctorsList.forEach(d => {
         const opt = document.createElement('option');
         opt.value = d.nombre;
-        opt.textContent = `${d.nombre} (Grp ${d.grupoLaboral} · G.${d.grupoGuardia})`;
+        const inactiveTag = d.active === false ? ' [BAJA]' : '';
+        opt.textContent = `${d.nombre}${inactiveTag} (Grp ${d.grupoLaboral} · G.${d.grupoGuardia})`;
         docFilter.appendChild(opt);
       });
       docFilter.value = prevDoc;
 
       const changedBySel = document.getElementById('modal-changed-by');
       changedBySel.innerHTML = '<option value="">-- Selecciona tu nombre --</option>';
-      OFFICIAL_DOCTORS.forEach(d => {
+      getActiveDoctors().forEach(d => {
         const opt = document.createElement('option');
         opt.value = d.nombre;
         opt.textContent = d.nombre;
@@ -5177,9 +6238,15 @@
     }
 
     function updateStats() {
+      const activeDocs = getActiveDoctors();
       document.getElementById('stat-changes').textContent = auditLogs.length;
+      document.getElementById('stat-snapshots').textContent = dbSnapshots.length;
       document.getElementById('badge-changes-desk').textContent = auditLogs.length;
       document.getElementById('badge-changes-mob').textContent = auditLogs.length;
+      document.getElementById('stat-team-active').textContent = `${activeDocs.length} / ${doctorsList.length} Activos`;
+      document.getElementById('nav-team-count-desk').textContent = activeDocs.length;
+      document.getElementById('nav-team-count-mob').textContent = activeDocs.length;
+
       if (weeksData.length > 0) {
         const firstD = weeksData[0].days[0]?.date || '';
         const lastW = weeksData[weeksData.length - 1];
@@ -5188,7 +6255,7 @@
       }
     }
 
-    // === GENERAR HTML DEL DESPLEGABLE INLINE DE "GUARDIA" DEBAJO DE CADA DÍA ===
+    // === DESPLEGABLE INLINE DE "GUARDIA" DEBAJO DE CADA DÍA ===
     function buildGuardiaDrawerHtml(wIdx, dIdx, day) {
       const members = normalizeGuardMembers(day);
       const cleanGroup = String(day.guardGroup || '').replace(/[^0-9]/g, '');
@@ -5205,11 +6272,12 @@
         rowsHtml = members.map((m, mIdx) => {
           const inputId = `guard-note-${wIdx}-${dIdx}-${mIdx}`;
           const btnId   = `guard-save-${wIdx}-${dIdx}-${mIdx}`;
+          const inactive = isDoctorInactive(m.name);
           return `
             <div class="inline-guardia-row">
               <div class="inline-guardia-person-bar" title="${escapeHtml(m.name)}">
-                <span class="dot-sm" style="background:#06b6d4; flex-shrink:0;"></span>
-                <strong style="color:var(--text-strong);">${escapeHtml(m.name)}</strong>
+                <span class="dot-sm" style="background:${inactive ? '#f43f5e' : '#06b6d4'}; flex-shrink:0;"></span>
+                <strong style="color:${inactive ? 'var(--accent-rose)' : 'var(--text-strong)'};">${escapeHtml(m.name)}${inactive ? ' (Baja)' : ''}</strong>
               </div>
               <div class="inline-guardia-note-wrap">
                 <input
@@ -5244,7 +6312,7 @@
       const customWrapId = `guard-custom-wrap-${wIdx}-${dIdx}`;
       const customInpId  = `guard-custom-inp-${wIdx}-${dIdx}`;
 
-      const doctorOptions = OFFICIAL_DOCTORS.map(d => {
+      const doctorOptions = getActiveDoctors().map(d => {
         const exists = members.some(m => m.name === d.nombre);
         return `<option value="${escapeHtml(d.nombre)}">${escapeHtml(d.nombre)}${exists ? ' ✓' : ''}</option>`;
       }).join('');
@@ -5316,7 +6384,6 @@
         const day = weeksData[wIdx].days[dIdx];
         const inner = unitEl.querySelector('.day-guardia-drawer-inner');
         if (inner) inner.innerHTML = buildGuardiaDrawerHtml(wIdx, dIdx, day);
-        // Forzar reflow para disparar la animación CSS con fluidez
         void unitEl.offsetWidth;
         unitEl.classList.add('guardia-expanded');
         const btn = unitEl.querySelector('.guardia-plus-btn');
@@ -5354,7 +6421,7 @@
       if (inner) inner.innerHTML = buildGuardiaDrawerHtml(wIdx, dIdx, day);
     }
 
-    function saveGuardMemberNote(wIdx, dIdx, mIdx) {
+    async function saveGuardMemberNote(wIdx, dIdx, mIdx) {
       const inputEl = document.getElementById(`guard-note-${wIdx}-${dIdx}-${mIdx}`);
       const btnEl   = document.getElementById(`guard-save-${wIdx}-${dIdx}-${mIdx}`);
       if (!inputEl) return;
@@ -5370,6 +6437,7 @@
       day.guardModified = true;
 
       if (oldNote !== newNote) {
+        recordSnapshot(`Nota guardia ${day.date} (${members[mIdx].name})`, 'Nota en Guardia');
         auditLogs.unshift({
           id: Date.now() + Math.random(),
           timestamp: new Date().toLocaleString('es-ES', { dateStyle: 'short', timeStyle: 'short' }),
@@ -5385,9 +6453,8 @@
         renderAuditLogs();
       }
 
-      saveState();
+      await saveState(true);
 
-      // Actualizar indicador de nota en la tira superior sin perder el feedback del botón
       const unitEl = document.getElementById(`day-unit-${wIdx}-${dIdx}`);
       if (unitEl) {
         const labelWrap = unitEl.querySelector('.day-guardia-label');
@@ -5396,6 +6463,7 @@
         if (hasAnyNote && labelWrap && !existingDot) {
           const dot = document.createElement('span');
           dot.className = 'guardia-note-dot';
+          dot.title = 'Contiene notas guardadas';
           labelWrap.appendChild(dot);
         } else if (!hasAnyNote && existingDot) {
           existingDot.remove();
@@ -5444,7 +6512,7 @@
       commitInlineGuardAdd(wIdx, dIdx, val);
     }
 
-    function commitInlineGuardAdd(wIdx, dIdx, personName) {
+    async function commitInlineGuardAdd(wIdx, dIdx, personName) {
       const week = weeksData[wIdx];
       const day = week.days[dIdx];
       const members = normalizeGuardMembers(day);
@@ -5453,6 +6521,8 @@
         alert(`${personName} ya está en la lista de guardia de este día.`);
         return;
       }
+
+      recordSnapshot(`Antes de añadir a ${personName} en guardia (${day.date})`, 'Calendario');
 
       members.push({ name: personName, note: '' });
       day.guardModified = true;
@@ -5470,18 +6540,19 @@
         reason: 'Persona añadida a guardia física'
       });
 
-      saveState();
+      await saveState(true);
       refreshDayGuardiaUI(wIdx, dIdx);
       renderAuditLogs();
     }
 
-    function removeInlineGuardMember(wIdx, dIdx, mIdx) {
+    async function removeInlineGuardMember(wIdx, dIdx, mIdx) {
       const week = weeksData[wIdx];
       const day = week.days[dIdx];
       const members = normalizeGuardMembers(day);
       const removed = members.splice(mIdx, 1)[0];
       if (!removed) return;
 
+      recordSnapshot(`Antes de quitar a ${removed.name} de guardia (${day.date})`, 'Calendario');
       day.guardModified = true;
 
       auditLogs.unshift({
@@ -5497,16 +6568,17 @@
         reason: 'Retirado de la lista de guardia'
       });
 
-      saveState();
+      await saveState(true);
       refreshDayGuardiaUI(wIdx, dIdx);
       renderAuditLogs();
     }
 
-    function resetInlineGuardMembers(wIdx, dIdx) {
+    async function resetInlineGuardMembers(wIdx, dIdx) {
       const day = weeksData[wIdx].days[dIdx];
+      recordSnapshot(`Antes de restaurar guardia del ${day.date}`, 'Calendario');
       day.guardMembers = getDefaultGuardMembersForGroup(day.guardGroup);
       delete day.guardModified;
-      saveState();
+      await saveState(true);
       refreshDayGuardiaUI(wIdx, dIdx);
     }
 
@@ -5532,11 +6604,12 @@
         for (let sIdx = 0; sIdx < 4; sIdx++) {
           const rawName = day.slots[sIdx] || '—';
           const verified = isVerifiedDoctor(rawName);
+          const inactive = isDoctorInactive(rawName);
           const isModSlot = day.modified && day.modified[sIdx];
           const isMatchSlot = docFilter && rawName.trim() === docFilter;
           namesHtml += `
-            <div class="compact-name ${verified ? '' : 'unverified'} ${isModSlot ? 'modified-item' : ''} ${isMatchSlot ? 'match-highlight' : ''}">
-              ${rawName}
+            <div class="compact-name ${verified ? '' : 'unverified'} ${inactive ? 'inactive-doc' : ''} ${isModSlot ? 'modified-item' : ''} ${isMatchSlot ? 'match-highlight' : ''}" title="${inactive ? 'Médico inhabilitado / de baja' : escapeHtml(rawName)}">
+              ${escapeHtml(rawName)}
             </div>
           `;
         }
@@ -5701,6 +6774,7 @@
         const rawName = day.slots[sIdx] || '';
         const verified = isVerifiedDoctor(rawName);
         const docInfo = getDoctorInfo(rawName);
+        const inactive = docInfo && docInfo.active === false;
         const modMeta = day.modified && day.modified[sIdx];
         const isSelected = activeSlotIdx === sIdx;
 
@@ -5709,26 +6783,32 @@
         btn.onclick = () => openChangeDrawerForSlot(sIdx);
         btn.className = `expanded-slot-card ${isSelected ? 'selected-slot' : ''}`;
 
+        let statusTag = '';
+        if (inactive) {
+          statusTag = `<span style="font-size:11px; color:var(--accent-rose); font-weight:800;">⏸️ De baja (${escapeHtml(docInfo.inactiveReason || 'Inhabilitado')})</span>`;
+        } else if (verified) {
+          statusTag = '<span style="font-size:11px; color:var(--accent-emerald); font-weight:800;">✓ Verificado</span>';
+        } else {
+          statusTag = '<span style="font-size:11px; color:var(--accent-amber); font-weight:700;">! Especial</span>';
+        }
+
         btn.innerHTML = `
           <div style="min-width:0; flex:1;">
-            <div style="display:flex; align-items:center; gap:8px;">
+            <div style="display:flex; flex-wrap:wrap; align-items:center; gap:8px;">
               <span class="mono" style="font-size:11px; font-weight:800; color:var(--accent-cyan); background:var(--sem-bg); padding:2px 7px; border-radius:6px;">
                 Puesto ${sIdx + 1}
               </span>
-              <strong style="font-size:16px; color:${verified ? 'var(--text-strong)' : 'var(--accent-amber)'};">
-                ${rawName || 'Sin asignar'}
+              <strong style="font-size:16px; color:${inactive ? 'var(--accent-rose)' : (verified ? 'var(--text-strong)' : 'var(--accent-amber)')};">
+                ${escapeHtml(rawName || 'Sin asignar')}
               </strong>
-              ${verified
-                ? '<span style="font-size:11px; color:var(--accent-emerald); font-weight:800;">✓ Verificado</span>'
-                : '<span style="font-size:11px; color:var(--accent-amber); font-weight:700;">! Especial</span>'
-              }
+              ${statusTag}
             </div>
             <div style="font-size:11.5px; color:var(--text-muted); margin-top:4px;">
               ${docInfo ? `Grupo Laboral ${docInfo.grupoLaboral} · Guardia habitual: ${docInfo.grupoGuardia}` : 'Turno especial o pendiente de asignar'}
             </div>
             ${modMeta ? `
               <div style="font-size:11px; color:var(--accent-amber); margin-top:4px; font-weight:600;">
-                ✏️ Modificado por ${modMeta.changedBy} (${modMeta.timestamp}) · Antes: ${modMeta.previous}
+                ✏️ Modificado por ${escapeHtml(modMeta.changedBy)} (${modMeta.timestamp}) · Antes: ${escapeHtml(modMeta.previous)}
               </div>
             ` : ''}
           </div>
@@ -5767,7 +6847,7 @@
 
       const selectEl = document.getElementById('modal-new-doctor');
       selectEl.innerHTML = '';
-      OFFICIAL_DOCTORS.forEach(doc => {
+      getActiveDoctors().forEach(doc => {
         const opt = document.createElement('option');
         opt.value = doc.nombre;
         const alreadyToday = day.slots.some((s, idx) => idx !== slotIdx && s.trim() === doc.nombre);
@@ -5800,7 +6880,7 @@
       document.getElementById('modal-duplicate-warning').classList.toggle('hidden', !dup);
     }
 
-    function confirmSlotChange() {
+    async function confirmSlotChange() {
       if (!activeDayTarget || activeSlotIdx === null) return;
       const newDoc = document.getElementById('modal-new-doctor').value;
       const changedBy = document.getElementById('modal-changed-by').value.trim();
@@ -5820,6 +6900,12 @@
       const targetDays = applyFullWeekend
         ? week.days.filter(d => ['Viernes', 'Sábado', 'Domingo'].includes(d.dayName))
         : [week.days[dayIdx]];
+
+      const oldSample = week.days[dayIdx].slots[activeSlotIdx] || 'Sin asignar';
+      recordSnapshot(
+        `Cambio L${activeSlotIdx + 1} (${week.days[dayIdx].date}): ${oldSample} ➔ ${newDoc}`,
+        changedBy
+      );
 
       const nowStr = new Date().toLocaleString('es-ES', { dateStyle: 'short', timeStyle: 'short' });
 
@@ -5847,19 +6933,23 @@
         });
       });
 
-      saveState();
+      await saveState(true);
       closeChangeDrawer();
-      renderCalendar();
-      renderTeam();
-      renderAuditLogs();
+      refreshAllViews();
     }
 
     function renderTeam() {
       const grid = document.getElementById('doctors-grid');
       grid.innerHTML = '';
 
+      const activeDocs = getActiveDoctors();
+      const pill = document.getElementById('team-active-pill');
+      if (pill) {
+        pill.textContent = `✓ ${activeDocs.length} activos · ${doctorsList.length - activeDocs.length} de baja`;
+      }
+
       const counts = {};
-      OFFICIAL_DOCTORS.forEach(d => counts[d.nombre] = { total: 0, lj: 0, vsd: 0 });
+      doctorsList.forEach(d => counts[d.nombre] = { total: 0, lj: 0, vsd: 0 });
 
       weeksData.forEach(w => {
         w.days.forEach(day => {
@@ -5875,22 +6965,24 @@
         });
       });
 
-      OFFICIAL_DOCTORS.forEach(doc => {
+      doctorsList.forEach(doc => {
         const c = counts[doc.nombre] || { total: 0, lj: 0, vsd: 0 };
+        const isAct = doc.active !== false;
         const card = document.createElement('div');
-        card.className = 'doc-card';
+        card.className = `doc-card ${isAct ? '' : 'inactive-user'}`;
         card.innerHTML = `
           <div class="doc-card-top">
             <div>
-              <div style="display:flex; align-items:center; gap:7px;">
-                <span class="dot-sm" style="background:#10b981;"></span>
-                <strong style="font-size:15px; color:var(--text-strong);">${doc.nombre}</strong>
+              <div style="display:flex; flex-wrap:wrap; align-items:center; gap:7px;">
+                <span class="dot-sm" style="background:${isAct ? '#10b981' : '#f43f5e'};"></span>
+                <strong style="font-size:15px; color:var(--text-strong);">${escapeHtml(doc.nombre)}</strong>
+                ${!isAct ? `<span class="status-chip inactive" style="font-size:10px;">⏸️ ${escapeHtml(doc.inactiveReason || 'De baja')}</span>` : ''}
               </div>
               <div style="font-size:11.5px; color:var(--text-muted); margin-top:3px;">
-                Grupo Laboral <strong style="color:var(--text-secondary);">${doc.grupoLaboral}</strong> · Guardia habitual: <strong style="color:var(--accent-cyan);">${doc.grupoGuardia}</strong>
+                Grupo Laboral <strong style="color:var(--text-secondary);">${escapeHtml(doc.grupoLaboral)}</strong> · Guardia habitual: <strong style="color:var(--accent-cyan);">${escapeHtml(String(doc.grupoGuardia))}</strong>
               </div>
             </div>
-            <button onclick="filterByDoctorFromTeam('${doc.nombre}')" class="btn-mini" style="color:var(--accent-emerald);">Ver turnos ➔</button>
+            <button onclick="filterByDoctorFromTeam('${escapeHtml(doc.nombre)}')" class="btn-mini" style="color:var(--accent-emerald);">Ver turnos ➔</button>
           </div>
           <div class="doc-metrics">
             <div class="doc-metric-box">
@@ -5899,11 +6991,11 @@
             </div>
             <div class="doc-metric-box">
               <div style="font-size:10px; color:var(--text-muted);">Lunes–Jueves</div>
-              <div class="mono" style="font-size:13px; font-weight:700; color:var(--accent-cyan);">${c.lj} <span style="font-size:10px; color:var(--text-muted);">/ ${doc.lj}</span></div>
+              <div class="mono" style="font-size:13px; font-weight:700; color:var(--accent-cyan);">${c.lj} <span style="font-size:10px; color:var(--text-muted);">/ ${doc.lj || 12}</span></div>
             </div>
             <div class="doc-metric-box">
               <div style="font-size:10px; color:var(--text-muted);">Vie–Sáb–Dom</div>
-              <div class="mono" style="font-size:13px; font-weight:700; color:var(--accent-indigo);">${c.vsd} <span style="font-size:10px; color:var(--text-muted);">/ ${doc.vsd}</span></div>
+              <div class="mono" style="font-size:13px; font-weight:700; color:var(--accent-indigo);">${c.vsd} <span style="font-size:10px; color:var(--text-muted);">/ ${doc.vsd || 9}</span></div>
             </div>
           </div>
         `;
@@ -5919,6 +7011,7 @@
 
     function renderAuditLogs() {
       const container = document.getElementById('audit-log-container');
+      if (!container) return;
       if (auditLogs.length === 0) {
         container.innerHTML = `
           <div style="padding:20px; border-radius:14px; background:var(--bg-sub); border:1px solid var(--border-subtle); text-align:center; font-size:12.5px; color:var(--text-muted);">
@@ -5933,7 +7026,7 @@
           <div>
             <div style="display:flex; flex-wrap:wrap; align-items:center; gap:6px; margin-bottom:4px;">
               <span class="mono" style="background:var(--sem-bg); color:var(--sem-text); font-size:11px; font-weight:700; padding:2px 7px; border-radius:6px;">${log.timestamp}</span>
-              <strong style="font-size:12.5px; color:var(--text-strong);">${log.dayLabel} · ${log.slotNumber === 'Guardia' ? 'Guardia' : 'Localizada #' + log.slotNumber}</strong>
+              <strong style="font-size:12.5px; color:var(--text-strong);">${escapeHtml(log.dayLabel)} · ${log.slotNumber === 'Guardia' ? 'Guardia' : (log.slotNumber === '-' ? log.weekLabel : 'Localizada #' + log.slotNumber)}</strong>
               <span style="font-size:11px; color:var(--text-muted);">(G. Guardia #${log.guardGroup})</span>
             </div>
             <div style="font-size:13px;">
@@ -5951,7 +7044,7 @@
       `).join('');
     }
 
-    // === LECTOR DINÁMICO DE EXCEL ===
+    // === LECTOR DINÁMICO MULTI-EXCEL Y MULTI-HOJA (SIN ERRORES DE CELDAS) ===
     function ensureXLSXLoaded(callback) {
       if (window.XLSX) { callback(); return; }
       const script = document.createElement('script');
@@ -5959,38 +7052,6 @@
       script.onload = () => callback();
       script.onerror = () => alert('No se pudo cargar el lector de Excel sin conexión a internet.');
       document.head.appendChild(script);
-    }
-
-    function handleExcelUpload(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-      ensureXLSXLoaded(() => {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          try {
-            const data = new Uint8Array(e.target.result);
-            const workbook = XLSX.read(data, { type: 'array' });
-            let targetSheet = workbook.Sheets[workbook.SheetNames[0]];
-            for (const sName of workbook.SheetNames) {
-              const testRows = XLSX.utils.sheet_to_json(workbook.Sheets[sName], { header: 1, defval: '' });
-              const hasDays = testRows.some(r =>
-                r.some(c => normalizeText(c) === 'lunes') &&
-                r.some(c => normalizeText(c) === 'domingo')
-              );
-              if (hasDays) {
-                targetSheet = workbook.Sheets[sName];
-                break;
-              }
-            }
-            const rows = XLSX.utils.sheet_to_json(targetSheet, { header: 1, defval: '' });
-            parseAndVerifyExcelRows(rows, file.name);
-          } catch (err) {
-            alert('Error al leer el archivo Excel: ' + err.message);
-          }
-          event.target.value = '';
-        };
-        reader.readAsArrayBuffer(file);
-      });
     }
 
     function normalizeText(val) {
@@ -6001,6 +7062,16 @@
         .replace(/[̀-ͯ]/g, '');
     }
 
+    function canonicalizeDoctorName(rawVal) {
+      let s = String(rawVal || '').trim();
+      if (!s) return '';
+      s = s.replace(/^(dr\.?|dra\.?)\s+/i, '').trim();
+      s = s.replace(/^([A-Za-zÁÉÍÓÚÜÑ])\.\s*([A-Za-zÁÉÍÓÚÜÑ])/, '$1. $2');
+      const normInput = normalizeText(s);
+      const matched = doctorsList.find(d => normalizeText(d.nombre) === normInput);
+      return matched ? matched.nombre : s;
+    }
+
     function looksLikeDateCell(val) {
       if (typeof val === 'number' && val > 35000 && val < 65000) return true;
       const s = normalizeText(val);
@@ -6009,16 +7080,30 @@
       return MONTH_SHORT_ES.some(m => new RegExp(`(^|\b|\d|-)${m}(\b|$|\s|·)`).test(s));
     }
 
-    function parseAndVerifyExcelRows(rows, fileName) {
+    function worksheetToExpandedMatrix(worksheet) {
+      const rows = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: '' });
+      const merges = worksheet['!merges'] || [];
+      merges.forEach(m => {
+        const topVal = (rows[m.s.r] && rows[m.s.r][m.s.c] !== undefined) ? rows[m.s.r][m.s.c] : '';
+        if (topVal === '') return;
+        for (let r = m.s.r; r <= m.e.r; r++) {
+          if (!rows[r]) rows[r] = [];
+          for (let c = m.s.c; c <= m.e.c; c++) {
+            if (rows[r][c] === '' || rows[r][c] === undefined || rows[r][c] === null) {
+              rows[r][c] = topVal;
+            }
+          }
+        }
+      });
+      return rows;
+    }
+
+    function extractWeeksFromSheetRows(rows, fileName) {
       let headerRowIdx = rows.findIndex(r =>
         r.some(cell => normalizeText(cell) === 'lunes') &&
         r.some(cell => normalizeText(cell) === 'domingo')
       );
-
-      if (headerRowIdx === -1) {
-        alert('No se encontró la cabecera de calendario (Lunes a Domingo) en el archivo.');
-        return;
-      }
+      if (headerRowIdx === -1) return { weeks: [], verifiedCount: 0, specialTokens: [] };
 
       const headerRow = rows[headerRowIdx];
       const targetDays = [
@@ -6037,7 +7122,6 @@
       })).filter(d => d.colIdx !== -1);
 
       const firstDayCol = Math.min(...dayCols.map(d => d.colIdx));
-
       const fileYearMatch = fileName.match(/20(\d{2})/);
       let inferredYear = fileYearMatch ? parseInt('20' + fileYearMatch[1], 10) : 2026;
 
@@ -6068,6 +7152,10 @@
             rows[firstSlotRowIdx + 3] || []
           ];
 
+          const extraRow = rows[firstSlotRowIdx + 4] || [];
+          const extraLeft = extraRow.slice(0, firstDayCol).map(c => normalizeText(c));
+          const hasExtraGuardRow = extraLeft.some(txt => txt.includes('guardia fisica'));
+
           const days = [];
           dayCols.forEach(dc => {
             const rawDate = row[dc.colIdx];
@@ -6077,27 +7165,40 @@
 
             let ggRaw = String(guardRow[dc.colIdx] || '').trim().replace(/\?\?/g, '');
             const slots = slotRows.map(sr => {
-              const val = String(sr[dc.colIdx] || '').trim();
-              if (val) {
-                if (isVerifiedDoctor(val)) verifiedNamesCount++;
-                else unverifiedTokens.add(val);
-              }
-              return val;
+              const rawCell = String(sr[dc.colIdx] || '').trim();
+              if (!rawCell) return '';
+              const canon = canonicalizeDoctorName(rawCell);
+              if (isVerifiedDoctor(canon)) verifiedNamesCount++;
+              else unverifiedTokens.add(canon);
+              return canon;
             });
+
+            let guardMembers = getDefaultGuardMembersForGroup(ggRaw);
+            if (hasExtraGuardRow && String(extraRow[dc.colIdx] || '').trim()) {
+              const rawList = String(extraRow[dc.colIdx]).split(',').map(x => x.trim()).filter(Boolean);
+              guardMembers = rawList.map(entry => {
+                const mNote = entry.match(/^(.+?)\s*\((.+)\)$/);
+                if (mNote) {
+                  return { name: canonicalizeDoctorName(mNote[1]), note: mNote[2].trim() };
+                }
+                return { name: canonicalizeDoctorName(entry), note: '' };
+              });
+            }
 
             days.push({
               dayName: dc.dayName,
               date: dateMeta.displayDate,
               monthKey: dateMeta.monthKey,
               monthLabel: dateMeta.monthLabel,
+              sortValue: dateMeta.sortValue,
               guardGroup: ggRaw || '-',
-              guardMembers: getDefaultGuardMembersForGroup(ggRaw),
+              guardMembers,
               slots
             });
           });
 
-          const hasAnyContent = days.some(d => d.slots.some(s => s !== '') || (d.guardGroup !== '-' && d.guardGroup !== ''));
-          if (days.length > 0 && hasAnyContent) {
+          const hasAnySlotContent = days.some(d => d.slots.some(s => s !== ''));
+          if (days.length > 0 && hasAnySlotContent) {
             const rawWeekLabel = row.slice(0, firstDayCol)
               .map(c => String(c || '').trim())
               .find(txt => txt && normalizeText(txt) !== 'fecha') || '';
@@ -6108,78 +7209,151 @@
             parsedWeeks.push({
               weekLabel: finalWeekLabel,
               year: inferredYear,
+              sortValue: days[0].sortValue || 0,
               days
             });
           }
 
-          r = firstSlotRowIdx + 4;
+          r = firstSlotRowIdx + (hasExtraGuardRow ? 5 : 4);
         } else {
           r++;
         }
       }
 
-      if (parsedWeeks.length === 0) {
-        alert('No se pudieron extraer semanas con guardias del archivo Excel.');
-        return;
-      }
+      return {
+        weeks: parsedWeeks,
+        verifiedCount: verifiedNamesCount,
+        specialTokens: Array.from(unverifiedTokens)
+      };
+    }
 
-      const mode = document.querySelector('input[name="import-mode"]:checked').value;
-      let updatedCount = 0;
-      let addedCount = 0;
+    function handleExcelUpload(event) {
+      const files = Array.from(event.target.files || []);
+      if (files.length === 0) return;
+      processMultipleExcelFiles(files);
+      event.target.value = '';
+    }
 
-      if (mode === 'replace') {
-        weeksData = parsedWeeks;
-        addedCount = parsedWeeks.length;
-      } else {
-        parsedWeeks.forEach(newW => {
-          const newStartKey = `${newW.days[0]?.monthKey}|${newW.days[0]?.date}`;
-          const existingIdx = weeksData.findIndex(ew =>
-            `${ew.days[0]?.monthKey}|${ew.days[0]?.date}` === newStartKey
-          );
-          if (existingIdx !== -1) {
-            weeksData[existingIdx] = newW;
-            updatedCount++;
-          } else {
-            weeksData.push(newW);
-            addedCount++;
+    function processMultipleExcelFiles(files) {
+      ensureXLSXLoaded(async () => {
+        let allParsedWeeks = [];
+        let totalVerified = 0;
+        let allSpecialTokens = new Set();
+        const fileNames = [];
+
+        for (const file of files) {
+          try {
+            const arrayBuf = await file.arrayBuffer();
+            const data = new Uint8Array(arrayBuf);
+            const workbook = XLSX.read(data, { type: 'array' });
+            fileNames.push(file.name);
+
+            for (const sName of workbook.SheetNames) {
+              const sheet = workbook.Sheets[sName];
+              const rows = worksheetToExpandedMatrix(sheet);
+              const res = extractWeeksFromSheetRows(rows, `${file.name}_${sName}`);
+              if (res.weeks.length > 0) {
+                allParsedWeeks = allParsedWeeks.concat(res.weeks);
+                totalVerified += res.verifiedCount;
+                res.specialTokens.forEach(t => allSpecialTokens.add(t));
+              }
+            }
+          } catch (err) {
+            alert(`Error leyendo "${file.name}": ${err.message}`);
           }
+        }
+
+        if (allParsedWeeks.length === 0) {
+          alert('No se encontraron semanas con guardias válidas en los archivos seleccionados. Comprueba que existan las columnas Lunes a Domingo.');
+          return;
+        }
+
+        const mode = document.querySelector('input[name="import-mode"]:checked').value;
+        recordSnapshot(
+          `Antes de importar Excel (${fileNames.join(', ')})`,
+          'Administrador'
+        );
+
+        let updatedCount = 0;
+        let addedCount = 0;
+
+        if (mode === 'replace') {
+          weeksData = allParsedWeeks;
+          addedCount = allParsedWeeks.length;
+        } else {
+          allParsedWeeks.forEach(newW => {
+            const newStartKey = `${newW.days[0]?.monthKey}|${newW.days[0]?.date.split(' ')[0]}`;
+            const existingIdx = weeksData.findIndex(ew =>
+              `${ew.days[0]?.monthKey}|${ew.days[0]?.date.split(' ')[0]}` === newStartKey
+            );
+            if (existingIdx !== -1) {
+              weeksData[existingIdx] = newW;
+              updatedCount++;
+            } else {
+              weeksData.push(newW);
+              addedCount++;
+            }
+          });
+        }
+
+        weeksData.sort((a, b) => {
+          const sa = a.sortValue || parseSpanishDateMeta(a.days[0]?.date, a.year || 2026).sortValue;
+          const sb = b.sortValue || parseSpanishDateMeta(b.days[0]?.date, b.year || 2026).sortValue;
+          return sa - sb;
         });
-      }
 
-      const detectedMonths = Array.from(new Set(parsedWeeks.flatMap(w => w.days.map(d => d.monthLabel))));
+        const detectedMonths = Array.from(new Set(allParsedWeeks.flatMap(w => w.days.map(d => d.monthLabel))));
 
-      auditLogs.unshift({
-        id: Date.now(),
-        timestamp: new Date().toLocaleString('es-ES', { dateStyle: 'short', timeStyle: 'short' }),
-        weekLabel: 'Importación Excel',
-        dayLabel: fileName,
-        guardGroup: '1-9',
-        slotNumber: '-',
-        oldDoctor: mode === 'replace' ? 'Calendario anterior' : `${updatedCount} sem. actualizadas`,
-        newDoctor: `${addedCount} sem. nuevas (${detectedMonths.join(', ')})`,
-        changedBy: 'Administrador',
-        reason: `Verificados ${verifiedNamesCount} turnos oficiales`
+        auditLogs.unshift({
+          id: Date.now(),
+          timestamp: new Date().toLocaleString('es-ES', { dateStyle: 'short', timeStyle: 'short' }),
+          weekLabel: 'Importación Excel',
+          dayLabel: fileNames.join(', '),
+          guardGroup: '1-9',
+          slotNumber: '-',
+          oldDoctor: mode === 'replace' ? 'Calendario anterior' : `${updatedCount} sem. actualizadas`,
+          newDoctor: `+${addedCount} sem. añadidas (${detectedMonths.join(', ')})`,
+          changedBy: 'Administrador',
+          reason: `Verificados ${totalVerified} turnos · Total acumulado: ${weeksData.length} sem.`
+        });
+
+        expandedGuardiaKeys.clear();
+        selectedMonthFilter = 'ALL';
+        selectedWeekFilter = 'ALL';
+        await saveState(true);
+        refreshAllViews();
+
+        const reportEl = document.getElementById('upload-report');
+        reportEl.classList.remove('hidden');
+        reportEl.innerHTML = `
+          <div style="font-weight:800; color:var(--accent-emerald); margin-bottom:4px;">✅ ${fileNames.length} archivo(s) procesado(s) y guardado(s) en la base de datos</div>
+          <div>• <strong>Meses detectados:</strong> ${detectedMonths.join(', ')}</div>
+          <div>• <strong>Resultado:</strong> ${addedCount} semanas nuevas añadidas, ${updatedCount} semanas actualizadas (Total calendario: <strong>${weeksData.length} semanas</strong>)</div>
+          <div>• <strong>Turnos verificados en plantilla:</strong> ${totalVerified}</div>
+          <div>• <strong>Etiquetas festivas / especiales:</strong> ${allSpecialTokens.size > 0 ? Array.from(allSpecialTokens).join(', ') : 'Ninguna'}</div>
+        `;
       });
+    }
 
-      expandedGuardiaKeys.clear();
-      selectedMonthFilter = 'ALL';
-      selectedWeekFilter = 'ALL';
-      saveState();
-      renderMonthBar();
-      populateSelectors();
-      renderCalendar();
-      renderTeam();
-      renderAuditLogs();
-
-      const reportEl = document.getElementById('upload-report');
-      reportEl.classList.remove('hidden');
-      reportEl.innerHTML = `
-        <div style="font-weight:800; color:var(--accent-emerald); margin-bottom:4px;">✅ Archivo "${fileName}" interpretado correctamente</div>
-        <div>• <strong>Meses detectados:</strong> ${detectedMonths.join(', ')}</div>
-        <div>• <strong>Resultado:</strong> ${addedCount} semanas añadidas, ${updatedCount} semanas actualizadas</div>
-        <div>• <strong>Turnos verificados en plantilla oficial (14 médicos):</strong> ${verifiedNamesCount}</div>
-        <div>• <strong>Etiquetas festivas / especiales:</strong> ${unverifiedTokens.size > 0 ? Array.from(unverifiedTokens).join(', ') : 'Ninguna'}</div>
-      `;
+    function setupDragAndDrop() {
+      const dz = document.getElementById('excel-drop-zone');
+      if (!dz) return;
+      ['dragenter', 'dragover'].forEach(evt => {
+        dz.addEventListener(evt, (e) => {
+          e.preventDefault();
+          dz.classList.add('drag-over');
+        });
+      });
+      ['dragleave', 'drop'].forEach(evt => {
+        dz.addEventListener(evt, (e) => {
+          e.preventDefault();
+          dz.classList.remove('drag-over');
+        });
+      });
+      dz.addEventListener('drop', (e) => {
+        const files = Array.from(e.dataTransfer?.files || []).filter(f => /\.(xlsx|xls|csv)$/i.test(f.name));
+        if (files.length > 0) processMultipleExcelFiles(files);
+      });
     }
 
     function exportCurrentToExcel() {
@@ -6217,19 +7391,41 @@
       });
     }
 
-    function restoreInitialData() {
-      if (!confirm('¿Seguro que deseas restaurar el cuadrante original de Enero-Marzo 2026?')) return;
+    async function restoreInitialData() {
+      if (!confirm('¿Seguro que deseas restaurar los datos originales de fábrica (Enero–Marzo 2026)? Se guardará un punto de restauración antes de hacerlo.')) return;
+      recordSnapshot('Antes de restaurar datos de fábrica', 'Administrador');
+      doctorsList = JSON.parse(JSON.stringify(INITIAL_DOCTORS));
       weeksData = JSON.parse(JSON.stringify(INITIAL_WEEKS));
-      auditLogs = [];
       expandedGuardiaKeys.clear();
       selectedMonthFilter = 'ALL';
       selectedWeekFilter = 'ALL';
-      saveState();
+      auditLogs.unshift({
+        id: Date.now(),
+        timestamp: new Date().toLocaleString('es-ES', { dateStyle: 'short', timeStyle: 'short' }),
+        weekLabel: 'Restauración Fábrica',
+        dayLabel: 'Ene – Mar 2026',
+        guardGroup: '-',
+        slotNumber: '-',
+        oldDoctor: 'Estado anterior',
+        newDoctor: 'Cuadrante inicial restaurado',
+        changedBy: 'Administrador',
+        reason: 'Restauración inicial'
+      });
+      await saveState(true);
+      refreshAllViews();
+    }
+
+    function refreshAllViews() {
       renderMonthBar();
       populateSelectors();
+      updateStats();
       renderCalendar();
       renderTeam();
       renderAuditLogs();
+      if (isAdminAuthenticated()) {
+        renderAdminUsersList();
+        renderSnapshotsList();
+      }
     }
 
     function switchTab(tabName) {
@@ -6271,17 +7467,14 @@
       renderCalendar();
     }
 
-    // Inicialización inmediata
-    initTheme();
-    loadState();
-    initParallax();
-    renderMonthBar();
-    populateSelectors();
-    updateStats();
-    renderCalendar();
-    renderTeam();
-    renderAuditLogs();
-    updateAdminView();
+    (async function bootstrapApp() {
+      initTheme();
+      initParallax();
+      setupDragAndDrop();
+      await loadInitialState();
+      refreshAllViews();
+      updateAdminView();
+    })();
   </script>
 </body>
 </html>
