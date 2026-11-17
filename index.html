@@ -1143,6 +1143,109 @@
       border-radius: 999px;
     }
 
+
+    /* === SECCIÓN DESPLEGABLE "GUARDIA" (PERSONAL DE TRASPLANTE DE GUARDIA FÍSICA) === */
+    .guardia-accordion {
+      margin-top: 14px;
+      border: 1px solid var(--border-glass);
+      border-radius: 16px;
+      background: var(--bg-sub);
+      overflow: hidden;
+      transition: border-color 0.2s ease;
+    }
+    .guardia-accordion.open {
+      border-color: var(--accent-cyan);
+    }
+    .guardia-toggle-btn {
+      width: 100%;
+      background: transparent;
+      border: none;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      cursor: pointer;
+      color: var(--text-strong);
+      text-align: left;
+    }
+    .guardia-toggle-btn:hover {
+      background: rgba(6, 182, 212, 0.06);
+    }
+    .guardia-count-pill {
+      font-size: 11px;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: var(--sem-bg);
+      color: var(--sem-text);
+      border: 1px solid var(--sem-border);
+    }
+    .guardia-chevron {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--text-muted);
+      transition: transform 0.2s ease;
+    }
+    .guardia-accordion.open .guardia-chevron {
+      transform: rotate(180deg);
+      color: var(--accent-cyan);
+    }
+    .guardia-body {
+      padding: 0 14px 14px 14px;
+      border-top: 1px solid var(--border-subtle);
+    }
+    .guardia-body-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding-top: 10px;
+      margin-bottom: 8px;
+      font-size: 11.5px;
+      color: var(--text-muted);
+    }
+    .guardia-member-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      background: var(--bg-expanded-slot);
+      border: 1px solid var(--border-subtle);
+      border-radius: 11px;
+      padding: 8px 10px;
+      margin-bottom: 6px;
+    }
+    .guardia-member-actions {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      flex-shrink: 0;
+    }
+    .guardia-mini-icon {
+      background: var(--bg-btn-sec);
+      border: 1px solid var(--border-input);
+      color: var(--text-strong);
+      border-radius: 8px;
+      padding: 4px 8px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .guardia-mini-icon.danger {
+      color: var(--accent-rose);
+      border-color: rgba(244, 63, 94, 0.35);
+      background: rgba(244, 63, 94, 0.1);
+    }
+    .guardia-add-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px dashed var(--border-subtle);
+    }
+
     .hidden { display: none !important; }
   </style>
 </head>
@@ -3355,6 +3458,41 @@
           <button onclick="confirmSlotChange()" class="btn-save">Confirmar Cambio</button>
         </div>
       </div>
+
+      <!-- Ítem desplegable "Guardia" (oculto por defecto para no saturar) -->
+      <div id="guardia-accordion" class="guardia-accordion">
+        <button type="button" id="guardia-toggle-btn" class="guardia-toggle-btn" onclick="toggleGuardiaSection()" aria-expanded="false">
+          <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+            <span style="font-size:15px;">🏥</span>
+            <span style="font-weight:800; font-size:14px; color:var(--text-strong);">Guardia</span>
+            <span id="guardia-count-pill" class="guardia-count-pill mono">G.#1 · 0 trasplante</span>
+            <span id="guardia-mod-badge" class="hidden" style="font-size:10px; font-weight:700; color:var(--accent-amber);">✏️ Editado</span>
+          </div>
+          <span id="guardia-chevron" class="guardia-chevron">▾</span>
+        </button>
+
+        <div id="guardia-collapsible-body" class="guardia-body hidden">
+          <div class="guardia-body-header">
+            <span id="guardia-subtitle">Personal de trasplante de guardia física</span>
+            <button type="button" id="guardia-reset-btn" onclick="resetDayGuardMembers()" class="link-btn hidden" style="font-size:10.5px;">Restaurar grupo</button>
+          </div>
+
+          <div id="guardia-members-list"></div>
+
+          <div class="guardia-add-row">
+            <select id="guardia-add-select" onchange="onGuardiaAddSelectChange(this.value)" style="font-size:12px; padding:7px 9px;">
+              <option value="">+ Añadir médico de trasplante...</option>
+            </select>
+            <button type="button" onclick="addDayGuardMember()" class="btn-primary-sm" style="padding:7px 12px; white-space:nowrap;">
+              + Añadir
+            </button>
+          </div>
+          <div id="guardia-custom-input-row" class="hidden" style="display:flex; gap:6px; margin-top:6px;">
+            <input id="guardia-custom-name" type="text" placeholder="Nombre del facultativo..." style="font-size:12px; padding:7px 9px;" />
+            <button type="button" onclick="confirmCustomGuardMember()" class="btn-save" style="padding:7px 12px; font-size:12px; white-space:nowrap;">Guardar</button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -3380,6 +3518,22 @@
       'ene', 'feb', 'mar', 'abr', 'may', 'jun',
       'jul', 'ago', 'sep', 'oct', 'nov', 'dic'
     ];
+
+    // Personal del grupo de trasplantes que pertenece a cada grupo de guardia del hospital (1-9)
+    const GUARD_GROUP_TRANSPLANT_MEMBERS = {
+      '1': [],
+      '2': [],
+      '3': ['A. Callejo', 'A. Juez', 'C. Lugo'],
+      '4': ['N. González'],
+      '5': [],
+      '6': ['F. Torcal', 'M. Saiz'],
+      '7': [],
+      '8': ['D. Benguría'],
+      '9': ['V. Zarza', 'J. Ruíz', 'C. Olea']
+    };
+
+    let guardiaSectionOpen = false;
+    let editingGuardMemberIdx = null;
 
     let weeksData = [];
     let auditLogs = [];
@@ -3854,8 +4008,11 @@
     function openDayDetailModal(weekIdx, dayIdx) {
       activeDayTarget = { weekIdx, dayIdx };
       activeSlotIdx = null;
+      guardiaSectionOpen = false;
+      editingGuardMemberIdx = null;
       document.getElementById('change-drawer').classList.add('hidden');
       renderDayDetailContent();
+      renderGuardiaSection();
       document.getElementById('day-detail-modal').classList.remove('hidden');
     }
 
@@ -4037,6 +4194,268 @@
       renderCalendar();
       renderTeam();
       renderAuditLogs();
+    }
+
+    // === SECCIÓN DESPLEGABLE "GUARDIA" (PERSONAL DE TRASPLANTE DE GUARDIA FÍSICA) ===
+    function getDefaultGuardMembersForGroup(gg) {
+      const cleanKey = String(gg || '').replace(/[^0-9]/g, '');
+      return [...(GUARD_GROUP_TRANSPLANT_MEMBERS[cleanKey] || [])];
+    }
+
+    function getDayGuardMembers(day) {
+      if (Array.isArray(day.guardMembers)) {
+        return day.guardMembers;
+      }
+      return getDefaultGuardMembersForGroup(day.guardGroup);
+    }
+
+    function toggleGuardiaSection() {
+      guardiaSectionOpen = !guardiaSectionOpen;
+      editingGuardMemberIdx = null;
+      renderGuardiaSection();
+    }
+
+    function renderGuardiaSection() {
+      if (!activeDayTarget) return;
+      const { weekIdx, dayIdx } = activeDayTarget;
+      const day = weeksData[weekIdx].days[dayIdx];
+      const members = getDayGuardMembers(day);
+      const cleanGroup = String(day.guardGroup || '').replace(/[^0-9]/g, '');
+
+      const accordion = document.getElementById('guardia-accordion');
+      const bodyEl = document.getElementById('guardia-collapsible-body');
+      const toggleBtn = document.getElementById('guardia-toggle-btn');
+      const pillEl = document.getElementById('guardia-count-pill');
+      const modBadge = document.getElementById('guardia-mod-badge');
+      const resetBtn = document.getElementById('guardia-reset-btn');
+      const subtitleEl = document.getElementById('guardia-subtitle');
+
+      accordion.classList.toggle('open', guardiaSectionOpen);
+      bodyEl.classList.toggle('hidden', !guardiaSectionOpen);
+      toggleBtn.setAttribute('aria-expanded', String(guardiaSectionOpen));
+
+      const groupText = cleanGroup ? `G.#${cleanGroup}` : 'Sin grupo';
+      pillEl.textContent = `${groupText} · ${members.length} trasplante`;
+      modBadge.classList.toggle('hidden', !day.guardModified);
+      resetBtn.classList.toggle('hidden', !day.guardModified);
+      if (cleanGroup) {
+        resetBtn.textContent = `Restaurar G.#${cleanGroup}`;
+        subtitleEl.textContent = `De trasplante en guardia física (Grupo #${cleanGroup}):`;
+      } else {
+        subtitleEl.textContent = `Personal de trasplante en guardia física:`;
+      }
+
+      const listEl = document.getElementById('guardia-members-list');
+      if (members.length === 0) {
+        listEl.innerHTML = `
+          <div style="font-size:12px; color:var(--text-muted); padding:8px 10px; border-radius:10px; background:var(--bg-expanded-slot); border:1px dashed var(--border-subtle);">
+            Ningún miembro de trasplante de guardia física${cleanGroup ? ` en el Grupo #${cleanGroup}` : ''}. Puedes añadir manualmente abajo.
+          </div>
+        `;
+      } else {
+        listEl.innerHTML = members.map((mName, idx) => {
+          const docInfo = getDoctorInfo(mName);
+          if (editingGuardMemberIdx === idx) {
+            const optionsHtml = OFFICIAL_DOCTORS.map(d =>
+              `<option value="${d.nombre}" ${d.nombre === mName ? 'selected' : ''}>${d.nombre} (Grp ${d.grupoLaboral})</option>`
+            ).join('');
+            return `
+              <div class="guardia-member-row" style="gap:6px;">
+                <select id="guardia-edit-select-${idx}" style="font-size:12px; padding:5px 8px;">
+                  ${optionsHtml}
+                </select>
+                <div class="guardia-member-actions">
+                  <button type="button" onclick="saveEditedGuardMember(${idx})" class="guardia-mini-icon" style="color:var(--accent-emerald);">✓</button>
+                  <button type="button" onclick="cancelEditGuardMember()" class="guardia-mini-icon">✕</button>
+                </div>
+              </div>
+            `;
+          }
+          return `
+            <div class="guardia-member-row">
+              <div style="min-width:0; flex:1;">
+                <div style="display:flex; align-items:center; gap:6px;">
+                  <span class="dot-sm" style="background:#06b6d4;"></span>
+                  <strong style="font-size:13px; color:var(--text-strong);">${mName}</strong>
+                  ${docInfo ? `<span style="font-size:10.5px; color:var(--text-muted);">(Grp ${docInfo.grupoLaboral})</span>` : ''}
+                </div>
+              </div>
+              <div class="guardia-member-actions">
+                <button type="button" onclick="startEditGuardMember(${idx})" class="guardia-mini-icon" title="Cambiar médico">✏️</button>
+                <button type="button" onclick="removeDayGuardMember(${idx})" class="guardia-mini-icon danger" title="Quitar de guardia">✕</button>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      // Rellenar desplegable "+ Añadir médico de trasplante..."
+      const addSel = document.getElementById('guardia-add-select');
+      addSel.innerHTML = '<option value="">+ Añadir médico de trasplante...</option>';
+      OFFICIAL_DOCTORS.forEach(d => {
+        const alreadyInGuard = members.includes(d.nombre);
+        const opt = document.createElement('option');
+        opt.value = d.nombre;
+        opt.textContent = `${d.nombre} (Grp ${d.grupoLaboral})${alreadyInGuard ? ' · Ya en lista' : ''}`;
+        addSel.appendChild(opt);
+      });
+      const customOpt = document.createElement('option');
+      customOpt.value = '__CUSTOM__';
+      customOpt.textContent = '✍️ Otro nombre manualmente...';
+      addSel.appendChild(customOpt);
+
+      document.getElementById('guardia-custom-input-row').classList.add('hidden');
+      document.getElementById('guardia-custom-name').value = '';
+    }
+
+    function onGuardiaAddSelectChange(val) {
+      const customRow = document.getElementById('guardia-custom-input-row');
+      if (val === '__CUSTOM__') {
+        customRow.classList.remove('hidden');
+        document.getElementById('guardia-custom-name').focus();
+      } else {
+        customRow.classList.add('hidden');
+      }
+    }
+
+    function addDayGuardMember() {
+      if (!activeDayTarget) return;
+      const sel = document.getElementById('guardia-add-select');
+      const val = sel.value;
+      if (!val) return;
+      if (val === '__CUSTOM__') {
+        document.getElementById('guardia-custom-input-row').classList.remove('hidden');
+        document.getElementById('guardia-custom-name').focus();
+        return;
+      }
+      commitGuardMemberAddition(val);
+    }
+
+    function confirmCustomGuardMember() {
+      const customVal = document.getElementById('guardia-custom-name').value.trim();
+      if (!customVal) return;
+      commitGuardMemberAddition(customVal);
+    }
+
+    function commitGuardMemberAddition(newMemberName) {
+      if (!activeDayTarget) return;
+      const { weekIdx, dayIdx } = activeDayTarget;
+      const week = weeksData[weekIdx];
+      const day = week.days[dayIdx];
+      const currentList = [...getDayGuardMembers(day)];
+
+      if (currentList.includes(newMemberName)) {
+        alert(`${newMemberName} ya figura en la lista de guardia física de este día.`);
+        return;
+      }
+
+      currentList.push(newMemberName);
+      day.guardMembers = currentList;
+      day.guardModified = true;
+
+      auditLogs.unshift({
+        id: Date.now() + Math.random(),
+        timestamp: new Date().toLocaleString('es-ES', { dateStyle: 'short', timeStyle: 'short' }),
+        weekLabel: week.weekLabel,
+        dayLabel: `${day.dayName} ${day.date}`,
+        guardGroup: day.guardGroup,
+        slotNumber: 'Guardia',
+        oldDoctor: 'Lista guardia física',
+        newDoctor: `+ ${newMemberName}`,
+        changedBy: 'Edición en ficha diaria',
+        reason: 'Ampliación manual de personal de trasplante en guardia'
+      });
+
+      saveState();
+      renderGuardiaSection();
+      renderAuditLogs();
+    }
+
+    function startEditGuardMember(idx) {
+      editingGuardMemberIdx = idx;
+      renderGuardiaSection();
+    }
+
+    function cancelEditGuardMember() {
+      editingGuardMemberIdx = null;
+      renderGuardiaSection();
+    }
+
+    function saveEditedGuardMember(idx) {
+      if (!activeDayTarget) return;
+      const sel = document.getElementById(`guardia-edit-select-${idx}`);
+      if (!sel) return;
+      const newName = sel.value;
+      const { weekIdx, dayIdx } = activeDayTarget;
+      const week = weeksData[weekIdx];
+      const day = week.days[dayIdx];
+      const currentList = [...getDayGuardMembers(day)];
+      const oldName = currentList[idx];
+
+      if (oldName !== newName) {
+        currentList[idx] = newName;
+        day.guardMembers = currentList;
+        day.guardModified = true;
+
+        auditLogs.unshift({
+          id: Date.now() + Math.random(),
+          timestamp: new Date().toLocaleString('es-ES', { dateStyle: 'short', timeStyle: 'short' }),
+          weekLabel: week.weekLabel,
+          dayLabel: `${day.dayName} ${day.date}`,
+          guardGroup: day.guardGroup,
+          slotNumber: 'Guardia',
+          oldDoctor: oldName,
+          newDoctor: newName,
+          changedBy: 'Edición en ficha diaria',
+          reason: 'Cambio en guardia física del hospital'
+        });
+        saveState();
+        renderAuditLogs();
+      }
+
+      editingGuardMemberIdx = null;
+      renderGuardiaSection();
+    }
+
+    function removeDayGuardMember(idx) {
+      if (!activeDayTarget) return;
+      const { weekIdx, dayIdx } = activeDayTarget;
+      const week = weeksData[weekIdx];
+      const day = week.days[dayIdx];
+      const currentList = [...getDayGuardMembers(day)];
+      const removed = currentList.splice(idx, 1)[0];
+
+      day.guardMembers = currentList;
+      day.guardModified = true;
+      editingGuardMemberIdx = null;
+
+      auditLogs.unshift({
+        id: Date.now() + Math.random(),
+        timestamp: new Date().toLocaleString('es-ES', { dateStyle: 'short', timeStyle: 'short' }),
+        weekLabel: week.weekLabel,
+        dayLabel: `${day.dayName} ${day.date}`,
+        guardGroup: day.guardGroup,
+        slotNumber: 'Guardia',
+        oldDoctor: removed,
+        newDoctor: 'Retirado de guardia',
+        changedBy: 'Edición en ficha diaria',
+        reason: 'Baja / cambio en guardia física'
+      });
+
+      saveState();
+      renderGuardiaSection();
+      renderAuditLogs();
+    }
+
+    function resetDayGuardMembers() {
+      if (!activeDayTarget) return;
+      const { weekIdx, dayIdx } = activeDayTarget;
+      const day = weeksData[weekIdx].days[dayIdx];
+      delete day.guardMembers;
+      delete day.guardModified;
+      editingGuardMemberIdx = null;
+      saveState();
+      renderGuardiaSection();
     }
 
     function renderTeam() {
