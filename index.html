@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="es" data-theme="dark">
+<html lang="es" data-theme="light">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <meta id="meta-theme-color" name="theme-color" content="#060d18" />
+  <meta id="meta-theme-color" name="theme-color" content="#eef3f9" />
   <title>Localizadas Trasplante · Anestesiología</title>
   <style>
     :root, [data-theme="dark"] {
@@ -1173,9 +1173,9 @@
 
             <!-- Toggle Modo Oscuro / Claro (Accesible en móvil y escritorio) -->
             <button type="button" id="theme-toggle-btn" onclick="toggleTheme()" class="theme-toggle-btn" aria-label="Cambiar entre modo oscuro y claro" title="Alternar modo oscuro / claro">
-              <span id="theme-icon">🌙</span>
+              <span id="theme-icon">☀️</span>
               <span class="theme-track" aria-hidden="true"><span class="theme-thumb"></span></span>
-              <span id="theme-label">Oscuro</span>
+              <span id="theme-label">Claro</span>
             </button>
           </div>
           <h1>Localizadas <span class="gradient-text">Trasplante</span></h1>
@@ -3337,12 +3337,11 @@
 
         <div class="field-group">
           <label for="modal-changed-by" class="field-label">¿Quién realiza el cambio? <span style="color:var(--accent-rose);">* (Obligatorio)</span></label>
-          <select id="modal-quick-who" onchange="document.getElementById('modal-changed-by').value = this.value" style="margin-bottom:6px; font-size:12px;">
-            <option value="">-- Selección rápida de tu nombre --</option>
+          <select id="modal-changed-by" onchange="document.getElementById('modal-error-msg').classList.add('hidden')">
+            <option value="">-- Selecciona tu nombre --</option>
           </select>
-          <input id="modal-changed-by" type="text" placeholder="Escribe o selecciona tu nombre..." />
           <p id="modal-error-msg" class="hidden" style="font-size:11.5px; color:var(--accent-rose); font-weight:700; margin-top:4px;">
-            ⛔ Campo obligatorio: indica quién realiza este cambio.
+            ⛔ Campo obligatorio: selecciona quién realiza este cambio.
           </p>
         </div>
 
@@ -3370,7 +3369,7 @@
     const STORAGE_KEY_WEEKS = 'tx_anest_weeks_v4';
     const STORAGE_KEY_LOGS  = 'tx_anest_logs_v4';
     const STORAGE_KEY_CREDS = 'tx_anest_admin_creds_v1';
-    const STORAGE_KEY_THEME = 'tx_anest_theme_v1';
+    const STORAGE_KEY_THEME = 'tx_anest_theme_v2';
     const SESSION_KEY_AUTH  = 'tx_anest_admin_authed';
 
     const MONTH_NAMES_ES = [
@@ -3410,9 +3409,9 @@
     }
 
     function initTheme() {
-      let saved = 'dark';
+      let saved = 'light';
       try {
-        saved = localStorage.getItem(STORAGE_KEY_THEME) || 'dark';
+        saved = localStorage.getItem(STORAGE_KEY_THEME) || 'light';
       } catch (e) {}
       applyTheme(saved);
     }
@@ -3704,13 +3703,13 @@
       });
       docFilter.value = prevDoc;
 
-      const quickWho = document.getElementById('modal-quick-who');
-      quickWho.innerHTML = '<option value="">-- Selección rápida de tu nombre --</option>';
+      const changedBySel = document.getElementById('modal-changed-by');
+      changedBySel.innerHTML = '<option value="">-- Selecciona tu nombre --</option>';
       OFFICIAL_DOCTORS.forEach(d => {
         const opt = document.createElement('option');
         opt.value = d.nombre;
         opt.textContent = d.nombre;
-        quickWho.appendChild(opt);
+        changedBySel.appendChild(opt);
       });
     }
 
@@ -3966,7 +3965,6 @@
       checkDuplicateInModal();
 
       document.getElementById('modal-changed-by').value = '';
-      document.getElementById('modal-quick-who').value = '';
       document.getElementById('modal-reason').value = '';
       document.getElementById('modal-error-msg').classList.add('hidden');
       document.getElementById('change-drawer').classList.remove('hidden');
