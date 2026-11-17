@@ -643,6 +643,7 @@
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 5px;
+      align-items: start;
     }
     @media (min-width: 768px) {
       .weekdays-grid { gap: 8px; }
@@ -689,6 +690,7 @@
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 5px;
+      align-items: start;
     }
     @media (min-width: 768px) {
       .weekend-grid { gap: 7px; }
@@ -696,14 +698,16 @@
 
     /* === UNIDAD DE DÍA: RECUADRO LOCALIZADAS ARRIBA + GUARDIA CON "+" DEBAJO === */
     .day-unit {
+      min-width: 0;
+      width: 100%;
       background: var(--bg-day);
       border: 1px solid var(--border-subtle);
       border-radius: 12px;
       overflow: hidden;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
-      transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.25s ease, box-shadow 0.25s ease;
+      justify-content: flex-start;
+      transition: border-color 0.25s ease, box-shadow 0.25s ease;
     }
     @media (min-width: 768px) {
       .day-unit { border-radius: 14px; }
@@ -720,10 +724,8 @@
       background: var(--bg-day-match);
     }
     .day-unit.guardia-expanded {
-      grid-column: 1 / -1;
       border-color: var(--accent-cyan);
-      box-shadow: 0 12px 28px -6px rgba(6, 182, 212, 0.28);
-      z-index: 5;
+      box-shadow: 0 10px 24px -6px rgba(6, 182, 212, 0.28);
     }
 
     /* Parte superior: Botón de Localizadas */
@@ -938,70 +940,97 @@
     }
     .day-guardia-drawer-inner {
       overflow: hidden;
+      min-width: 0;
     }
     .guardia-drawer-content {
-      padding: 10px;
+      padding: 7px 6px;
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 6px;
+      min-width: 0;
+    }
+    @media (min-width: 768px) {
+      .guardia-drawer-content { padding: 8px 7px; gap: 7px; }
     }
     .guardia-drawer-top {
       display: flex;
+      flex-wrap: wrap;
       align-items: center;
       justify-content: space-between;
-      gap: 6px;
-      font-size: 11px;
+      gap: 4px;
+      font-size: 10px;
       font-weight: 800;
       color: var(--accent-cyan);
     }
 
-    /* Fila de cada persona de guardia + campo de texto al lado + botón Guardar */
+    /* Fila compacta dentro de la propia columna del día */
     .inline-guardia-row {
       display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 6px;
-      padding: 7px 8px;
-      border-radius: 10px;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 4px;
+      padding: 6px;
+      border-radius: 9px;
       background: var(--bg-expanded-slot);
       border: 1px solid var(--border-subtle);
+      min-width: 0;
       animation: fadeSlideIn 0.26s cubic-bezier(0.22, 1, 0.36, 1) both;
     }
     @keyframes fadeSlideIn {
       from { opacity: 0; transform: translateY(-5px); }
       to { opacity: 1; transform: translateY(0); }
     }
+    .inline-guardia-person-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 4px;
+      min-width: 0;
+    }
     .inline-guardia-person {
       display: inline-flex;
       align-items: center;
-      gap: 5px;
-      min-width: 108px;
-      flex-shrink: 0;
+      gap: 4px;
+      min-width: 0;
+      flex: 1;
+    }
+    .inline-guardia-person strong {
+      font-size: 11px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    @media (min-width: 768px) {
+      .inline-guardia-person strong { font-size: 11.5px; }
     }
     .inline-guardia-note-wrap {
       display: flex;
+      flex-wrap: wrap;
       align-items: center;
-      gap: 5px;
-      flex: 1;
-      min-width: 170px;
+      gap: 4px;
+      width: 100%;
+      min-width: 0;
     }
     .inline-guardia-input {
-      padding: 6px 8px !important;
-      font-size: 11.5px !important;
-      border-radius: 8px !important;
-      flex: 1;
+      padding: 4px 6px !important;
+      font-size: 10.5px !important;
+      border-radius: 7px !important;
+      flex: 1 1 68px;
+      min-width: 0;
+      width: 100%;
     }
     .inline-guardia-save-btn {
       background: linear-gradient(135deg, #10b981, #0891b2);
       border: none;
       color: #ffffff;
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 800;
-      padding: 6px 10px;
-      border-radius: 8px;
+      padding: 4px 7px;
+      border-radius: 7px;
       cursor: pointer;
       white-space: nowrap;
-      flex-shrink: 0;
+      flex: 1 0 auto;
+      text-align: center;
       transition: transform 0.14s ease, opacity 0.2s ease;
     }
     .inline-guardia-save-btn:active {
@@ -1014,10 +1043,10 @@
       background: rgba(244, 63, 94, 0.12);
       border: 1px solid rgba(244, 63, 94, 0.35);
       color: var(--accent-rose);
-      width: 24px;
-      height: 24px;
-      border-radius: 7px;
-      font-size: 11px;
+      width: 19px;
+      height: 19px;
+      border-radius: 6px;
+      font-size: 10px;
       font-weight: 800;
       cursor: pointer;
       display: flex;
@@ -1027,11 +1056,19 @@
     }
     .inline-guardia-add-bar {
       display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 6px;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 4px;
       padding-top: 6px;
       border-top: 1px dashed var(--border-subtle);
+      min-width: 0;
+    }
+    .inline-guardia-select {
+      width: 100%;
+      min-width: 0;
+      font-size: 10.5px !important;
+      padding: 5px 6px !important;
+      border-radius: 7px !important;
     }
 
     /* Colores Grupos de Guardia 1-9 (Modo Oscuro) */
@@ -5156,21 +5193,27 @@
       let rowsHtml = '';
       if (members.length === 0) {
         rowsHtml = `
-          <div style="font-size:11.5px; color:var(--text-muted); padding:6px 8px; border-radius:8px; background:var(--bg-expanded-slot); border:1px dashed var(--border-subtle);">
-            Ningún miembro de trasplante en guardia física (${groupLabel}). Añade uno abajo:
+          <div style="font-size:10.5px; color:var(--text-muted); padding:5px 6px; border-radius:7px; background:var(--bg-expanded-slot); border:1px dashed var(--border-subtle);">
+            Sin guardia trasplante (${groupLabel}).
           </div>
         `;
       } else {
         rowsHtml = members.map((m, mIdx) => {
-          const docInfo = getDoctorInfo(m.name);
           const inputId = `guard-note-${wIdx}-${dIdx}-${mIdx}`;
           const btnId   = `guard-save-${wIdx}-${dIdx}-${mIdx}`;
           return `
             <div class="inline-guardia-row">
-              <div class="inline-guardia-person">
-                <span class="dot-sm" style="background:#06b6d4;"></span>
-                <strong style="font-size:12.5px; color:var(--text-strong);">${escapeHtml(m.name)}</strong>
-                ${docInfo ? `<span style="font-size:10px; color:var(--text-muted);">(${docInfo.grupoLaboral})</span>` : ''}
+              <div class="inline-guardia-person-bar">
+                <div class="inline-guardia-person">
+                  <span class="dot-sm" style="background:#06b6d4; flex-shrink:0;"></span>
+                  <strong style="color:var(--text-strong);">${escapeHtml(m.name)}</strong>
+                </div>
+                <button
+                  type="button"
+                  onclick="removeInlineGuardMember(${wIdx}, ${dIdx}, ${mIdx})"
+                  class="inline-guardia-del-btn"
+                  title="Quitar de guardia"
+                >✕</button>
               </div>
               <div class="inline-guardia-note-wrap">
                 <input
@@ -5178,7 +5221,7 @@
                   type="text"
                   class="inline-guardia-input"
                   value="${escapeHtml(m.note)}"
-                  placeholder="Nota / observación..."
+                  placeholder="Nota..."
                   onkeydown="if(event.key==='Enter'){ event.preventDefault(); saveGuardMemberNote(${wIdx}, ${dIdx}, ${mIdx}); }"
                 />
                 <button
@@ -5187,12 +5230,6 @@
                   onclick="saveGuardMemberNote(${wIdx}, ${dIdx}, ${mIdx})"
                   class="inline-guardia-save-btn"
                 >Guardar</button>
-                <button
-                  type="button"
-                  onclick="removeInlineGuardMember(${wIdx}, ${dIdx}, ${mIdx})"
-                  class="inline-guardia-del-btn"
-                  title="Quitar de guardia"
-                >✕</button>
               </div>
             </div>
           `;
@@ -5205,50 +5242,51 @@
 
       const doctorOptions = OFFICIAL_DOCTORS.map(d => {
         const exists = members.some(m => m.name === d.nombre);
-        return `<option value="${escapeHtml(d.nombre)}">${escapeHtml(d.nombre)} (Grp ${d.grupoLaboral})${exists ? ' · Ya añadido' : ''}</option>`;
+        return `<option value="${escapeHtml(d.nombre)}">${escapeHtml(d.nombre)}${exists ? ' ✓' : ''}</option>`;
       }).join('');
 
       return `
         <div class="guardia-drawer-content">
           <div class="guardia-drawer-top">
-            <span>🏥 Guardia física · ${day.dayName} ${day.date} (${groupLabel})</span>
-            ${day.guardModified ? `<button type="button" onclick="resetInlineGuardMembers(${wIdx}, ${dIdx})" class="link-btn" style="font-size:10.5px;">Restaurar ${groupLabel}</button>` : ''}
+            <span>🏥 ${groupLabel}</span>
+            ${day.guardModified ? `<button type="button" onclick="resetInlineGuardMembers(${wIdx}, ${dIdx})" class="link-btn" style="font-size:10px;">Restaurar</button>` : ''}
           </div>
 
-          <div style="display:flex; flex-direction:column; gap:6px;">
+          <div style="display:flex; flex-direction:column; gap:5px; min-width:0;">
             ${rowsHtml}
           </div>
 
           <div class="inline-guardia-add-bar">
             <select
               id="${addSelectId}"
+              class="inline-guardia-select"
               onchange="onInlineGuardAddSelect(${wIdx}, ${dIdx}, this.value)"
-              style="flex:1; min-width:165px; font-size:11.5px; padding:6px 8px;"
             >
-              <option value="">+ Elegir persona de guardia...</option>
+              <option value="">+ Añadir guardia...</option>
               ${doctorOptions}
-              <option value="__CUSTOM__">✍️ Escribir otro nombre...</option>
+              <option value="__CUSTOM__">✍️ Otro nombre...</option>
             </select>
             <button
               type="button"
               onclick="addInlineGuardMember(${wIdx}, ${dIdx})"
               class="btn-primary-sm"
-              style="padding:6px 11px; font-size:11.5px;"
+              style="padding:5px 8px; font-size:10.5px; width:100%;"
             >+ Añadir</button>
           </div>
 
-          <div id="${customWrapId}" class="hidden" style="display:flex; gap:6px;">
+          <div id="${customWrapId}" class="hidden" style="display:flex; flex-direction:column; gap:4px; min-width:0;">
             <input
               id="${customInpId}"
               type="text"
-              placeholder="Nombre del médico de guardia..."
-              style="font-size:11.5px; padding:6px 8px;"
+              placeholder="Nombre..."
+              style="font-size:10.5px; padding:4px 6px; width:100%; min-width:0;"
               onkeydown="if(event.key==='Enter'){ event.preventDefault(); confirmInlineCustomGuard(${wIdx}, ${dIdx}); }"
             />
             <button
               type="button"
               onclick="confirmInlineCustomGuard(${wIdx}, ${dIdx})"
               class="inline-guardia-save-btn"
+              style="width:100%;"
             >Añadir</button>
           </div>
         </div>
