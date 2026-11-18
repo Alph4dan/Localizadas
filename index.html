@@ -501,6 +501,7 @@
     }
     .text-emerald { color: var(--accent-emerald); }
     .text-cyan { color: var(--accent-cyan); }
+    .text-rose { color: var(--accent-rose); }
 
     /* === CONTROLES Y FILTROS === */
     .controls-row {
@@ -1225,12 +1226,87 @@
       box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.25);
     }
 
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .modal-gg-badge {
+      font-size: 11px;
+      padding: 3px 9px;
+      display: inline-block;
+      margin-bottom: 6px;
+    }
+    .modal-title {
+      font-size: 21px;
+      font-weight: 800;
+      color: var(--text-strong);
+      letter-spacing: -0.02em;
+    }
+    .modal-subtitle {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
     .change-drawer {
       margin-top: 14px;
       border: 1px solid var(--border-glass);
       background: var(--bg-sub);
-      border-radius: 4px;
+      border-radius: 12px;
       padding: 14px;
+      box-shadow: var(--specular-top);
+      animation: fadeSlideIn 0.22s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+    .modal-drawer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+    .modal-drawer-title {
+      font-size: 13.5px;
+      color: var(--accent-cyan);
+    }
+    .modal-drawer-close {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 2px 4px;
+    }
+    .modal-drawer-close:hover { color: var(--text-strong); }
+    .modal-warn-msg {
+      font-size: 11px;
+      color: var(--accent-amber);
+      margin-top: 4px;
+    }
+    .modal-error-msg {
+      font-size: 11.5px;
+      color: var(--accent-rose);
+      font-weight: 700;
+      margin-top: 4px;
+    }
+    .modal-checkbox {
+      width: 16px;
+      height: 16px;
+      accent-color: #6366f1;
+      flex-shrink: 0;
+    }
+    .modal-hint {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 5px;
+    }
+    .modal-delete-wrap {
+      margin-top: 10px;
+      text-align: center;
+    }
+    .modal-delete-wrap .btn-danger-sm {
+      width: 100%;
     }
     .field-group { margin-top: 11px; }
     .field-label {
@@ -5526,15 +5602,15 @@
   <!-- ===================================================================== -->
   <!-- MODAL AMPLIADO DEL DÍA: VER Y CAMBIAR LOS 4 PUESTOS DE LOCALIZADA     -->
   <!-- ===================================================================== -->
-  <div id="day-detail-modal" class="modal-backdrop hidden" onclick="if(event.target===this) closeDayDetailModal()">
+  <div id="day-detail-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="detail-day-title" onclick="if(event.target===this) closeDayDetailModal()">
     <div class="modal-box">
-      <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;">
+      <div class="modal-header">
         <div>
-          <span id="detail-badge-gg" class="gg-pill-xs mono gg-1" style="font-size:11px; padding:3px 9px; display:inline-block; margin-bottom:6px;">Grupo Guardia #1</span>
-          <h3 id="detail-day-title" style="font-size:21px; font-weight:800; color:var(--text-strong);">Lunes 11-ene</h3>
-          <p id="detail-week-subtitle" style="font-size:12px; color:var(--text-muted);">Semana 11-ene a 17-ene · Toca un puesto para cambiarlo</p>
+          <span id="detail-badge-gg" class="gg-pill-xs mono gg-1 modal-gg-badge">Grupo Guardia #1</span>
+          <h3 id="detail-day-title" class="modal-title">Lunes 11-ene</h3>
+          <p id="detail-week-subtitle" class="modal-subtitle">Semana 11-ene a 17-ene · Toca un puesto para cambiarlo</p>
         </div>
-        <button onclick="closeDayDetailModal()" class="icon-btn" style="width:36px; height:36px;">✕</button>
+        <button type="button" onclick="closeDayDetailModal()" class="icon-btn" aria-label="Cerrar detalle del día">✕</button>
       </div>
 
       <!-- Lista ampliada de los 4 puestos de localizada del día seleccionado -->
@@ -5542,43 +5618,43 @@
 
       <!-- Panel desplegable de edición cuando se pulsa uno de los 4 puestos -->
       <div id="change-drawer" class="change-drawer hidden">
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-          <strong id="drawer-title" style="font-size:13.5px; color:var(--accent-cyan);">✏️ Cambiar Localizada #1</strong>
-          <button onclick="closeChangeDrawer()" style="background:none; border:none; color:var(--text-muted); font-size:12px; cursor:pointer;">Cerrar ✕</button>
+        <div class="modal-drawer-header">
+          <strong id="drawer-title" class="modal-drawer-title">✏️ Cambiar Localizada #1</strong>
+          <button type="button" onclick="closeChangeDrawer()" class="modal-drawer-close">Cerrar ✕</button>
         </div>
 
         <div class="field-group">
-          <label for="modal-new-doctor" class="field-label">Sustituir por (Médicos Activos) <span style="color:var(--accent-rose);">*</span></label>
+          <label for="modal-new-doctor" class="field-label">Sustituir por (Médicos Activos) <span class="text-rose">*</span></label>
           <select id="modal-new-doctor"></select>
-          <p id="modal-duplicate-warning" class="hidden" style="font-size:11px; color:var(--accent-amber); margin-top:4px;">
+          <p id="modal-duplicate-warning" class="modal-warn-msg hidden" aria-live="polite">
             ⚠️ Este médico ya está asignado en otro puesto este mismo día.
           </p>
         </div>
 
         <!-- Opción inteligente para aplicar a todo el bloque de fin de semana -->
         <label id="weekend-sync-wrapper" class="weekend-sync-box hidden">
-          <input type="checkbox" id="modal-apply-full-weekend" style="width:16px; height:16px; accent-color:#6366f1;" />
+          <input type="checkbox" id="modal-apply-full-weekend" class="modal-checkbox" />
           <span>Aplicar cambio a <strong>todo el fin de semana</strong> (Vie–Sáb–Dom)</span>
         </label>
 
         <div class="field-group">
-          <label for="modal-changed-by" class="field-label">¿Quién realiza el cambio? <span style="color:var(--accent-rose);">* (Obligatorio)</span></label>
+          <label for="modal-changed-by" class="field-label">¿Quién realiza el cambio? <span class="text-rose">* (Obligatorio)</span></label>
           <select id="modal-changed-by" onchange="document.getElementById('modal-error-msg').classList.add('hidden')">
             <option value="">-- Selecciona tu nombre --</option>
           </select>
-          <p id="modal-error-msg" class="hidden" style="font-size:11.5px; color:var(--accent-rose); font-weight:700; margin-top:4px;">
+          <p id="modal-error-msg" class="modal-error-msg hidden" role="alert">
             ⛔ Campo obligatorio: selecciona quién realiza este cambio.
           </p>
         </div>
 
         <div class="field-group">
           <label for="modal-reason" class="field-label" style="color:var(--text-muted);">Motivo (opcional)</label>
-          <input id="modal-reason" type="text" placeholder="Ej. Cambio acordado con compañero" style="font-size:12px;" />
+          <input id="modal-reason" type="text" placeholder="Ej. Cambio acordado con compañero" />
         </div>
 
         <div class="modal-actions">
-          <button onclick="closeChangeDrawer()" class="btn-cancel">Cancelar</button>
-          <button onclick="confirmSlotChange()" class="btn-save">Confirmar Cambio</button>
+          <button type="button" onclick="closeChangeDrawer()" class="btn-cancel">Cancelar</button>
+          <button type="button" onclick="confirmSlotChange()" class="btn-save">Confirmar Cambio</button>
         </div>
       </div>
     </div>
@@ -5653,19 +5729,19 @@
   <!-- ===================================================================== -->
   <!-- MODAL AÑADIR / EDITAR TX RENAL VIVO DE LA SEMANA                      -->
   <!-- ===================================================================== -->
-  <div id="txvivo-modal" class="modal-backdrop hidden" onclick="if(event.target===this) closeTxVivoModal()">
+  <div id="txvivo-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="txvivo-modal-title" onclick="if(event.target===this) closeTxVivoModal()">
     <div class="modal-box">
-      <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;">
+      <div class="modal-header">
         <div>
           <span class="pill-badge" style="margin-bottom:6px;"><svg class="kidneys-icon" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 6.2C8.3 4.2 5.4 3.8 3.8 5.8C2.2 7.8 2.2 12.2 3.8 14.4C5.3 16.4 8.2 16.1 9.5 14.1C10.1 13.1 9.1 11.9 9.1 10.2C9.1 8.5 10.1 7.2 9.5 6.2Z" fill="currentColor" fill-opacity="0.22"/><path d="M14.5 6.2C15.7 4.2 18.6 3.8 20.2 5.8C21.8 7.8 21.8 12.2 20.2 14.4C18.7 16.4 15.8 16.1 14.5 14.1C13.9 13.1 14.9 11.9 14.9 10.2C14.9 8.5 13.9 7.2 14.5 6.2Z" fill="currentColor" fill-opacity="0.22"/><path d="M9.1 10.8C10.4 11.5 10.8 14.2 10.8 19.5"/><path d="M14.9 10.8C13.6 11.5 13.2 14.2 13.2 19.5"/></svg> Trasplante Renal de Vivo</span>
-          <h3 id="txvivo-modal-title" style="font-size:20px; font-weight:800; color:var(--text-strong);">Añadir Tx Renal vivo</h3>
-          <p id="txvivo-modal-subtitle" style="font-size:12px; color:var(--text-muted);">Selecciona el día de la semana y escribe la anotación</p>
+          <h3 id="txvivo-modal-title" class="modal-title">Añadir Tx Renal vivo</h3>
+          <p id="txvivo-modal-subtitle" class="modal-subtitle">Selecciona el día de la semana y escribe la anotación</p>
         </div>
-        <button type="button" onclick="closeTxVivoModal()" class="icon-btn" style="width:36px; height:36px;">✕</button>
+        <button type="button" onclick="closeTxVivoModal()" class="icon-btn" aria-label="Cerrar ventana de Tx Renal vivo">✕</button>
       </div>
 
       <div class="field-group">
-        <label for="txvivo-day-select" class="field-label">Día de la semana <span style="color:var(--accent-rose);">*</span></label>
+        <label for="txvivo-day-select" class="field-label">Día de la semana <span class="text-rose">*</span></label>
         <select id="txvivo-day-select" onchange="onTxVivoDaySelectChange()"></select>
       </div>
 
@@ -5677,7 +5753,7 @@
           placeholder="Ej. Quirófano 4 · Equipo / Receptor-Donante..."
           onkeydown="if(event.key==='Enter'){ event.preventDefault(); confirmTxVivoModal(); }"
         />
-        <p style="font-size:11px; color:var(--text-muted); margin-top:5px;">
+        <p class="modal-hint">
           Al aceptar se mostrará automáticamente debajo de <strong>Guardia</strong> en el día elegido.
         </p>
       </div>
@@ -5687,8 +5763,8 @@
         <button type="button" onclick="confirmTxVivoModal()" class="btn-save">Aceptar</button>
       </div>
 
-      <div id="txvivo-delete-wrap" class="hidden" style="margin-top:10px; text-align:center;">
-        <button type="button" onclick="deleteTxVivoFromModal()" class="btn-danger-sm" style="width:100%;">
+      <div id="txvivo-delete-wrap" class="modal-delete-wrap hidden">
+        <button type="button" onclick="deleteTxVivoFromModal()" class="btn-danger-sm">
           🗑️ Eliminar Tx Renal vivo de este día
         </button>
       </div>
@@ -5745,12 +5821,21 @@
     let editingUserId = null;
     let activeTxVivoWeekIdx = null;
 
+    const HTML_ESCAPE_RE = /[&<>"']/g;
+    const HTML_ESCAPE_TEST_RE = /[&<>"']/;
+    const HTML_ESCAPE_MAP = {
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#39;'
+    };
+
     function escapeHtml(str) {
-      return String(str || '')
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;');
+      if (str === null || str === undefined) return '';
+      const s = typeof str === 'string' ? str : String(str);
+      if (!s || !HTML_ESCAPE_TEST_RE.test(s)) return s;
+      return s.replace(HTML_ESCAPE_RE, ch => HTML_ESCAPE_MAP[ch]);
     }
 
     // === GESTIÓN DE MODO OSCURO / CLARO ===
@@ -5864,6 +5949,14 @@
     }
 
     // === CAPA DE BASE DE DATOS: INDEXEDDB + CLOUD (FIREBASE / SUPABASE / UPSTASH) ===
+    const TRAILING_SLASH_RE = /\/+$/;
+
+    function cloneData(val) {
+      return typeof structuredClone === 'function'
+        ? structuredClone(val)
+        : JSON.parse(JSON.stringify(val));
+    }
+
     function getCloudConfig() {
       try {
         const raw = localStorage.getItem(STORAGE_KEY_CLOUD);
@@ -5909,9 +6002,16 @@
       lbl.textContent = text;
     }
 
+    let idbPromise = null;
+
     function openIndexedDB() {
-      return new Promise((resolve, reject) => {
-        if (!window.indexedDB) { reject(new Error('No IDB')); return; }
+      if (idbPromise) return idbPromise;
+      idbPromise = new Promise((resolve, reject) => {
+        if (!window.indexedDB) {
+          idbPromise = null;
+          reject(new Error('No IDB'));
+          return;
+        }
         const req = indexedDB.open(IDB_NAME, 1);
         req.onupgradeneeded = (e) => {
           const db = e.target.result;
@@ -5919,15 +6019,24 @@
             db.createObjectStore(IDB_STORE);
           }
         };
-        req.onsuccess = () => resolve(req.result);
-        req.onerror = () => reject(req.error);
+        req.onsuccess = () => {
+          const db = req.result;
+          db.onclose = () => { idbPromise = null; };
+          db.onversionchange = () => { db.close(); idbPromise = null; };
+          resolve(db);
+        };
+        req.onerror = () => {
+          idbPromise = null;
+          reject(req.error);
+        };
       });
+      return idbPromise;
     }
 
     async function writeToIndexedDB(payload) {
       try {
         const db = await openIndexedDB();
-        return new Promise((resolve) => {
+        return await new Promise((resolve) => {
           const tx = db.transaction(IDB_STORE, 'readwrite');
           tx.objectStore(IDB_STORE).put(payload, 'current');
           tx.oncomplete = () => resolve(true);
@@ -5941,7 +6050,7 @@
     async function readFromIndexedDB() {
       try {
         const db = await openIndexedDB();
-        return new Promise((resolve) => {
+        return await new Promise((resolve) => {
           const tx = db.transaction(IDB_STORE, 'readonly');
           const req = tx.objectStore(IDB_STORE).get('current');
           req.onsuccess = () => resolve(req.result || null);
@@ -5952,25 +6061,36 @@
       }
     }
 
-    async function pushToCloudDB(payload) {
+    async function cloudFetch(url, options = {}, timeoutMs = 10000) {
+      const controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
+      const timer = controller ? setTimeout(() => controller.abort(), timeoutMs) : 0;
+      try {
+        const res = await fetch(url, controller ? { ...options, signal: controller.signal } : options);
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        return res;
+      } finally {
+        if (timer) clearTimeout(timer);
+      }
+    }
+
+    async function pushToCloudDB(payload, preSerializedJson) {
       const cfg = getCloudConfig();
       if (!cfg || cfg.provider === 'local') return false;
       setDbStatusBadge('syncing', 'Guardando...');
       try {
         if (cfg.provider === 'firebase' && cfg.firebaseUrl) {
-          const baseUrl = cfg.firebaseUrl.replace(/\/+$/, '');
-          const res = await fetch(`${baseUrl}/trasplante_localizadas.json`, {
+          const baseUrl = cfg.firebaseUrl.replace(TRAILING_SLASH_RE, '');
+          await cloudFetch(`${baseUrl}/trasplante_localizadas.json`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
+            body: preSerializedJson || JSON.stringify(payload)
           });
-          if (!res.ok) throw new Error('HTTP ' + res.status);
           setDbStatusBadge('cloud-ok', 'Nube OK');
           return true;
         }
         if (cfg.provider === 'supabase' && cfg.supabaseUrl && cfg.supabaseKey) {
-          const baseUrl = cfg.supabaseUrl.replace(/\/+$/, '');
-          const res = await fetch(`${baseUrl}/rest/v1/trasplante_db`, {
+          const baseUrl = cfg.supabaseUrl.replace(TRAILING_SLASH_RE, '');
+          await cloudFetch(`${baseUrl}/rest/v1/trasplante_db`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -5980,21 +6100,19 @@
             },
             body: JSON.stringify({ id: 'main', payload })
           });
-          if (!res.ok) throw new Error('HTTP ' + res.status);
           setDbStatusBadge('cloud-ok', 'Supabase OK');
           return true;
         }
         if (cfg.provider === 'upstash' && cfg.upstashUrl && cfg.upstashToken) {
-          const baseUrl = cfg.upstashUrl.replace(/\/+$/, '');
-          const res = await fetch(`${baseUrl}/set/trasplante_localizadas`, {
+          const baseUrl = cfg.upstashUrl.replace(TRAILING_SLASH_RE, '');
+          await cloudFetch(`${baseUrl}/set/trasplante_localizadas`, {
             method: 'POST',
             headers: {
               'Authorization': `Bearer ${cfg.upstashToken}`,
               'Content-Type': 'application/json'
             },
-            body: JSON.stringify(payload)
+            body: preSerializedJson || JSON.stringify(payload)
           });
-          if (!res.ok) throw new Error('HTTP ' + res.status);
           setDbStatusBadge('cloud-ok', 'Vercel KV OK');
           return true;
         }
@@ -6012,32 +6130,29 @@
       setDbStatusBadge('syncing', 'Sincronizando...');
       try {
         if (cfg.provider === 'firebase' && cfg.firebaseUrl) {
-          const baseUrl = cfg.firebaseUrl.replace(/\/+$/, '');
-          const res = await fetch(`${baseUrl}/trasplante_localizadas.json`);
-          if (!res.ok) throw new Error('HTTP ' + res.status);
+          const baseUrl = cfg.firebaseUrl.replace(TRAILING_SLASH_RE, '');
+          const res = await cloudFetch(`${baseUrl}/trasplante_localizadas.json`);
           const data = await res.json();
           setDbStatusBadge('cloud-ok', 'Nube OK');
           return data;
         }
         if (cfg.provider === 'supabase' && cfg.supabaseUrl && cfg.supabaseKey) {
-          const baseUrl = cfg.supabaseUrl.replace(/\/+$/, '');
-          const res = await fetch(`${baseUrl}/rest/v1/trasplante_db?id=eq.main&select=payload`, {
+          const baseUrl = cfg.supabaseUrl.replace(TRAILING_SLASH_RE, '');
+          const res = await cloudFetch(`${baseUrl}/rest/v1/trasplante_db?id=eq.main&select=payload`, {
             headers: {
               'apikey': cfg.supabaseKey,
               'Authorization': `Bearer ${cfg.supabaseKey}`
             }
           });
-          if (!res.ok) throw new Error('HTTP ' + res.status);
           const rows = await res.json();
           setDbStatusBadge('cloud-ok', 'Supabase OK');
           return rows && rows[0] ? rows[0].payload : null;
         }
         if (cfg.provider === 'upstash' && cfg.upstashUrl && cfg.upstashToken) {
-          const baseUrl = cfg.upstashUrl.replace(/\/+$/, '');
-          const res = await fetch(`${baseUrl}/get/trasplante_localizadas`, {
+          const baseUrl = cfg.upstashUrl.replace(TRAILING_SLASH_RE, '');
+          const res = await cloudFetch(`${baseUrl}/get/trasplante_localizadas`, {
             headers: { 'Authorization': `Bearer ${cfg.upstashToken}` }
           });
-          if (!res.ok) throw new Error('HTTP ' + res.status);
           const json = await res.json();
           setDbStatusBadge('cloud-ok', 'Vercel KV OK');
           return json && json.result ? JSON.parse(json.result) : null;
@@ -6065,27 +6180,32 @@
       if (!obj || typeof obj !== 'object') return false;
       doctorsList = Array.isArray(obj.doctorsList) && obj.doctorsList.length > 0
         ? obj.doctorsList
-        : JSON.parse(JSON.stringify(INITIAL_DOCTORS));
+        : cloneData(INITIAL_DOCTORS);
       weeksData = Array.isArray(obj.weeksData) && obj.weeksData.length > 0
         ? obj.weeksData
-        : JSON.parse(JSON.stringify(INITIAL_WEEKS));
+        : cloneData(INITIAL_WEEKS);
       auditLogs = Array.isArray(obj.auditLogs) ? obj.auditLogs : [];
       dbSnapshots = Array.isArray(obj.dbSnapshots) ? obj.dbSnapshots : [];
       lastUpdatedAt = obj.updatedAt || Date.now();
 
-      doctorsList.forEach((d, i) => {
-        if (!d.id) d.id = `doc_${i + 1}_${Date.now()}`;
+      const now = Date.now();
+      for (let i = 0; i < doctorsList.length; i++) {
+        const d = doctorsList[i];
+        if (!d.id) d.id = `doc_${i + 1}_${now}`;
         if (typeof d.active !== 'boolean') d.active = true;
         if (typeof d.inactiveReason !== 'string') d.inactiveReason = '';
-        if (typeof d.priorTotal !== 'number' || isNaN(d.priorTotal)) d.priorTotal = 0;
-        if (typeof d.priorJue !== 'number' || isNaN(d.priorJue)) d.priorJue = 0;
-        if (typeof d.priorVsd !== 'number' || isNaN(d.priorVsd)) d.priorVsd = 0;
-        if (typeof d.priorComp !== 'number' || isNaN(d.priorComp)) d.priorComp = 0;
-      });
+        if (!Number.isFinite(d.priorTotal)) d.priorTotal = 0;
+        if (!Number.isFinite(d.priorJue)) d.priorJue = 0;
+        if (!Number.isFinite(d.priorVsd)) d.priorVsd = 0;
+        if (!Number.isFinite(d.priorComp)) d.priorComp = 0;
+      }
 
-      weeksData.forEach(w => {
+      for (let i = 0; i < weeksData.length; i++) {
+        const w = weeksData[i];
         const fallbackYear = w.year || 2026;
-        w.days.forEach(d => {
+        const days = w.days;
+        for (let j = 0; j < days.length; j++) {
+          const d = days[j];
           if (!d.monthKey || !d.monthLabel) {
             const parsed = parseSpanishDateMeta(d.date, fallbackYear);
             d.monthKey = parsed.monthKey;
@@ -6093,32 +6213,40 @@
           }
           normalizeGuardMembers(d);
           if (typeof d.txRenalVivo !== 'string') d.txRenalVivo = '';
-        });
-      });
+        }
+      }
       return true;
+    }
+
+    function saveLocalBackup(payload) {
+      let json = null;
+      try {
+        json = JSON.stringify(payload);
+        localStorage.setItem(STORAGE_KEY_STATE, json);
+      } catch (e) {}
+      return json;
     }
 
     async function saveState(syncCloud = true) {
       lastUpdatedAt = Date.now();
       const payload = buildCurrentStatePayload();
-      try {
-        localStorage.setItem(STORAGE_KEY_STATE, JSON.stringify(payload));
-      } catch (e) {}
+      const json = saveLocalBackup(payload);
       await writeToIndexedDB(payload);
       updateStats();
       if (syncCloud) {
-        await pushToCloudDB(payload);
+        await pushToCloudDB(payload, json);
       }
     }
 
     async function loadInitialState() {
+      const idbPromiseRead = readFromIndexedDB();
       let localObj = null;
       try {
         const raw = localStorage.getItem(STORAGE_KEY_STATE);
         if (raw) localObj = JSON.parse(raw);
       } catch (e) {}
 
-      const idbObj = await readFromIndexedDB();
+      const idbObj = await idbPromiseRead;
       if (idbObj && (!localObj || (idbObj.updatedAt || 0) >= (localObj.updatedAt || 0))) {
         localObj = idbObj;
       }
@@ -6128,8 +6256,8 @@
       } else {
         hydrateStateFromObject({
           updatedAt: 0,
-          doctorsList: JSON.parse(JSON.stringify(INITIAL_DOCTORS)),
-          weeksData: JSON.parse(JSON.stringify(INITIAL_WEEKS)),
+          doctorsList: cloneData(INITIAL_DOCTORS),
+          weeksData: cloneData(INITIAL_WEEKS),
           auditLogs: [],
           dbSnapshots: []
         });
@@ -6143,8 +6271,8 @@
         if (cloudObj && Array.isArray(cloudObj.weeksData)) {
           if ((cloudObj.updatedAt || 0) >= (localObj?.updatedAt || 0)) {
             hydrateStateFromObject(cloudObj);
+            saveLocalBackup(cloudObj);
             await writeToIndexedDB(cloudObj);
-            try { localStorage.setItem(STORAGE_KEY_STATE, JSON.stringify(cloudObj)); } catch (e) {}
           } else {
             await pushToCloudDB(buildCurrentStatePayload());
           }
@@ -6165,6 +6293,7 @@
       const cloudObj = await pullFromCloudDB();
       if (cloudObj && Array.isArray(cloudObj.weeksData)) {
         hydrateStateFromObject(cloudObj);
+        saveLocalBackup(cloudObj);
         await writeToIndexedDB(cloudObj);
         refreshAllViews();
       }
@@ -6362,17 +6491,40 @@
     }
 
     // === GESTIÓN DE USUARIOS (AÑADIR, MODIFICAR, INHABILITAR POR BAJA) ===
+    const NON_DIGIT_RE = /[^0-9]/g;
+    let doctorIndexMap = null;
+    let doctorIndexRef = null;
+    let doctorIndexLen = -1;
+
+    function invalidateDoctorIndex() {
+      doctorIndexMap = null;
+    }
+
+    function getDoctorIndex() {
+      if (!doctorIndexMap || doctorIndexRef !== doctorsList || doctorIndexLen !== doctorsList.length) {
+        doctorIndexMap = new Map();
+        for (let i = 0; i < doctorsList.length; i++) {
+          const d = doctorsList[i];
+          doctorIndexMap.set(d.nombre.trim(), d);
+        }
+        doctorIndexRef = doctorsList;
+        doctorIndexLen = doctorsList.length;
+      }
+      return doctorIndexMap;
+    }
+
     function getActiveDoctors() {
       return doctorsList.filter(d => d.active !== false);
     }
 
     function getDoctorInfo(name) {
       const clean = (name || '').trim();
-      return doctorsList.find(d => d.nombre.trim() === clean) || null;
+      if (!clean) return null;
+      return getDoctorIndex().get(clean) || null;
     }
 
     function isVerifiedDoctor(name) {
-      return !!getDoctorInfo(name);
+      return getDoctorInfo(name) !== null;
     }
 
     function isDoctorInactive(name) {
@@ -6381,24 +6533,45 @@
     }
 
     function getDefaultGuardMembersForGroup(gg) {
-      const cleanKey = String(gg || '').replace(/[^0-9]/g, '');
+      const cleanKey = String(gg || '').replace(NON_DIGIT_RE, '');
       if (!cleanKey) return [];
-      return doctorsList
-        .filter(d => d.active !== false && String(d.grupoGuardia).trim() === cleanKey)
-        .map(d => ({ name: d.nombre, note: '' }));
+      const members = [];
+      for (let i = 0; i < doctorsList.length; i++) {
+        const d = doctorsList[i];
+        if (d.active !== false && String(d.grupoGuardia).trim() === cleanKey) {
+          members.push({ name: d.nombre, note: '' });
+        }
+      }
+      return members;
     }
 
     function normalizeGuardMembers(day) {
       if (!Array.isArray(day.guardMembers)) {
         day.guardMembers = getDefaultGuardMembersForGroup(day.guardGroup);
       } else {
-        day.guardMembers = day.guardMembers.map(item =>
-          typeof item === 'string'
+        for (let i = 0; i < day.guardMembers.length; i++) {
+          const item = day.guardMembers[i];
+          day.guardMembers[i] = typeof item === 'string'
             ? { name: item, note: '' }
-            : { name: String(item.name || ''), note: String(item.note || '') }
-        );
+            : { name: String(item.name || ''), note: String(item.note || '') };
+        }
       }
       return day.guardMembers;
+    }
+
+    function pushUserAuditLog(dayLabel, guardGroup, oldDoctor, newDoctor, reason) {
+      auditLogs.unshift({
+        id: Date.now(),
+        timestamp: new Date().toLocaleString('es-ES', { dateStyle: 'short', timeStyle: 'short' }),
+        weekLabel: 'Gestión Usuarios',
+        dayLabel,
+        guardGroup,
+        slotNumber: '-',
+        oldDoctor,
+        newDoctor,
+        changedBy: 'Administrador',
+        reason
+      });
     }
 
     async function addNewDoctorUser() {
@@ -6412,7 +6585,8 @@
         nameInp.focus();
         return;
       }
-      if (doctorsList.some(d => normalizeText(d.nombre) === normalizeText(rawName))) {
+      const normNew = normalizeText(rawName);
+      if (doctorsList.some(d => normalizeText(d.nombre) === normNew)) {
         alert(`El usuario "${rawName}" ya existe en la plantilla.`);
         return;
       }
@@ -6436,19 +6610,15 @@
         findes: 3,
         defVsd: 0
       });
+      invalidateDoctorIndex();
 
-      auditLogs.unshift({
-        id: Date.now(),
-        timestamp: new Date().toLocaleString('es-ES', { dateStyle: 'short', timeStyle: 'short' }),
-        weekLabel: 'Gestión Usuarios',
-        dayLabel: 'Alta de médico',
-        guardGroup: ggSel.value,
-        slotNumber: '-',
-        oldDoctor: 'No estaba en plantilla',
-        newDoctor: `+ ${rawName} (Grp ${glSel.value})`,
-        changedBy: 'Administrador',
-        reason: 'Nuevo usuario añadido manualmente'
-      });
+      pushUserAuditLog(
+        'Alta de médico',
+        ggSel.value,
+        'No estaba en plantilla',
+        `+ ${rawName} (Grp ${glSel.value})`,
+        'Nuevo usuario añadido manualmente'
+      );
 
       nameInp.value = '';
       await saveState(true);
@@ -6472,18 +6642,13 @@
       doc.active = willBeActive;
       doc.inactiveReason = willBeActive ? '' : reason;
 
-      auditLogs.unshift({
-        id: Date.now(),
-        timestamp: new Date().toLocaleString('es-ES', { dateStyle: 'short', timeStyle: 'short' }),
-        weekLabel: 'Gestión Usuarios',
-        dayLabel: willBeActive ? 'Reactivación' : 'Inhabilitación / Baja',
-        guardGroup: doc.grupoGuardia,
-        slotNumber: '-',
-        oldDoctor: `${doc.nombre} (${willBeActive ? 'Inhabilitado' : 'Activo'})`,
-        newDoctor: `${doc.nombre} (${willBeActive ? 'Activo' : 'Inhabilitado'})`,
-        changedBy: 'Administrador',
-        reason: willBeActive ? 'Usuario reactivado para guardias' : reason
-      });
+      pushUserAuditLog(
+        willBeActive ? 'Reactivación' : 'Inhabilitación / Baja',
+        doc.grupoGuardia,
+        `${doc.nombre} (${willBeActive ? 'Inhabilitado' : 'Activo'})`,
+        `${doc.nombre} (${willBeActive ? 'Activo' : 'Inhabilitado'})`,
+        willBeActive ? 'Usuario reactivado para guardias' : reason
+      );
 
       await saveState(true);
       refreshAllViews();
@@ -6530,16 +6695,20 @@
 
       const oldName = doc.nombre;
       if (oldName !== newName) {
-        weeksData.forEach(w => {
-          w.days.forEach(day => {
-            day.slots = day.slots.map(s => (s.trim() === oldName ? newName : s));
-            if (Array.isArray(day.guardMembers)) {
-              day.guardMembers.forEach(gm => {
-                if (gm.name.trim() === oldName) gm.name = newName;
-              });
+        for (let i = 0; i < weeksData.length; i++) {
+          const days = weeksData[i].days;
+          for (let j = 0; j < days.length; j++) {
+            const day = days[j];
+            for (let s = 0; s < day.slots.length; s++) {
+              if (day.slots[s].trim() === oldName) day.slots[s] = newName;
             }
-          });
-        });
+            if (Array.isArray(day.guardMembers)) {
+              for (let g = 0; g < day.guardMembers.length; g++) {
+                if (day.guardMembers[g].name.trim() === oldName) day.guardMembers[g].name = newName;
+              }
+            }
+          }
+        }
       }
 
       doc.nombre = newName;
@@ -6547,19 +6716,15 @@
       doc.grupoGuardia = newGg;
       doc.active = newAct;
       doc.inactiveReason = newReas;
+      invalidateDoctorIndex();
 
-      auditLogs.unshift({
-        id: Date.now(),
-        timestamp: new Date().toLocaleString('es-ES', { dateStyle: 'short', timeStyle: 'short' }),
-        weekLabel: 'Gestión Usuarios',
-        dayLabel: 'Edición de usuario',
-        guardGroup: newGg,
-        slotNumber: '-',
-        oldDoctor: oldName,
-        newDoctor: `${newName} (Grp ${newGl} · ${newAct ? 'Activo' : 'Inhabilitado'})`,
-        changedBy: 'Administrador',
-        reason: newReas || 'Actualización de ficha de usuario'
-      });
+      pushUserAuditLog(
+        'Edición de usuario',
+        newGg,
+        oldName,
+        `${newName} (Grp ${newGl} · ${newAct ? 'Activo' : 'Inhabilitado'})`,
+        newReas || 'Actualización de ficha de usuario'
+      );
 
       closeEditUserModal();
       await saveState(true);
@@ -6573,19 +6738,15 @@
 
       recordSnapshot(`Antes de eliminar usuario ${doc.nombre}`, 'Administrador');
       doctorsList = doctorsList.filter(d => d.id !== docId);
+      invalidateDoctorIndex();
 
-      auditLogs.unshift({
-        id: Date.now(),
-        timestamp: new Date().toLocaleString('es-ES', { dateStyle: 'short', timeStyle: 'short' }),
-        weekLabel: 'Gestión Usuarios',
-        dayLabel: 'Baja definitiva',
-        guardGroup: doc.grupoGuardia,
-        slotNumber: '-',
-        oldDoctor: doc.nombre,
-        newDoctor: 'Eliminado de plantilla',
-        changedBy: 'Administrador',
-        reason: 'Usuario eliminado del grupo'
-      });
+      pushUserAuditLog(
+        'Baja definitiva',
+        doc.grupoGuardia,
+        doc.nombre,
+        'Eliminado de plantilla',
+        'Usuario eliminado del grupo'
+      );
 
       await saveState(true);
       refreshAllViews();
@@ -6596,15 +6757,14 @@
       const summaryEl = document.getElementById('admin-users-summary');
       if (!container) return;
 
-      const activeCount = doctorsList.filter(d => d.active !== false).length;
-      const inactiveCount = doctorsList.length - activeCount;
-      if (summaryEl) {
-        summaryEl.textContent = `${activeCount} activos · ${inactiveCount} inhabilitados`;
-      }
-
-      container.innerHTML = doctorsList.map(doc => {
+      let activeCount = 0;
+      const rows = new Array(doctorsList.length);
+      for (let i = 0; i < doctorsList.length; i++) {
+        const doc = doctorsList[i];
         const isAct = doc.active !== false;
-        return `
+        if (isAct) activeCount++;
+        const safeId = escapeHtml(doc.id);
+        rows[i] = `
           <div class="user-admin-row ${isAct ? '' : 'is-disabled'}">
             <div>
               <div style="display:flex; flex-wrap:wrap; align-items:center; gap:6px;">
@@ -6619,15 +6779,20 @@
               ${!isAct && doc.inactiveReason ? `<div style="font-size:11px; color:var(--accent-rose); margin-top:3px;">Motivo: ${escapeHtml(doc.inactiveReason)}</div>` : ''}
             </div>
             <div style="display:flex; flex-wrap:wrap; gap:6px;">
-              <button type="button" onclick="openEditUserModal('${doc.id}')" class="btn-mini">✏️ Editar</button>
-              <button type="button" onclick="toggleDoctorActiveStatus('${doc.id}')" class="btn-mini" style="color:${isAct ? 'var(--accent-amber)' : 'var(--accent-emerald)'};">
+              <button type="button" onclick="openEditUserModal('${safeId}')" class="btn-mini">✏️ Editar</button>
+              <button type="button" onclick="toggleDoctorActiveStatus('${safeId}')" class="btn-mini" style="color:${isAct ? 'var(--accent-amber)' : 'var(--accent-emerald)'};">
                 ${isAct ? '⏸️ Inhabilitar' : '▶ Reactivar'}
               </button>
-              <button type="button" onclick="deleteDoctorUser('${doc.id}')" class="btn-danger-sm" style="padding:5px 9px;">🗑️</button>
+              <button type="button" onclick="deleteDoctorUser('${safeId}')" class="btn-danger-sm" style="padding:5px 9px;">🗑️</button>
             </div>
           </div>
         `;
-      }).join('');
+      }
+
+      if (summaryEl) {
+        summaryEl.textContent = `${activeCount} activos · ${doctorsList.length - activeCount} inhabilitados`;
+      }
+      container.innerHTML = rows.join('');
     }
 
     // === PARALLAX DINÁMICO MULTICAPA Y EFECTOS DE DESPLAZAMIENTO ===
