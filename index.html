@@ -1833,6 +1833,70 @@
     }
 
 
+    /* === SECCIONES COLAPSABLES DEL PANEL DE ADMINISTRADOR === */
+    .admin-section-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+    .admin-section-trigger {
+      flex: 1;
+      min-width: 220px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .admin-section-trigger:hover h2 {
+      color: var(--accent-cyan);
+    }
+    .admin-section-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+    }
+    .admin-section-toggle {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      border: 1px solid var(--border-input);
+      background: var(--bg-sub);
+      color: var(--text-strong);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.2s ease, background 0.2s ease;
+    }
+    .admin-section-toggle:hover {
+      border-color: var(--accent-cyan);
+    }
+    .admin-section.collapsed .admin-section-toggle {
+      transform: rotate(-90deg);
+    }
+    .admin-section-body {
+      display: grid;
+      grid-template-rows: 1fr;
+      opacity: 1;
+      margin-top: 12px;
+      transition:
+        grid-template-rows 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+        opacity 0.24s ease,
+        margin-top 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .admin-section.collapsed .admin-section-body {
+      grid-template-rows: 0fr;
+      opacity: 0;
+      margin-top: 0;
+      pointer-events: none;
+    }
+    .admin-section-body-inner {
+      overflow: hidden;
+      min-width: 0;
+    }
+
     /* === TABLA EDITABLE DE HISTÓRICO Y COMPENSACIONES PREVIAS (ADMIN) === */
     .hist-table-wrap {
       overflow-x: auto;
@@ -5272,307 +5336,353 @@
 
 
         <!-- -1. SUMATORIO HISTÓRICO Y COMPENSACIONES PREVIAS (AÑOS / MESES ANTERIORES) -->
-        <div class="glass-panel" style="border-left: 3px solid #06b6d4;">
-          <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:10px; margin-bottom:10px;">
-            <div>
+        <div class="glass-panel admin-section collapsed" style="border-left: 3px solid #06b6d4;">
+          <div class="admin-section-header">
+            <div class="admin-section-trigger" onclick="toggleAdminSection(this)">
               <h2 style="font-size:18px; font-weight:800; color:var(--text-strong);">📊 Sumatorio Histórico y Compensaciones Previas</h2>
               <p style="font-size:12.5px; color:var(--text-muted); margin-top:3px;">
                 Añade o edita los <strong>días localizados, jueves, fines de semana (Vie–Sáb–Dom) y compensaciones</strong> de meses o años anteriores al primer Excel cargado. El sumatorio total se usará automáticamente para equilibrar los futuros cuadrantes.
               </p>
             </div>
-            <div style="display:flex; flex-wrap:wrap; gap:6px;">
+            <div class="admin-section-actions">
               <button type="button" onclick="saveHistoricalBalances()" class="btn-save" style="padding:8px 14px; font-size:12px;">
                 💾 Guardar Histórico y Compensaciones
               </button>
+              <button type="button" class="admin-section-toggle" onclick="toggleAdminSection(this)" aria-expanded="false" aria-label="Mostrar u ocultar Sumatorio Histórico">▾</button>
             </div>
           </div>
 
-          <div class="hist-table-wrap">
-            <table class="hist-balance-table">
-              <thead>
-                <tr>
-                  <th>Facultativo</th>
-                  <th title="Días localizados previos a los Excel cargados">Días Loc.<br>Previos</th>
-                  <th title="Jueves localizados previos">Jueves<br>Previos</th>
-                  <th title="Días Vie-Sáb-Dom previos (ej. 3 días por finde)">Vie-Sáb-Dom<br>Previos</th>
-                  <th title="Compensación manual (+/- días para ajustar equidad)">Compensación<br>(+/- días)</th>
-                  <th title="Días contabilizados actualmente en los calendarios de la app">En App<br>(Tot / Jue / VSD)</th>
-                  <th title="Suma total acumulada (Previos + App + Compensación)">Sumatorio<br>Total</th>
-                  <th title="Desviación respecto a la media del equipo activo">Balance vs<br>Media</th>
-                </tr>
-              </thead>
-              <tbody id="admin-hist-balance-tbody"></tbody>
-            </table>
-          </div>
-          <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:8px; margin-top:8px; font-size:11px; color:var(--text-muted);">
-            <span>💡 <strong>Cómo funciona:</strong> Si un médico hizo 1 finde menos el año pasado, ponle <code>-3</code> en <em>Vie-Sáb-Dom Previos</em> o en <em>Compensación</em> y el generador le dará prioridad para igualarlo.</span>
-            <span id="hist-avg-summary" class="mono" style="color:var(--accent-cyan); font-weight:700;"></span>
+          <div class="admin-section-body">
+            <div class="admin-section-body-inner">
+              <div class="hist-table-wrap">
+                <table class="hist-balance-table">
+                  <thead>
+                    <tr>
+                      <th>Facultativo</th>
+                      <th title="Días localizados previos a los Excel cargados">Días Loc.<br>Previos</th>
+                      <th title="Jueves localizados previos">Jueves<br>Previos</th>
+                      <th title="Días Vie-Sáb-Dom previos (ej. 3 días por finde)">Vie-Sáb-Dom<br>Previos</th>
+                      <th title="Compensación manual (+/- días para ajustar equidad)">Compensación<br>(+/- días)</th>
+                      <th title="Días contabilizados actualmente en los calendarios de la app">En App<br>(Tot / Jue / VSD)</th>
+                      <th title="Suma total acumulada (Previos + App + Compensación)">Sumatorio<br>Total</th>
+                      <th title="Desviación respecto a la media del equipo activo">Balance vs<br>Media</th>
+                    </tr>
+                  </thead>
+                  <tbody id="admin-hist-balance-tbody"></tbody>
+                </table>
+              </div>
+              <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:8px; margin-top:8px; font-size:11px; color:var(--text-muted);">
+                <span>💡 <strong>Cómo funciona:</strong> Si un médico hizo 1 finde menos el año pasado, ponle <code>-3</code> en <em>Vie-Sáb-Dom Previos</em> o en <em>Compensación</em> y el generador le dará prioridad para igualarlo.</span>
+                <span id="hist-avg-summary" class="mono" style="color:var(--accent-cyan); font-weight:700;"></span>
+              </div>
+            </div>
           </div>
         </div>
 
         <!-- 0. GENERADOR AUTOMÁTICO DE CUADRANTES FUTUROS (IA DE PATRONES + EQUIDAD TRIMESTRAL) -->
-        <div class="glass-panel" style="border-left: 3px solid #10b981;">
-          <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:10px; margin-bottom:10px;">
-            <div>
+        <div class="glass-panel admin-section collapsed" style="border-left: 3px solid #10b981;">
+          <div class="admin-section-header">
+            <div class="admin-section-trigger" onclick="toggleAdminSection(this)">
               <h2 style="font-size:18px; font-weight:800; color:var(--text-strong);">🧠 Generador Automático de Meses Futuros</h2>
               <p style="font-size:12.5px; color:var(--text-muted); margin-top:3px;">
                 Calcula y distribuye automáticamente las 4 localizadas diarias aplicando los patrones detectados: <strong>afinidad con guardia física (1–9)</strong>, <strong>bloques de fin de semana completos (Vie–Sáb–Dom)</strong> y <strong>equidad exacta de días totales, fines de semana y jueves</strong>.
               </p>
             </div>
-            <span class="status-chip active">Algoritmo Patrón + Equidad</span>
+            <div class="admin-section-actions">
+              <span class="status-chip active">Algoritmo Patrón + Equidad</span>
+              <button type="button" class="admin-section-toggle" onclick="toggleAdminSection(this)" aria-expanded="false" aria-label="Mostrar u ocultar Generador Automático">▾</button>
+            </div>
           </div>
 
-          <div style="background:var(--bg-sub); border:1px solid var(--border-subtle); border-radius:5px; padding:12px;">
-            <div class="gen-grid-controls">
-              <div>
-                <label for="gen-start-monday" class="field-label">Lunes inicial de generación</label>
-                <input id="gen-start-monday" type="date" style="background:var(--bg-input); border:1px solid var(--border-input); color:var(--text-strong); border-radius:5px; padding:7px 9px; font-size:12.5px; font-weight:600; width:100%;" />
-              </div>
-              <div>
-                <label for="gen-weeks-count" class="field-label">Duración a generar</label>
-                <select id="gen-weeks-count">
-                  <option value="4">4 semanas (~1 mes)</option>
-                  <option value="8">8 semanas (~2 meses)</option>
-                  <option value="12" selected>12 semanas (Trimestre completo · Equidad 100%)</option>
-                  <option value="13">13 semanas (Trimestre 91 días)</option>
-                </select>
-              </div>
-              <div>
-                <label for="gen-start-guard" class="field-label">Grupo Guardia del primer Lunes</label>
-                <select id="gen-start-guard">
-                  <option value="AUTO" selected>🔄 Continuar secuencia automática</option>
-                  <option value="1">Grupo Guardia #1</option>
-                  <option value="2">Grupo Guardia #2</option>
-                  <option value="3">Grupo Guardia #3</option>
-                  <option value="4">Grupo Guardia #4</option>
-                  <option value="5">Grupo Guardia #5</option>
-                  <option value="6">Grupo Guardia #6</option>
-                  <option value="7">Grupo Guardia #7</option>
-                  <option value="8">Grupo Guardia #8</option>
-                  <option value="9">Grupo Guardia #9</option>
-                </select>
-              </div>
-              <div>
-                <button type="button" onclick="runSchedulePreviewGenerator()" class="btn-save" style="width:100%; padding:9px 12px; font-size:12.5px;">
-                  ⚡ Calcular Propuesta
-                </button>
+          <div class="admin-section-body">
+            <div class="admin-section-body-inner">
+              <div style="background:var(--bg-sub); border:1px solid var(--border-subtle); border-radius:5px; padding:12px;">
+                <div class="gen-grid-controls">
+                  <div>
+                    <label for="gen-start-monday" class="field-label">Lunes inicial de generación</label>
+                    <input id="gen-start-monday" type="date" style="background:var(--bg-input); border:1px solid var(--border-input); color:var(--text-strong); border-radius:5px; padding:7px 9px; font-size:12.5px; font-weight:600; width:100%;" />
+                  </div>
+                  <div>
+                    <label for="gen-weeks-count" class="field-label">Duración a generar</label>
+                    <select id="gen-weeks-count">
+                      <option value="4">4 semanas (~1 mes)</option>
+                      <option value="8">8 semanas (~2 meses)</option>
+                      <option value="12" selected>12 semanas (Trimestre completo · Equidad 100%)</option>
+                      <option value="13">13 semanas (Trimestre 91 días)</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label for="gen-start-guard" class="field-label">Grupo Guardia del primer Lunes</label>
+                    <select id="gen-start-guard">
+                      <option value="AUTO" selected>🔄 Continuar secuencia automática</option>
+                      <option value="1">Grupo Guardia #1</option>
+                      <option value="2">Grupo Guardia #2</option>
+                      <option value="3">Grupo Guardia #3</option>
+                      <option value="4">Grupo Guardia #4</option>
+                      <option value="5">Grupo Guardia #5</option>
+                      <option value="6">Grupo Guardia #6</option>
+                      <option value="7">Grupo Guardia #7</option>
+                      <option value="8">Grupo Guardia #8</option>
+                      <option value="9">Grupo Guardia #9</option>
+                    </select>
+                  </div>
+                  <div>
+                    <button type="button" onclick="runSchedulePreviewGenerator()" class="btn-save" style="width:100%; padding:9px 12px; font-size:12.5px;">
+                      ⚡ Calcular Propuesta
+                    </button>
+                  </div>
+                </div>
+
+                <div style="display:flex; flex-wrap:wrap; gap:14px; font-size:11.5px; color:var(--text-sub); margin-bottom:6px;">
+                  <label class="radio-label">
+                    <input type="checkbox" id="gen-opt-guard-affinity" checked style="accent-color:#10b981;" />
+                    <span>Priorizar coincidencia con su <strong>Grupo de Guardia</strong> (en FDS y diario)</span>
+                  </label>
+                  <label class="radio-label">
+                    <input type="checkbox" id="gen-opt-avoid-consec" checked style="accent-color:#10b981;" />
+                    <span>Evitar repetir días consecutivos y respetar descanso</span>
+                  </label>
+                  <label class="radio-label">
+                    <input type="checkbox" id="gen-opt-carry-balance" checked style="accent-color:#10b981;" />
+                    <span>Compensar histórico previo, compensaciones y desviaciones acumuladas</span>
+                  </label>
+                </div>
+
+                <!-- Contenedor de previsualización de equidad y aplicación -->
+                <div id="gen-preview-box" class="hidden" style="margin-top:12px; padding-top:12px; border-top:1px solid var(--border-subtle);"></div>
               </div>
             </div>
-
-            <div style="display:flex; flex-wrap:wrap; gap:14px; font-size:11.5px; color:var(--text-sub); margin-bottom:6px;">
-              <label class="radio-label">
-                <input type="checkbox" id="gen-opt-guard-affinity" checked style="accent-color:#10b981;" />
-                <span>Priorizar coincidencia con su <strong>Grupo de Guardia</strong> (en FDS y diario)</span>
-              </label>
-              <label class="radio-label">
-                <input type="checkbox" id="gen-opt-avoid-consec" checked style="accent-color:#10b981;" />
-                <span>Evitar repetir días consecutivos y respetar descanso</span>
-              </label>
-              <label class="radio-label">
-                <input type="checkbox" id="gen-opt-carry-balance" checked style="accent-color:#10b981;" />
-                <span>Compensar histórico previo, compensaciones y desviaciones acumuladas</span>
-              </label>
-            </div>
-
-            <!-- Contenedor de previsualización de equidad y aplicación -->
-            <div id="gen-preview-box" class="hidden" style="margin-top:12px; padding-top:12px; border-top:1px solid var(--border-subtle);"></div>
           </div>
         </div>
 
         <!-- 1. SUBIDA DINÁMICA DE MÚLTIPLES ARCHIVOS EXCEL -->
-        <div class="glass-panel">
-          <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:10px;">
-            <div>
+        <div class="glass-panel admin-section collapsed">
+          <div class="admin-section-header">
+            <div class="admin-section-trigger" onclick="toggleAdminSection(this)">
               <h2 style="font-size:18px; font-weight:800; color:var(--text-strong);">📤 Añadir Documentos Excel (.xlsx / .xls)</h2>
               <p style="font-size:12.5px; color:var(--text-muted); margin-top:3px;">
                 Sube uno o varios archivos Excel de nuevos trimestres/meses. Se leen de forma dinámica (todas las hojas, celdas combinadas, fechas y nombres) y se <strong>añaden a los datos ya existentes</strong>.
               </p>
             </div>
-            <button onclick="exportCurrentToExcel()" class="btn-primary-sm">📥 Exportar Todo a Excel</button>
+            <div class="admin-section-actions">
+              <button type="button" onclick="exportCurrentToExcel()" class="btn-primary-sm">📥 Exportar Todo a Excel</button>
+              <button type="button" class="admin-section-toggle" onclick="toggleAdminSection(this)" aria-expanded="false" aria-label="Mostrar u ocultar Documentos Excel">▾</button>
+            </div>
           </div>
 
-          <label id="excel-drop-zone" for="excel-upload" class="drop-zone">
-            <div style="font-size:28px; margin-bottom:6px;">📊</div>
-            <div style="font-size:14px; font-weight:800; color:var(--text-strong);">Pulsa aquí o arrastra uno o varios archivos Excel</div>
-            <div style="font-size:11.5px; color:var(--text-muted); margin-top:4px;">Añade Abril–Junio, Julio–Septiembre, Octubre–Diciembre o actualizaciones sin perder lo anterior</div>
-            <input id="excel-upload" type="file" accept=".xlsx,.xls,.csv" multiple class="hidden" onchange="handleExcelUpload(event)" />
-          </label>
+          <div class="admin-section-body">
+            <div class="admin-section-body-inner">
+              <label id="excel-drop-zone" for="excel-upload" class="drop-zone">
+                <div style="font-size:28px; margin-bottom:6px;">📊</div>
+                <div style="font-size:14px; font-weight:800; color:var(--text-strong);">Pulsa aquí o arrastra uno o varios archivos Excel</div>
+                <div style="font-size:11.5px; color:var(--text-muted); margin-top:4px;">Añade Abril–Junio, Julio–Septiembre, Octubre–Diciembre o actualizaciones sin perder lo anterior</div>
+                <input id="excel-upload" type="file" accept=".xlsx,.xls,.csv" multiple class="hidden" onchange="handleExcelUpload(event)" />
+              </label>
 
-          <div class="radio-row">
-            <label class="radio-label">
-              <input type="radio" name="import-mode" value="merge" checked />
-              <span><strong>Añadir a los datos existentes</strong> (conserva los meses actuales y suma/actualiza las semanas nuevas)</span>
-            </label>
-            <label class="radio-label">
-              <input type="radio" name="import-mode" value="replace" />
-              <span><strong>Reemplazar calendario completo</strong> (crea antes un punto de restauración automático)</span>
-            </label>
+              <div class="radio-row">
+                <label class="radio-label">
+                  <input type="radio" name="import-mode" value="merge" checked />
+                  <span><strong>Añadir a los datos existentes</strong> (conserva los meses actuales y suma/actualiza las semanas nuevas)</span>
+                </label>
+                <label class="radio-label">
+                  <input type="radio" name="import-mode" value="replace" />
+                  <span><strong>Reemplazar calendario completo</strong> (crea antes un punto de restauración automático)</span>
+                </label>
+              </div>
+
+              <div id="upload-report" class="hidden" style="margin-top:14px; padding:12px; border-radius:14px; background:rgba(16,185,129,0.12); border:1px solid rgba(16,185,129,0.35); font-size:12.5px;"></div>
+            </div>
           </div>
-
-          <div id="upload-report" class="hidden" style="margin-top:14px; padding:12px; border-radius:14px; background:rgba(16,185,129,0.12); border:1px solid rgba(16,185,129,0.35); font-size:12.5px;"></div>
         </div>
 
         <!-- 2. GESTIÓN DE USUARIOS (AÑADIR, EDITAR, INHABILITAR POR BAJA) -->
-        <div class="glass-panel">
-          <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:10px; margin-bottom:12px;">
-            <div>
+        <div class="glass-panel admin-section collapsed">
+          <div class="admin-section-header">
+            <div class="admin-section-trigger" onclick="toggleAdminSection(this)">
               <h2 style="font-size:18px; font-weight:800; color:var(--text-strong);">🩺 Gestión de Usuarios (Anestesistas de Trasplante)</h2>
               <p style="font-size:12.5px; color:var(--text-muted); margin-top:2px;">
                 Añade nuevos médicos manualmente, modifica su grupo o <strong>inhabilita temporalmente</strong> a quien esté de baja para que no aparezca en los desplegables de cambios.
               </p>
             </div>
-            <span id="admin-users-summary" class="status-chip active">14 activos · 0 inhabilitados</span>
-          </div>
-
-          <!-- Formulario para añadir nuevo usuario manualmente -->
-          <div style="background:var(--bg-sub); border:1px solid var(--border-subtle); border-radius:14px; padding:12px; margin-bottom:14px;">
-            <div style="font-size:12.5px; font-weight:800; color:var(--text-strong); margin-bottom:8px;">➕ Añadir nuevo médico al grupo</div>
-            <div class="admin-form-grid">
-              <div>
-                <label class="field-label" style="margin-bottom:3px;">Nombre (ej. M. Pérez)</label>
-                <input id="new-doc-name" type="text" placeholder="Ej. M. Pérez" />
-              </div>
-              <div>
-                <label class="field-label" style="margin-bottom:3px;">Grupo Laboral</label>
-                <select id="new-doc-gl">
-                  <option value="A">Grupo A</option>
-                  <option value="B">Grupo B</option>
-                  <option value="C">Grupo C</option>
-                  <option value="D">Grupo D</option>
-                </select>
-              </div>
-              <div>
-                <label class="field-label" style="margin-bottom:3px;">Grupo Guardia</label>
-                <select id="new-doc-gg">
-                  <option value="1">Guardia #1</option>
-                  <option value="2">Guardia #2</option>
-                  <option value="3">Guardia #3</option>
-                  <option value="4">Guardia #4</option>
-                  <option value="5">Guardia #5</option>
-                  <option value="6">Guardia #6</option>
-                  <option value="7">Guardia #7</option>
-                  <option value="8">Guardia #8</option>
-                  <option value="9">Guardia #9</option>
-                  <option value="Sin grupo" selected>Sin grupo</option>
-                  <option value="Sin guardias">Sin guardias</option>
-                </select>
-              </div>
-              <div>
-                <button type="button" onclick="addNewDoctorUser()" class="btn-save" style="width:100%; padding:9px 14px; font-size:12.5px;">
-                  + Añadir Usuario
-                </button>
-              </div>
+            <div class="admin-section-actions">
+              <span id="admin-users-summary" class="status-chip active">14 activos · 0 inhabilitados</span>
+              <button type="button" class="admin-section-toggle" onclick="toggleAdminSection(this)" aria-expanded="false" aria-label="Mostrar u ocultar Gestión de Usuarios">▾</button>
             </div>
           </div>
 
-          <!-- Lista de usuarios existentes con opciones de Editar / Inhabilitar / Eliminar -->
-          <div id="admin-users-list"></div>
+          <div class="admin-section-body">
+            <div class="admin-section-body-inner">
+              <!-- Formulario para añadir nuevo usuario manualmente -->
+              <div style="background:var(--bg-sub); border:1px solid var(--border-subtle); border-radius:14px; padding:12px; margin-bottom:14px;">
+                <div style="font-size:12.5px; font-weight:800; color:var(--text-strong); margin-bottom:8px;">➕ Añadir nuevo médico al grupo</div>
+                <div class="admin-form-grid">
+                  <div>
+                    <label class="field-label" style="margin-bottom:3px;">Nombre (ej. M. Pérez)</label>
+                    <input id="new-doc-name" type="text" placeholder="Ej. M. Pérez" />
+                  </div>
+                  <div>
+                    <label class="field-label" style="margin-bottom:3px;">Grupo Laboral</label>
+                    <select id="new-doc-gl">
+                      <option value="A">Grupo A</option>
+                      <option value="B">Grupo B</option>
+                      <option value="C">Grupo C</option>
+                      <option value="D">Grupo D</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="field-label" style="margin-bottom:3px;">Grupo Guardia</label>
+                    <select id="new-doc-gg">
+                      <option value="1">Guardia #1</option>
+                      <option value="2">Guardia #2</option>
+                      <option value="3">Guardia #3</option>
+                      <option value="4">Guardia #4</option>
+                      <option value="5">Guardia #5</option>
+                      <option value="6">Guardia #6</option>
+                      <option value="7">Guardia #7</option>
+                      <option value="8">Guardia #8</option>
+                      <option value="9">Guardia #9</option>
+                      <option value="Sin grupo" selected>Sin grupo</option>
+                      <option value="Sin guardias">Sin guardias</option>
+                    </select>
+                  </div>
+                  <div>
+                    <button type="button" onclick="addNewDoctorUser()" class="btn-save" style="width:100%; padding:9px 14px; font-size:12.5px;">
+                      + Añadir Usuario
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Lista de usuarios existentes con opciones de Editar / Inhabilitar / Eliminar -->
+              <div id="admin-users-list"></div>
+            </div>
+          </div>
         </div>
 
         <!-- 3. BASE DE DATOS EN LA NUBE (VERCEL + FIREBASE / SUPABASE / UPSTASH) -->
-        <div class="glass-panel">
-          <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:10px; margin-bottom:10px;">
-            <div>
+        <div class="glass-panel admin-section collapsed">
+          <div class="admin-section-header">
+            <div class="admin-section-trigger" onclick="toggleAdminSection(this)">
               <h2 style="font-size:18px; font-weight:800; color:var(--text-strong);">☁️ Base de Datos Compartida (GitHub + Vercel)</h2>
               <p style="font-size:12.5px; color:var(--text-muted); margin-top:2px;">
                 Conecta una base de datos gratuita en la nube para que todos los móviles compartan los mismos datos, Excel subidos y cambios en tiempo real.
               </p>
             </div>
-            <span id="cloud-db-badge" class="status-chip inactive">💾 Solo local (IndexedDB)</span>
+            <div class="admin-section-actions">
+              <span id="cloud-db-badge" class="status-chip inactive">💾 Solo local (IndexedDB)</span>
+              <button type="button" class="admin-section-toggle" onclick="toggleAdminSection(this)" aria-expanded="false" aria-label="Mostrar u ocultar Base de Datos Compartida">▾</button>
+            </div>
           </div>
 
-          <div style="background:var(--bg-sub); border:1px solid var(--border-subtle); border-radius:14px; padding:12px;">
-            <div style="display:grid; grid-template-columns:1fr; gap:8px;">
-              <div>
-                <label class="field-label">Proveedor de Base de Datos Cloud</label>
-                <select id="cloud-provider-select" onchange="onCloudProviderChange()">
-                  <option value="local">💾 Solo Local (IndexedDB en este navegador)</option>
-                  <option value="firebase">🔥 Firebase Realtime Database (URL directa — Recomendado)</option>
-                  <option value="supabase">⚡ Supabase (Integración oficial Vercel Storage)</option>
-                  <option value="upstash">🚀 Vercel KV / Upstash Redis (REST API)</option>
-                </select>
-              </div>
+          <div class="admin-section-body">
+            <div class="admin-section-body-inner">
+              <div style="background:var(--bg-sub); border:1px solid var(--border-subtle); border-radius:14px; padding:12px;">
+                <div style="display:grid; grid-template-columns:1fr; gap:8px;">
+                  <div>
+                    <label class="field-label">Proveedor de Base de Datos Cloud</label>
+                    <select id="cloud-provider-select" onchange="onCloudProviderChange()">
+                      <option value="local">💾 Solo Local (IndexedDB en este navegador)</option>
+                      <option value="firebase">🔥 Firebase Realtime Database (URL directa — Recomendado)</option>
+                      <option value="supabase">⚡ Supabase (Integración oficial Vercel Storage)</option>
+                      <option value="upstash">🚀 Vercel KV / Upstash Redis (REST API)</option>
+                    </select>
+                  </div>
 
-              <div id="cloud-fields-firebase" class="hidden" style="margin-top:8px;">
-                <label class="field-label">URL de Firebase Realtime Database</label>
-                <input id="cloud-firebase-url" type="text" placeholder="https://tu-proyecto-default-rtdb.europe-west1.firebasedatabase.app" />
-                <p style="font-size:11px; color:var(--text-muted); margin-top:4px;">
-                  Crea un proyecto gratis en <strong>console.firebase.google.com</strong> → Realtime Database → Copia la URL y pega aquí.
+                  <div id="cloud-fields-firebase" class="hidden" style="margin-top:8px;">
+                    <label class="field-label">URL de Firebase Realtime Database</label>
+                    <input id="cloud-firebase-url" type="text" placeholder="https://tu-proyecto-default-rtdb.europe-west1.firebasedatabase.app" />
+                    <p style="font-size:11px; color:var(--text-muted); margin-top:4px;">
+                      Crea un proyecto gratis en <strong>console.firebase.google.com</strong> → Realtime Database → Copia la URL y pega aquí.
+                    </p>
+                  </div>
+
+                  <div id="cloud-fields-supabase" class="hidden" style="margin-top:8px; display:flex; flex-direction:column; gap:8px;">
+                    <div>
+                      <label class="field-label">Supabase Project URL</label>
+                      <input id="cloud-supabase-url" type="text" placeholder="https://xyzcompany.supabase.co" />
+                    </div>
+                    <div>
+                      <label class="field-label">Supabase Anon Public Key</label>
+                      <input id="cloud-supabase-key" type="text" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6..." />
+                    </div>
+                    <p style="font-size:11px; color:var(--text-muted);">
+                      En Vercel → <strong>Storage → Create Database → Supabase</strong>. Crea una tabla <code>trasplante_db</code> con columnas <code>id</code> (text, primary key) y <code>payload</code> (jsonb).
+                    </p>
+                  </div>
+
+                  <div id="cloud-fields-upstash" class="hidden" style="margin-top:8px; display:flex; flex-direction:column; gap:8px;">
+                    <div>
+                      <label class="field-label">UPSTASH_REDIS_REST_URL (Vercel Storage)</label>
+                      <input id="cloud-upstash-url" type="text" placeholder="https://eu1-xxx.upstash.io" />
+                    </div>
+                    <div>
+                      <label class="field-label">UPSTASH_REDIS_REST_TOKEN</label>
+                      <input id="cloud-upstash-token" type="password" placeholder="AXxxxxxxxxxxxx" />
+                    </div>
+                  </div>
+                </div>
+
+                <div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:12px;">
+                  <button type="button" onclick="saveCloudConfigAndSync()" class="btn-save" style="padding:9px 14px; font-size:12px;">
+                    ☁️ Guardar y Sincronizar Base de Datos
+                  </button>
+                  <button type="button" onclick="downloadConfiguredHtmlForVercel()" class="btn-primary-sm">
+                    📦 Descargar index.html listo para GitHub/Vercel
+                  </button>
+                </div>
+                <p style="font-size:11px; color:var(--text-muted); margin-top:8px;">
+                  💡 <strong>Truco para Vercel:</strong> Tras guardar la URL de tu base de datos aquí, pulsa <em>"Descargar index.html listo para GitHub/Vercel"</em> y súbelo a tu repositorio. Así todos tus compañeros se conectarán automáticamente sin configurar nada.
                 </p>
               </div>
-
-              <div id="cloud-fields-supabase" class="hidden" style="margin-top:8px; display:flex; flex-direction:column; gap:8px;">
-                <div>
-                  <label class="field-label">Supabase Project URL</label>
-                  <input id="cloud-supabase-url" type="text" placeholder="https://xyzcompany.supabase.co" />
-                </div>
-                <div>
-                  <label class="field-label">Supabase Anon Public Key</label>
-                  <input id="cloud-supabase-key" type="text" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6..." />
-                </div>
-                <p style="font-size:11px; color:var(--text-muted);">
-                  En Vercel → <strong>Storage → Create Database → Supabase</strong>. Crea una tabla <code>trasplante_db</code> con columnas <code>id</code> (text, primary key) y <code>payload</code> (jsonb).
-                </p>
-              </div>
-
-              <div id="cloud-fields-upstash" class="hidden" style="margin-top:8px; display:flex; flex-direction:column; gap:8px;">
-                <div>
-                  <label class="field-label">UPSTASH_REDIS_REST_URL (Vercel Storage)</label>
-                  <input id="cloud-upstash-url" type="text" placeholder="https://eu1-xxx.upstash.io" />
-                </div>
-                <div>
-                  <label class="field-label">UPSTASH_REDIS_REST_TOKEN</label>
-                  <input id="cloud-upstash-token" type="password" placeholder="AXxxxxxxxxxxxx" />
-                </div>
-              </div>
             </div>
-
-            <div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:12px;">
-              <button type="button" onclick="saveCloudConfigAndSync()" class="btn-save" style="padding:9px 14px; font-size:12px;">
-                ☁️ Guardar y Sincronizar Base de Datos
-              </button>
-              <button type="button" onclick="downloadConfiguredHtmlForVercel()" class="btn-primary-sm">
-                📦 Descargar index.html listo para GitHub/Vercel
-              </button>
-            </div>
-            <p style="font-size:11px; color:var(--text-muted); margin-top:8px;">
-              💡 <strong>Truco para Vercel:</strong> Tras guardar la URL de tu base de datos aquí, pulsa <em>"Descargar index.html listo para GitHub/Vercel"</em> y súbelo a tu repositorio. Así todos tus compañeros se conectarán automáticamente sin configurar nada.
-            </p>
           </div>
         </div>
 
         <!-- 4. PUNTOS DE RESTAURACIÓN EN BASE DE DATOS (HISTORIAL DE VERSIONES) -->
-        <div class="glass-panel">
-          <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:10px; margin-bottom:12px;">
-            <div>
+        <div class="glass-panel admin-section collapsed">
+          <div class="admin-section-header">
+            <div class="admin-section-trigger" onclick="toggleAdminSection(this)">
               <h2 style="font-size:18px; font-weight:800; color:var(--text-strong);">⏪ Puntos de Restauración (Versiones en BD)</h2>
               <p style="font-size:12.5px; color:var(--text-muted); margin-top:2px;">
                 Cada cambio realizado por los usuarios o subida de Excel guarda una copia automática en la base de datos para poder volver atrás en cualquier momento.
               </p>
             </div>
-            <div style="display:flex; flex-wrap:wrap; gap:6px;">
+            <div class="admin-section-actions">
               <button type="button" onclick="createManualSnapshot()" class="btn-primary-sm">💾 Guardar punto ahora</button>
               <button type="button" onclick="exportFullJsonBackup()" class="btn-mini">⬇ Backup .JSON</button>
               <label class="btn-mini" style="cursor:pointer;">
                 ⬆ Cargar .JSON
                 <input type="file" accept=".json" class="hidden" onchange="importFullJsonBackup(event)" />
               </label>
+              <button type="button" class="admin-section-toggle" onclick="toggleAdminSection(this)" aria-expanded="false" aria-label="Mostrar u ocultar Puntos de Restauración">▾</button>
             </div>
           </div>
 
-          <div id="snapshots-list-container"></div>
+          <div class="admin-section-body">
+            <div class="admin-section-body-inner">
+              <div id="snapshots-list-container"></div>
+            </div>
+          </div>
         </div>
 
         <!-- 5. REGISTRO DE AUDITORÍA DE MOVIMIENTOS -->
-        <div class="glass-panel">
-          <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:10px; margin-bottom:14px;">
-            <div>
+        <div class="glass-panel admin-section collapsed">
+          <div class="admin-section-header">
+            <div class="admin-section-trigger" onclick="toggleAdminSection(this)">
               <h2 style="font-size:18px; font-weight:800; color:var(--text-strong);">📋 Registro Detallado de Cambios (Auditoría)</h2>
               <p style="font-size:12.5px; color:var(--text-muted); margin-top:2px;">Historial cronológico de todos los movimientos realizados por los usuarios.</p>
             </div>
-            <button onclick="restoreInitialData()" class="btn-danger-sm">Restaurar datos originales de fábrica</button>
+            <div class="admin-section-actions">
+              <button type="button" onclick="restoreInitialData()" class="btn-danger-sm">Restaurar datos originales de fábrica</button>
+              <button type="button" class="admin-section-toggle" onclick="toggleAdminSection(this)" aria-expanded="false" aria-label="Mostrar u ocultar Registro de Auditoría">▾</button>
+            </div>
           </div>
-          <div id="audit-log-container"></div>
+
+          <div class="admin-section-body">
+            <div class="admin-section-body-inner">
+              <div id="audit-log-container"></div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -5882,6 +5992,14 @@
       try { return sessionStorage.getItem(SESSION_KEY_AUTH) === 'true'; } catch (e) { return false; }
     }
 
+    function toggleAdminSection(triggerOrBtn) {
+      const section = triggerOrBtn.closest('.admin-section');
+      if (!section) return;
+      const isCollapsed = section.classList.toggle('collapsed');
+      const btn = section.querySelector('.admin-section-toggle');
+      if (btn) btn.setAttribute('aria-expanded', String(!isCollapsed));
+    }
+
     function updateAdminView() {
       const authed = isAdminAuthenticated();
       document.getElementById('admin-login-box').classList.toggle('hidden', authed);
@@ -5894,10 +6012,11 @@
         renderAdminUsersList();
         renderSnapshotsList();
 
-        // Collapse admin panels by default except global overview
-        document.querySelectorAll('#admin-panel-content .glass-panel').forEach((p, idx) => {
-          if (idx > 0) p.classList.add('collapsed');
-          else p.classList.remove('collapsed');
+        // Todas las secciones principales colapsadas por defecto
+        document.querySelectorAll('#admin-panel-content .admin-section').forEach(section => {
+          section.classList.add('collapsed');
+          const btn = section.querySelector('.admin-section-toggle');
+          if (btn) btn.setAttribute('aria-expanded', 'false');
         });
       }
     }
