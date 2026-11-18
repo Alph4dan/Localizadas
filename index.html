@@ -5752,9 +5752,16 @@
       if (authed) {
         initGeneratorDefaults();
         loadCloudConfigToForm();
+        renderAdminGlobalOverview();
         renderHistoricalBalanceTable();
         renderAdminUsersList();
         renderSnapshotsList();
+
+        // Collapse admin panels by default except global overview
+        document.querySelectorAll('#admin-panel-content .glass-panel').forEach((p, idx) => {
+          if (idx > 0) p.classList.add('collapsed');
+          else p.classList.remove('collapsed');
+        });
       }
     }
 
