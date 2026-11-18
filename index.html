@@ -1783,6 +1783,98 @@
       box-shadow: var(--specular-top), 0 18px 42px -10px rgba(2, 132, 199, 0.26);
     }
 
+    /* === MINI CABECERA FIJA AL HACER SCROLL === */
+    .sticky-mini-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 45;
+      padding: 9px 14px 10px;
+      background: var(--bg-mobile-nav);
+      backdrop-filter: blur(18px) saturate(165%);
+      -webkit-backdrop-filter: blur(18px) saturate(165%);
+      border-bottom: 1px solid var(--border-glass);
+      box-shadow: var(--specular-top), 0 10px 30px -10px rgba(0, 0, 0, 0.38);
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transform: translate3d(0, -18px, 0) scale(0.988);
+      transform-origin: top center;
+      will-change: transform, opacity;
+      transition:
+        opacity 0.36s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 0.44s cubic-bezier(0.22, 1, 0.36, 1),
+        visibility 0s linear 0.44s;
+    }
+    .sticky-mini-header::before {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(52, 211, 153, 0.35), rgba(34, 211, 238, 0.4), transparent);
+      pointer-events: none;
+    }
+    .sticky-mini-header.is-visible {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transform: translate3d(0, 0, 0) scale(1);
+      transition:
+        opacity 0.38s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 0.44s cubic-bezier(0.22, 1, 0.36, 1),
+        visibility 0s linear 0s;
+    }
+    .sticky-mini-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .sticky-mini-title-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .sticky-mini-title {
+      font-size: 14.5px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--text-strong);
+      line-height: 1.2;
+    }
+    .sticky-mini-sub {
+      font-size: 11.5px;
+      line-height: 1.35;
+      color: var(--text-muted);
+    }
+    .sticky-mini-sub strong {
+      color: var(--text-secondary);
+      font-weight: 700;
+    }
+    @media (min-width: 768px) {
+      .sticky-mini-header {
+        padding: 10px 24px 11px;
+      }
+      .sticky-mini-inner {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+      }
+      .sticky-mini-title {
+        font-size: 15.5px;
+        white-space: nowrap;
+      }
+      .sticky-mini-sub {
+        font-size: 12px;
+        text-align: right;
+      }
+    }
+
     .kidneys-icon {
       display: inline-block;
       vertical-align: -0.22em;
@@ -2039,6 +2131,19 @@
   <!-- BARRA DE PROGRESO DE DESPLAZAMIENTO -->
   <div class="scroll-progress-track" aria-hidden="true">
     <div id="scroll-progress-fill" class="scroll-progress-fill"></div>
+  </div>
+
+  <!-- MINI CABECERA FIJA AL HACER SCROLL -->
+  <div id="sticky-mini-header" class="sticky-mini-header" aria-hidden="true">
+    <div class="sticky-mini-inner">
+      <div class="sticky-mini-title-row">
+        <span class="pulse-dot" aria-hidden="true"></span>
+        <span class="sticky-mini-title">Localizadas de <span class="gradient-text">trasplante</span></span>
+      </div>
+      <div class="sticky-mini-sub">
+        Toca las localizadas de un día para cambiar turnos, pulsa <strong>+</strong> en <strong>Guardia</strong> o usa <strong>+ Tx Renal vivo</strong> junto a la fecha de cada semana.
+      </div>
+    </div>
   </div>
 
   <!-- FONDO PARALLAX MULTICAPA -->
@@ -3907,6 +4012,7 @@
       const ecg      = document.getElementById('p-ecg');
       const ecg2     = document.getElementById('p-ecg-2');
       const hero     = document.getElementById('hero-header');
+      const miniHdr  = document.getElementById('sticky-mini-header');
       const progFill = document.getElementById('scroll-progress-fill');
 
       const reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -3917,10 +4023,12 @@
       let vw = window.innerWidth || 1024;
       let isDesktop = vw >= 768;
       let docH = Math.max(0, document.documentElement.scrollHeight - vh);
+      let heroThreshold = 180;
 
       let targetMouseX = 0, targetMouseY = 0;
       let currMouseX = 0, currMouseY = 0;
       let lastHeroScrolled = null;
+      let lastMiniHeaderVisible = null;
       let lastSpotlightBlock = null;
       let scrollDirty = true;
       let mouseDirty = false;
@@ -3931,6 +4039,7 @@
         vw = window.innerWidth || 1024;
         isDesktop = vw >= 768;
         docH = Math.max(0, document.documentElement.scrollHeight - vh);
+        heroThreshold = hero ? Math.max(120, hero.offsetTop + hero.offsetHeight - 48) : 180;
         scrollDirty = true;
         requestTick();
       }
@@ -4019,6 +4128,15 @@
             if (isScrolled !== lastHeroScrolled) {
               lastHeroScrolled = isScrolled;
               hero.classList.toggle('is-scrolled', isScrolled);
+            }
+          }
+
+          if (miniHdr) {
+            const showMini = scrollY > heroThreshold;
+            if (showMini !== lastMiniHeaderVisible) {
+              lastMiniHeaderVisible = showMini;
+              miniHdr.classList.toggle('is-visible', showMini);
+              miniHdr.setAttribute('aria-hidden', showMini ? 'false' : 'true');
             }
           }
 
