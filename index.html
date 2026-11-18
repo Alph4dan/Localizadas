@@ -6580,26 +6580,40 @@
 
     // === PARALLAX DINÁMICO MULTICAPA Y EFECTOS DE DESPLAZAMIENTO ===
     let weekScrollObserver = null;
+    let cachedWeekBlocks = [];
+    let refreshParallaxMetrics = null;
 
     function observeWeekBlocks() {
-      const blocks = document.querySelectorAll('.week-block');
-      if (!('IntersectionObserver' in window)) {
-        blocks.forEach(b => b.classList.add('in-view'));
+      cachedWeekBlocks = Array.from(document.querySelectorAll('.week-block'));
+      const reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      if (reducedMotion || !('IntersectionObserver' in window)) {
+        cachedWeekBlocks.forEach(b => b.classList.add('in-view'));
+        if (refreshParallaxMetrics) refreshParallaxMetrics();
         return;
       }
+
       if (!weekScrollObserver) {
         weekScrollObserver = new IntersectionObserver((entries) => {
-          entries.forEach(entry => {
+          for (let i = 0; i < entries.length; i++) {
+            const entry = entries[i];
             if (entry.isIntersecting) {
               entry.target.classList.add('in-view');
+              weekScrollObserver.unobserve(entry.target);
             }
-          });
+          }
         }, { threshold: 0.06, rootMargin: '0px 0px -24px 0px' });
       }
-      blocks.forEach((b, idx) => {
-        b.style.transitionDelay = `${Math.min(idx % 4, 3) * 45}ms`;
-        weekScrollObserver.observe(b);
-      });
+
+      for (let idx = 0; idx < cachedWeekBlocks.length; idx++) {
+        const b = cachedWeekBlocks[idx];
+        if (!b.classList.contains('in-view')) {
+          b.style.transitionDelay = `${Math.min(idx % 4, 3) * 45}ms`;
+          weekScrollObserver.observe(b);
+        }
+      }
+
+      if (refreshParallaxMetrics) refreshParallaxMetrics();
     }
 
     function initParallax() {
@@ -6613,150 +6627,195 @@
       const hero     = document.getElementById('hero-header');
       const progFill = document.getElementById('scroll-progress-fill');
 
+      const reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
       let scrollY = window.scrollY || 0;
+      let vh = window.innerHeight || 800;
+      let vw = window.innerWidth || 1024;
+      let isDesktop = vw >= 768;
+      let docH = Math.max(0, document.documentElement.scrollHeight - vh);
+
       let targetMouseX = 0, targetMouseY = 0;
       let currMouseX = 0, currMouseY = 0;
-      let ticking = false;
+      let lastHeroScrolled = null;
+      let scrollDirty = true;
+      let mouseDirty = false;
+      let rafId = 0;
+
+      function updateMetrics() {
+        vh = window.innerHeight || 800;
+        vw = window.innerWidth || 1024;
+        isDesktop = vw >= 768;
+        docH = Math.max(0, document.documentElement.scrollHeight - vh);
+        scrollDirty = true;
+        requestTick();
+      }
+      refreshParallaxMetrics = updateMetrics;
 
       function updateDepthEffects() {
-        currMouseX += (targetMouseX - currMouseX) * 0.14;
-        currMouseY += (targetMouseY - currMouseY) * 0.14;
+        rafId = 0;
 
-        if (grid) {
-          grid.style.transform = `translate3d(${currMouseX * -14}px, ${scrollY * -0.14 + currMouseY * -14}px, 0)`;
-        }
-        if (subgrid) {
-          subgrid.style.transform = `translate3d(${currMouseX * 18}px, ${scrollY * -0.24 + currMouseY * 18}px, 0)`;
-        }
-        if (orb1) {
-          orb1.style.transform = `translate3d(${currMouseX * 28}px, ${scrollY * 0.24 + currMouseY * 28}px, 0) scale(${1 + Math.min(scrollY * 0.00012, 0.12)})`;
-        }
-        if (orb2) {
-          orb2.style.transform = `translate3d(${currMouseX * -32}px, ${scrollY * -0.18 + currMouseY * -24}px, 0)`;
-        }
-        if (cross) {
-          cross.style.transform = `translate3d(${currMouseX * 22}px, ${scrollY * -0.3 + currMouseY * 22}px, 0)`;
-        }
-        if (ecg) {
-          ecg.style.transform = `translate3d(${-scrollY * 0.42}px, ${scrollY * 0.06}px, 0)`;
-        }
-        if (ecg2) {
-          ecg2.style.transform = `translate3d(${scrollY * 0.34}px, ${-scrollY * 0.05}px, 0)`;
-        }
-
-        if (hero) {
-          hero.classList.toggle('is-scrolled', scrollY > 18);
-          if (window.innerWidth >= 768) {
-            const lift = Math.min(scrollY * 0.06, 14);
-            hero.style.transform = `translate3d(${currMouseX * -4}px, ${lift}px, 0)`;
+        if (mouseDirty) {
+          const dx = targetMouseX - currMouseX;
+          const dy = targetMouseY - currMouseY;
+          if (Math.abs(dx) < 0.0008 && Math.abs(dy) < 0.0008) {
+            currMouseX = targetMouseX;
+            currMouseY = targetMouseY;
+            mouseDirty = false;
+          } else {
+            currMouseX += dx * 0.14;
+            currMouseY += dy * 0.14;
           }
         }
 
-        // Scroll progress bar
-        if (progFill) {
-          const docH = document.documentElement.scrollHeight - window.innerHeight;
-          const pct = docH > 0 ? Math.min(100, Math.max(0, (scrollY / docH) * 100)) : 0;
-          progFill.style.width = `${pct.toFixed(1)}%`;
+        if (!reducedMotion && (scrollDirty || mouseDirty)) {
+          if (grid) {
+            grid.style.transform = `translate3d(${(currMouseX * -14).toFixed(2)}px, ${(scrollY * -0.14 + currMouseY * -14).toFixed(2)}px, 0)`;
+          }
+          if (subgrid) {
+            subgrid.style.transform = `translate3d(${(currMouseX * 18).toFixed(2)}px, ${(scrollY * -0.24 + currMouseY * 18).toFixed(2)}px, 0)`;
+          }
+          if (orb1) {
+            const scale = 1 + Math.min(scrollY * 0.00012, 0.12);
+            orb1.style.transform = `translate3d(${(currMouseX * 28).toFixed(2)}px, ${(scrollY * 0.24 + currMouseY * 28).toFixed(2)}px, 0) scale(${scale.toFixed(4)})`;
+          }
+          if (orb2) {
+            orb2.style.transform = `translate3d(${(currMouseX * -32).toFixed(2)}px, ${(scrollY * -0.18 + currMouseY * -24).toFixed(2)}px, 0)`;
+          }
+          if (cross) {
+            cross.style.transform = `translate3d(${(currMouseX * 22).toFixed(2)}px, ${(scrollY * -0.3 + currMouseY * 22).toFixed(2)}px, 0)`;
+          }
+          if (hero && isDesktop) {
+            const lift = Math.min(scrollY * 0.06, 14);
+            hero.style.transform = `translate3d(${(currMouseX * -4).toFixed(2)}px, ${lift.toFixed(2)}px, 0)`;
+          }
         }
 
-        // Subtle viewport-relative parallax shift on visible week blocks
-        const vh = window.innerHeight || 800;
-        const visibleWeeks = document.querySelectorAll('.week-block.in-view');
-        visibleWeeks.forEach(wb => {
-          const rect = wb.getBoundingClientRect();
-          const centerOffset = ((rect.top + rect.height * 0.5) - vh * 0.5) / vh;
-          const clamped = Math.max(-1, Math.min(1, centerOffset));
-          wb.style.setProperty('--week-shift', `${(clamped * 7).toFixed(2)}px`);
-        });
+        if (scrollDirty) {
+          if (!reducedMotion) {
+            if (ecg) {
+              ecg.style.transform = `translate3d(${(-scrollY * 0.42).toFixed(2)}px, ${(scrollY * 0.06).toFixed(2)}px, 0)`;
+            }
+            if (ecg2) {
+              ecg2.style.transform = `translate3d(${(scrollY * 0.34).toFixed(2)}px, ${(-scrollY * 0.05).toFixed(2)}px, 0)`;
+            }
 
-        ticking = false;
+            // Batch DOM reads before DOM writes to prevent layout thrashing
+            const shiftsToApply = [];
+            for (let i = 0; i < cachedWeekBlocks.length; i++) {
+              const wb = cachedWeekBlocks[i];
+              if (!wb.classList.contains('in-view')) continue;
+              const rect = wb.getBoundingClientRect();
+              if (rect.bottom < -100 || rect.top > vh + 100) continue;
+              const centerOffset = ((rect.top + rect.height * 0.5) - vh * 0.5) / vh;
+              const clamped = Math.max(-1, Math.min(1, centerOffset));
+              shiftsToApply.push(wb, (clamped * 7).toFixed(2));
+            }
+            for (let i = 0; i < shiftsToApply.length; i += 2) {
+              shiftsToApply[i].style.setProperty('--week-shift', `${shiftsToApply[i + 1]}px`);
+            }
+          }
+
+          if (hero) {
+            const isScrolled = scrollY > 18;
+            if (isScrolled !== lastHeroScrolled) {
+              lastHeroScrolled = isScrolled;
+              hero.classList.toggle('is-scrolled', isScrolled);
+            }
+          }
+
+          if (progFill) {
+            const pct = docH > 0 ? Math.min(100, Math.max(0, (scrollY / docH) * 100)) : 0;
+            progFill.style.width = `${pct.toFixed(1)}%`;
+          }
+
+          scrollDirty = false;
+        }
+
+        if (mouseDirty) {
+          requestTick();
+        }
       }
 
       function requestTick() {
-        if (!ticking) {
-          ticking = true;
-          requestAnimationFrame(updateDepthEffects);
+        if (!rafId) {
+          rafId = requestAnimationFrame(updateDepthEffects);
         }
       }
 
       window.addEventListener('scroll', () => {
         scrollY = window.scrollY;
+        scrollDirty = true;
         requestTick();
       }, { passive: true });
 
-      window.addEventListener('mousemove', (e) => {
-        targetMouseX = (e.clientX / window.innerWidth) - 0.5;
-        targetMouseY = (e.clientY / window.innerHeight) - 0.5;
-        requestTick();
-      }, { passive: true });
+      if (!reducedMotion) {
+        window.addEventListener('mousemove', (e) => {
+          targetMouseX = (e.clientX / vw) - 0.5;
+          targetMouseY = (e.clientY / vh) - 0.5;
+          mouseDirty = true;
+          requestTick();
+        }, { passive: true });
+      }
 
-      window.addEventListener('resize', requestTick, { passive: true });
+      window.addEventListener('resize', updateMetrics, { passive: true });
       observeWeekBlocks();
       requestTick();
+    }
+
+    const ISO_DATE_RE = /^(\d{4})-(\d{1,2})-(\d{1,2})/;
+    const SLASH_DATE_RE = /^(\d{1,2})[\/\-](\d{1,2})(?:[\/\-](\d{2,4}))?/;
+    const YEAR_20XX_RE = /20\d{2}/;
+    const LEADING_DAY_RE = /^(\d{1,2})/;
+    const DAY_SHORT_MAP = {
+      'Lunes': 'LUN', 'Martes': 'MAR', 'Miércoles': 'MIÉ',
+      'Jueves': 'JUE', 'Viernes': 'VIE', 'Sábado': 'SÁB', 'Domingo': 'DOM'
+    };
+
+    function buildDateMeta(yr, mNum, dNum, displayDateOverride) {
+      const mIdx = Math.max(0, Math.min(11, mNum - 1));
+      return {
+        displayDate: displayDateOverride || `${dNum}-${MONTH_SHORT_ES[mIdx]}`,
+        monthKey: `${yr}-${String(mNum).padStart(2, '0')}`,
+        monthLabel: `${MONTH_NAMES_ES[mIdx]} ${yr}`,
+        year: yr,
+        sortValue: yr * 10000 + mNum * 100 + dNum
+      };
     }
 
     function parseSpanishDateMeta(rawVal, defaultYear = 2026) {
       if (typeof rawVal === 'number' && window.XLSX && XLSX.SSF) {
         const pd = XLSX.SSF.parse_date_code(rawVal);
         if (pd && pd.m >= 1 && pd.m <= 12) {
-          const mIdx = pd.m - 1;
-          const yr = pd.y || defaultYear;
-          return {
-            displayDate: `${pd.d}-${MONTH_SHORT_ES[mIdx]}`,
-            monthKey: `${yr}-${String(pd.m).padStart(2, '0')}`,
-            monthLabel: `${MONTH_NAMES_ES[mIdx]} ${yr}`,
-            year: yr,
-            sortValue: yr * 10000 + pd.m * 100 + pd.d
-          };
+          return buildDateMeta(pd.y || defaultYear, pd.m, pd.d);
         }
       }
 
       const str = String(rawVal || '').trim();
-      const isoMatch = str.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+      const isoMatch = ISO_DATE_RE.exec(str);
       if (isoMatch) {
-        const yr = parseInt(isoMatch[1], 10);
-        const mNum = parseInt(isoMatch[2], 10);
-        const dNum = parseInt(isoMatch[3], 10);
-        const mIdx = Math.max(0, Math.min(11, mNum - 1));
-        return {
-          displayDate: `${dNum}-${MONTH_SHORT_ES[mIdx]}`,
-          monthKey: `${yr}-${String(mNum).padStart(2, '0')}`,
-          monthLabel: `${MONTH_NAMES_ES[mIdx]} ${yr}`,
-          year: yr,
-          sortValue: yr * 10000 + mNum * 100 + dNum
-        };
+        return buildDateMeta(
+          parseInt(isoMatch[1], 10),
+          parseInt(isoMatch[2], 10),
+          parseInt(isoMatch[3], 10)
+        );
       }
 
-      const slashMatch = str.match(/^(\d{1,2})[\/\-](\d{1,2})(?:[\/\-](\d{2,4}))?/);
+      const slashMatch = SLASH_DATE_RE.exec(str);
       if (slashMatch) {
-        const dNum = parseInt(slashMatch[1], 10);
-        const mNum = parseInt(slashMatch[2], 10);
         let yr = slashMatch[3] ? parseInt(slashMatch[3], 10) : defaultYear;
         if (yr < 100) yr += 2000;
-        const mIdx = Math.max(0, Math.min(11, mNum - 1));
-        return {
-          displayDate: `${dNum}-${MONTH_SHORT_ES[mIdx]}`,
-          monthKey: `${yr}-${String(mNum).padStart(2, '0')}`,
-          monthLabel: `${MONTH_NAMES_ES[mIdx]} ${yr}`,
-          year: yr,
-          sortValue: yr * 10000 + mNum * 100 + dNum
-        };
+        return buildDateMeta(yr, parseInt(slashMatch[2], 10), parseInt(slashMatch[1], 10));
       }
 
       const lower = str.toLowerCase();
       for (let i = 0; i < MONTH_SHORT_ES.length; i++) {
         if (lower.includes(MONTH_SHORT_ES[i])) {
-          const yrMatch = lower.match(/20\d{2}/);
+          const yrMatch = YEAR_20XX_RE.exec(lower);
           const yr = yrMatch ? parseInt(yrMatch[0], 10) : defaultYear;
-          const dayMatch = lower.match(/^(\d{1,2})/);
+          const dayMatch = LEADING_DAY_RE.exec(lower);
           const dNum = dayMatch ? parseInt(dayMatch[1], 10) : 1;
-          return {
-            displayDate: str,
-            monthKey: `${yr}-${String(i + 1).padStart(2, '0')}`,
-            monthLabel: `${MONTH_NAMES_ES[i]} ${yr}`,
-            year: yr,
-            sortValue: yr * 10000 + (i + 1) * 100 + dNum
-          };
+          return buildDateMeta(yr, i + 1, dNum, str);
         }
       }
 
@@ -6775,11 +6834,7 @@
     }
 
     function shortDayName(dName) {
-      const map = {
-        'Lunes': 'LUN', 'Martes': 'MAR', 'Miércoles': 'MIÉ',
-        'Jueves': 'JUE', 'Viernes': 'VIE', 'Sábado': 'SÁB', 'Domingo': 'DOM'
-      };
-      return map[dName] || dName.slice(0, 3).toUpperCase();
+      return DAY_SHORT_MAP[dName] || dName.slice(0, 3).toUpperCase();
     }
 
     function isHolidaySlot(slots) {
@@ -6789,13 +6844,15 @@
 
     function getAvailableMonths() {
       const map = new Map();
-      weeksData.forEach(w => {
-        w.days.forEach(d => {
+      for (let i = 0; i < weeksData.length; i++) {
+        const days = weeksData[i].days;
+        for (let j = 0; j < days.length; j++) {
+          const d = days[j];
           if (d.monthKey && !d.monthKey.endsWith('-00')) {
             map.set(d.monthKey, d.monthLabel);
           }
-        });
-      });
+        }
+      }
       return Array.from(map.entries())
         .sort((a, b) => a[0].localeCompare(b[0]))
         .map(([key, label]) => ({ key, label }));
@@ -6806,19 +6863,16 @@
       const months = getAvailableMonths();
       document.getElementById('months-count-label').textContent = `${months.length} meses cargados`;
 
-      let html = `
-        <button type="button" onclick="selectMonth('ALL')" class="month-pill ${selectedMonthFilter === 'ALL' ? 'active' : ''}">
-          Todos (${months.length})
-        </button>
-      `;
-      months.forEach(m => {
-        html += `
-          <button type="button" onclick="selectMonth('${m.key}')" class="month-pill ${selectedMonthFilter === m.key ? 'active' : ''}">
-            ${m.label}
-          </button>
-        `;
-      });
-      bar.innerHTML = html;
+      const parts = [
+        `<button type="button" onclick="selectMonth('ALL')" class="month-pill ${selectedMonthFilter === 'ALL' ? 'active' : ''}">Todos (${months.length})</button>`
+      ];
+      for (let i = 0; i < months.length; i++) {
+        const m = months[i];
+        parts.push(
+          `<button type="button" onclick="selectMonth('${m.key}')" class="month-pill ${selectedMonthFilter === m.key ? 'active' : ''}">${m.label}</button>`
+        );
+      }
+      bar.innerHTML = parts.join('');
     }
 
     function selectMonth(monthKey) {
@@ -6831,50 +6885,79 @@
 
     function populateSelectors() {
       const weekSel = document.getElementById('week-selector');
-      const visibleWeeks = weeksData
-        .map((w, idx) => ({ w, idx }))
-        .filter(({ w }) => selectedMonthFilter === 'ALL' || w.days.some(d => d.monthKey === selectedMonthFilter));
+      const visibleWeeks = [];
+      for (let idx = 0; idx < weeksData.length; idx++) {
+        const w = weeksData[idx];
+        if (selectedMonthFilter === 'ALL' || w.days.some(d => d.monthKey === selectedMonthFilter)) {
+          visibleWeeks.push({ w, idx });
+        }
+      }
 
-      weekSel.innerHTML = `<option value="ALL">📆 Todas las semanas (${visibleWeeks.length})</option>`;
-      visibleWeeks.forEach(({ w, idx }) => {
+      const weekFrag = document.createDocumentFragment();
+      const allWeekOpt = document.createElement('option');
+      allWeekOpt.value = 'ALL';
+      allWeekOpt.textContent = `📆 Todas las semanas (${visibleWeeks.length})`;
+      weekFrag.appendChild(allWeekOpt);
+
+      for (let i = 0; i < visibleWeeks.length; i++) {
+        const { w, idx } = visibleWeeks[i];
         const opt = document.createElement('option');
         opt.value = idx;
         opt.textContent = `Sem ${idx + 1}: ${w.weekLabel}`;
-        weekSel.appendChild(opt);
-      });
+        weekFrag.appendChild(opt);
+      }
+      weekSel.replaceChildren(weekFrag);
       weekSel.value = selectedWeekFilter;
 
       const docFilter = document.getElementById('doctor-filter');
       const prevDoc = docFilter.value;
-      docFilter.innerHTML = `<option value="">👨‍⚕️ Todos (${doctorsList.length})</option>`;
-      doctorsList.forEach(d => {
+      const docFrag = document.createDocumentFragment();
+      const allDocOpt = document.createElement('option');
+      allDocOpt.value = '';
+      allDocOpt.textContent = `👨‍⚕️ Todos (${doctorsList.length})`;
+      docFrag.appendChild(allDocOpt);
+
+      for (let i = 0; i < doctorsList.length; i++) {
+        const d = doctorsList[i];
         const opt = document.createElement('option');
         opt.value = d.nombre;
         const inactiveTag = d.active === false ? ' [BAJA]' : '';
         opt.textContent = `${d.nombre}${inactiveTag} (Grp ${d.grupoLaboral} · G.${d.grupoGuardia})`;
-        docFilter.appendChild(opt);
-      });
+        docFrag.appendChild(opt);
+      }
+      docFilter.replaceChildren(docFrag);
       docFilter.value = prevDoc;
 
       const changedBySel = document.getElementById('modal-changed-by');
-      changedBySel.innerHTML = '<option value="">-- Selecciona tu nombre --</option>';
-      getActiveDoctors().forEach(d => {
+      const activeDocs = getActiveDoctors();
+      const changedByFrag = document.createDocumentFragment();
+      const placeholderOpt = document.createElement('option');
+      placeholderOpt.value = '';
+      placeholderOpt.textContent = '-- Selecciona tu nombre --';
+      changedByFrag.appendChild(placeholderOpt);
+
+      for (let i = 0; i < activeDocs.length; i++) {
+        const d = activeDocs[i];
         const opt = document.createElement('option');
         opt.value = d.nombre;
         opt.textContent = d.nombre;
-        changedBySel.appendChild(opt);
-      });
+        changedByFrag.appendChild(opt);
+      }
+      changedBySel.replaceChildren(changedByFrag);
     }
 
     function updateStats() {
       const activeDocs = getActiveDoctors();
-      document.getElementById('stat-changes').textContent = auditLogs.length;
+      const changesCount = auditLogs.length;
+      const activeCount = activeDocs.length;
+
+      document.getElementById('stat-changes').textContent = changesCount;
       document.getElementById('stat-snapshots').textContent = dbSnapshots.length;
-      document.getElementById('badge-changes-desk').textContent = auditLogs.length;
-      document.getElementById('badge-changes-mob').textContent = auditLogs.length;
-      document.getElementById('stat-team-active').textContent = `${activeDocs.length} / ${doctorsList.length} Activos`;
-      document.getElementById('nav-team-count-desk').textContent = activeDocs.length;
-      document.getElementById('nav-team-count-mob').textContent = activeDocs.length;
+      document.getElementById('badge-changes-desk').textContent = changesCount;
+      document.getElementById('badge-changes-mob').textContent = changesCount;
+      document.getElementById('stat-team-active').textContent = `${activeCount} / ${doctorsList.length} Activos`;
+      document.getElementById('nav-team-count-desk').textContent = activeCount;
+      document.getElementById('nav-team-count-mob').textContent = activeCount;
 
       if (weeksData.length > 0) {
         const firstD = weeksData[0].days[0]?.date || '';
