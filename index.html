@@ -10,121 +10,129 @@
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet" />
 <style>
     :root, [data-theme="dark"] {
-      --bg-deep: #040914;
-      --bg-surface: #0b1424;
-      --bg-card: rgba(13, 24, 44, 0.78);
-      --bg-sub: rgba(7, 15, 29, 0.72);
-      --bg-input: rgba(8, 16, 32, 0.9);
-      --bg-btn-sec: #13223b;
-      --bg-nav-desk: rgba(6, 13, 24, 0.68);
-      --bg-mobile-nav: rgba(6, 12, 24, 0.92);
-      --bg-modal: #0c182d;
-      --bg-week: rgba(11, 21, 39, 0.72);
-      --bg-day: linear-gradient(165deg, rgba(22, 39, 68, 0.9), rgba(9, 17, 32, 0.96));
-      --bg-day-wk: linear-gradient(165deg, rgba(31, 38, 82, 0.92), rgba(12, 18, 40, 0.97));
-      --bg-day-match: linear-gradient(165deg, rgba(16, 185, 129, 0.26), rgba(10, 24, 38, 0.96));
-      --bg-wk-cluster: linear-gradient(145deg, rgba(49, 46, 129, 0.3), rgba(14, 116, 144, 0.18));
-      --border-wk-cluster: rgba(129, 140, 248, 0.45);
-      --wk-title-color: #c7d2fe;
-      --wk-badge-bg: rgba(129, 140, 248, 0.22);
-      --wk-badge-text: #e0e7ff;
-      --bg-name-chip: rgba(6, 13, 24, 0.62);
-      --bg-doc-card: rgba(10, 20, 38, 0.85);
-      --bg-expanded-slot: rgba(8, 16, 30, 0.9);
-      --bg-expanded-hover: rgba(16, 36, 64, 0.95);
-      --bg-guardia-strip: rgba(6, 182, 212, 0.09);
-      --bg-guardia-drawer: rgba(5, 11, 22, 0.9);
+      --bg-deep: #090D16;
+      --bg-surface: #0F172A;
+      --bg-header: #0F172A;
+      --border-header: #1E293B;
+      --bg-card: #111827;
+      --bg-sub: rgba(15, 23, 42, 0.7);
+      --bg-input: #0F172A;
+      --bg-btn-sec: rgba(255, 255, 255, 0.05);
+      --bg-nav-desk: rgba(255, 255, 255, 0.04);
+      --bg-mobile-nav: rgba(15, 23, 42, 0.94);
+      --bg-modal: #111827;
+      --bg-week: #111827;
+      --bg-day: #182132;
+      --bg-day-wk: #1a2436;
+      --bg-day-match: rgba(13, 148, 136, 0.14);
+      --bg-wk-cluster: rgba(59, 130, 246, 0.035);
+      --border-wk-cluster: rgba(255, 255, 255, 0.06);
+      --wk-title-color: #93C5FD;
+      --wk-badge-bg: rgba(59, 130, 246, 0.12);
+      --wk-badge-text: #BFDBFE;
+      --bg-name-chip: transparent;
+      --bg-doc-card: #182132;
+      --bg-expanded-slot: #0F172A;
+      --bg-expanded-hover: #1E293B;
+      --bg-guardia-strip: rgba(255, 255, 255, 0.025);
+      --bg-guardia-drawer: #0F172A;
 
-      --border-glass: rgba(56, 189, 248, 0.2);
-      --border-subtle: rgba(148, 163, 184, 0.14);
-      --border-input: rgba(148, 163, 184, 0.25);
-      --specular-top: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      --border-glass: rgba(255, 255, 255, 0.06);
+      --border-subtle: rgba(255, 255, 255, 0.06);
+      --border-input: rgba(255, 255, 255, 0.1);
+      --specular-top: inset 0 1px 0 rgba(255, 255, 255, 0.04);
 
-      --text-main: #f1f5f9;
-      --text-strong: #ffffff;
-      --text-secondary: #e2e8f0;
-      --text-sub: #cbd5e1;
-      --text-muted: #94a3b8;
+      --text-main: #F1F5F9;
+      --text-strong: #FFFFFF;
+      --text-secondary: #E2E8F0;
+      --text-sub: #CBD5E1;
+      --text-muted: #94A3B8;
 
-      --accent-emerald: #34d399;
-      --accent-cyan: #22d3ee;
-      --accent-indigo: #a5b4fc;
-      --accent-amber: #fcd34d;
-      --accent-rose: #fda4af;
+      --accent-primary: #3B82F6;
+      --accent-primary-hover: #2563EB;
+      --accent-emerald: #0D9488;
+      --accent-cyan: #38BDF8;
+      --accent-indigo: #93C5FD;
+      --accent-amber: #FBBF24;
+      --accent-rose: #FB7185;
 
-      --pill-bg: rgba(16, 185, 129, 0.15);
-      --pill-border: rgba(16, 185, 129, 0.35);
-      --pill-text: #6ee7b7;
+      --pill-bg: rgba(59, 130, 246, 0.12);
+      --pill-border: rgba(59, 130, 246, 0.24);
+      --pill-text: #93C5FD;
 
-      --sem-bg: rgba(6, 182, 212, 0.16);
-      --sem-border: rgba(6, 182, 212, 0.38);
-      --sem-text: #67e8f9;
+      --sem-bg: rgba(255, 255, 255, 0.06);
+      --sem-border: rgba(255, 255, 255, 0.08);
+      --sem-text: #CBD5E1;
 
-      --grid-line: rgba(148, 163, 184, 0.045);
-      --orb-1: rgba(16, 185, 129, 0.24);
-      --orb-2: rgba(6, 182, 212, 0.22);
-      --ecg-opacity: 0.14;
-      --shadow-card: 0 14px 36px -10px rgba(0, 0, 0, 0.65), 0 2px 6px rgba(0, 0, 0, 0.35);
-      --glow-hover: 0 14px 32px -8px rgba(34, 211, 238, 0.26), 0 0 0 1px rgba(34, 211, 238, 0.28);
+      --grid-line: rgba(148, 163, 184, 0.02);
+      --orb-1: rgba(59, 130, 246, 0.045);
+      --orb-2: rgba(13, 148, 136, 0.04);
+      --ecg-opacity: 0.035;
+      --shadow-card: 0 8px 24px -8px rgba(0, 0, 0, 0.45), 0 1px 3px rgba(0, 0, 0, 0.25);
+      --glow-hover: 0 10px 26px -8px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.1);
     }
 
     [data-theme="light"] {
-      --bg-deep: #f1f5f9;
-      --bg-surface: #ffffff;
-      --bg-card: rgba(255, 255, 255, 0.88);
-      --bg-sub: rgba(241, 245, 249, 0.86);
-      --bg-input: #ffffff;
-      --bg-btn-sec: #e2e8f0;
-      --bg-nav-desk: rgba(226, 232, 240, 0.72);
-      --bg-mobile-nav: rgba(255, 255, 255, 0.92);
-      --bg-modal: #ffffff;
-      --bg-week: rgba(255, 255, 255, 0.84);
-      --bg-day: linear-gradient(165deg, #ffffff, #f8fafc);
-      --bg-day-wk: linear-gradient(165deg, #f5f7ff, #eef2ff);
-      --bg-day-match: linear-gradient(165deg, #d1fae5, #ecfdf5);
-      --bg-wk-cluster: linear-gradient(145deg, rgba(224, 231, 255, 0.72), rgba(207, 250, 254, 0.58));
-      --border-wk-cluster: rgba(99, 102, 241, 0.38);
-      --wk-title-color: #3730a3;
-      --wk-badge-bg: rgba(99, 102, 241, 0.13);
-      --wk-badge-text: #312e81;
-      --bg-name-chip: #f1f5f9;
-      --bg-doc-card: rgba(255, 255, 255, 0.94);
-      --bg-expanded-slot: #f8fafc;
-      --bg-expanded-hover: #f0f9ff;
-      --bg-guardia-strip: rgba(2, 132, 199, 0.07);
-      --bg-guardia-drawer: #f8fafc;
+      --bg-deep: #F8FAFC;
+      --bg-surface: #FFFFFF;
+      --bg-header: #FFFFFF;
+      --border-header: #E2E8F0;
+      --bg-card: #FFFFFF;
+      --bg-sub: #F1F5F9;
+      --bg-input: #FFFFFF;
+      --bg-btn-sec: #F1F5F9;
+      --bg-nav-desk: #F1F5F9;
+      --bg-mobile-nav: rgba(255, 255, 255, 0.94);
+      --bg-modal: #FFFFFF;
+      --bg-week: #FFFFFF;
+      --bg-day: #F8FAFC;
+      --bg-day-wk: #F1F5F9;
+      --bg-day-match: rgba(13, 148, 136, 0.1);
+      --bg-wk-cluster: rgba(59, 130, 246, 0.035);
+      --border-wk-cluster: rgba(15, 23, 42, 0.07);
+      --wk-title-color: #1D4ED8;
+      --wk-badge-bg: rgba(59, 130, 246, 0.1);
+      --wk-badge-text: #1E40AF;
+      --bg-name-chip: transparent;
+      --bg-doc-card: #FFFFFF;
+      --bg-expanded-slot: #F8FAFC;
+      --bg-expanded-hover: #F1F5F9;
+      --bg-guardia-strip: rgba(15, 23, 42, 0.025);
+      --bg-guardia-drawer: #F8FAFC;
 
-      --border-glass: rgba(14, 116, 144, 0.16);
-      --border-subtle: rgba(15, 23, 42, 0.085);
-      --border-input: rgba(100, 116, 139, 0.3);
-      --specular-top: inset 0 1px 0 rgba(255, 255, 255, 0.85);
+      --border-glass: rgba(15, 23, 42, 0.08);
+      --border-subtle: rgba(15, 23, 42, 0.07);
+      --border-input: rgba(15, 23, 42, 0.14);
+      --specular-top: inset 0 1px 0 rgba(255, 255, 255, 0.9);
 
-      --text-main: #0f172a;
-      --text-strong: #090f1d;
-      --text-secondary: #1e293b;
+      --text-main: #0F172A;
+      --text-strong: #090F1D;
+      --text-secondary: #1E293B;
       --text-sub: #334155;
-      --text-muted: #475569;
+      --text-muted: #64748B;
 
-      --accent-emerald: #059669;
-      --accent-cyan: #0284c7;
-      --accent-indigo: #4f46e5;
-      --accent-amber: #b45309;
-      --accent-rose: #be123c;
+      --accent-primary: #2563EB;
+      --accent-primary-hover: #1D4ED8;
+      --accent-emerald: #0D9488;
+      --accent-cyan: #0284C7;
+      --accent-indigo: #4F46E5;
+      --accent-amber: #B45309;
+      --accent-rose: #BE123C;
 
-      --pill-bg: rgba(16, 185, 129, 0.13);
-      --pill-border: rgba(5, 150, 105, 0.32);
-      --pill-text: #047857;
+      --pill-bg: rgba(37, 99, 235, 0.08);
+      --pill-border: rgba(37, 99, 235, 0.2);
+      --pill-text: #1D4ED8;
 
-      --sem-bg: rgba(2, 132, 199, 0.11);
-      --sem-border: rgba(2, 132, 199, 0.3);
-      --sem-text: #0369a1;
+      --sem-bg: #F1F5F9;
+      --sem-border: #E2E8F0;
+      --sem-text: #475569;
 
-      --grid-line: rgba(15, 23, 42, 0.04);
-      --orb-1: rgba(16, 185, 129, 0.15);
-      --orb-2: rgba(6, 182, 212, 0.14);
-      --ecg-opacity: 0.1;
-      --shadow-card: 0 12px 30px -10px rgba(15, 23, 42, 0.09), 0 2px 6px rgba(15, 23, 42, 0.04);
-      --glow-hover: 0 12px 26px -8px rgba(2, 132, 199, 0.18), 0 0 0 1px rgba(2, 132, 199, 0.22);
+      --grid-line: rgba(15, 23, 42, 0.025);
+      --orb-1: rgba(59, 130, 246, 0.05);
+      --orb-2: rgba(13, 148, 136, 0.04);
+      --ecg-opacity: 0.04;
+      --shadow-card: 0 4px 16px -4px rgba(15, 23, 42, 0.06), 0 1px 3px rgba(15, 23, 42, 0.03);
+      --glow-hover: 0 8px 20px -6px rgba(15, 23, 42, 0.1), 0 0 0 1px rgba(37, 99, 235, 0.18);
     }
 
     * {
@@ -153,6 +161,7 @@
 
     .mono {
       font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-variant-numeric: tabular-nums;
     }
 
     /* === FONDO PARALLAX MULTICAPA === */
@@ -330,25 +339,73 @@
     }
 
     h1 {
-      font-size: 22px;
+      font-size: 20px;
       font-weight: 800;
-      letter-spacing: -0.03em;
+      letter-spacing: -0.025em;
       color: var(--text-strong);
-      line-height: 1.12;
+      line-height: 1.15;
     }
     @media (min-width: 768px) {
-      h1 { font-size: 36px; }
+      h1 { font-size: 26px; }
     }
     .gradient-text {
-      background: linear-gradient(100deg, #10b981 0%, #06b6d4 52%, #6366f1 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      color: var(--accent-primary);
     }
-    .hero-sub {
+    .hero-heading-row {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .help-tip-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      height: 20px;
+      border-radius: 999px;
+      background: var(--bg-btn-sec);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      font-size: 11px;
+      font-weight: 800;
+      cursor: help;
+      transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+    }
+    .help-tip-icon:hover, .help-tip-icon:focus-visible {
+      color: var(--text-strong);
+      border-color: var(--accent-primary);
+      background: rgba(59, 130, 246, 0.12);
+      outline: none;
+    }
+    .hero-kpis-inline {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px 16px;
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid var(--border-subtle);
       font-size: 11.5px;
-      color: var(--text-sub);
-      margin-top: 4px;
-      max-width: 640px;
+      color: var(--text-muted);
+    }
+    .hero-kpi-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .hero-kpi-label {
+      text-transform: uppercase;
+      font-size: 10px;
+      letter-spacing: 0.05em;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+    .hero-kpi-val {
+      font-weight: 700;
+      color: var(--text-secondary);
+      font-variant-numeric: tabular-nums;
     }
 
     /* === NAVEGACIÓN DESKTOP === */
@@ -359,145 +416,109 @@
       .desk-nav {
         display: flex;
         align-items: center;
-        gap: 6px;
+        gap: 4px;
         background: var(--bg-nav-desk);
-        padding: 6px;
-        border-radius: 12px;
+        padding: 4px;
+        border-radius: 10px;
         border: 1px solid var(--border-subtle);
-        box-shadow: var(--specular-top);
       }
     }
     .nav-btn {
       border: none;
       background: transparent;
-      color: var(--text-sub);
-      font-size: 13px;
-      font-weight: 700;
-      padding: 9px 16px;
-      border-radius: 8px;
+      color: var(--text-muted);
+      font-size: 12.5px;
+      font-weight: 600;
+      padding: 7px 13px;
+      border-radius: 7px;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+      transition: background 0.18s ease, color 0.18s ease;
     }
     .nav-btn:hover:not(.active) {
       color: var(--text-strong);
-      background: rgba(148, 163, 184, 0.12);
+      background: rgba(148, 163, 184, 0.1);
     }
     .nav-btn.active {
-      background: linear-gradient(135deg, #10b981, #0891b2);
+      background: var(--accent-primary);
       color: #ffffff;
-      box-shadow: 0 6px 18px -4px rgba(16, 185, 129, 0.45);
+      font-weight: 700;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
     }
     .count-pill {
-      background: rgba(6, 182, 212, 0.22);
-      color: var(--accent-cyan);
-      padding: 1px 7px;
+      background: rgba(148, 163, 184, 0.16);
+      color: var(--text-sub);
+      padding: 1px 6px;
       border-radius: 999px;
-      font-size: 11px;
+      font-size: 10.5px;
     }
     .nav-btn.active .count-pill {
-      background: rgba(255, 255, 255, 0.25);
+      background: rgba(255, 255, 255, 0.22);
       color: #ffffff;
     }
 
-    /* === NAVEGACIÓN SUPERIOR DE MESES (DINÁMICA) === */
-    .month-nav-wrapper {
-      margin-top: 12px;
-      padding-top: 12px;
-      border-top: 1px solid var(--border-subtle);
+    /* === TOOLBAR UNIFICADO (MESES + FILTROS) === */
+    .unified-toolbar {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 10px 12px;
+      margin-bottom: 14px;
+      box-shadow: var(--specular-top), var(--shadow-card);
     }
-    .month-nav-label {
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: var(--text-muted);
-      font-weight: 700;
-      margin-bottom: 6px;
+    @media (min-width: 768px) {
+      .unified-toolbar {
+        padding: 12px 16px;
+        border-radius: 14px;
+        margin-bottom: 18px;
+      }
+    }
+    .toolbar-top-row {
       display: flex;
-      align-items: center;
-      justify-content: space-between;
+      flex-direction: column;
+      gap: 8px;
+    }
+    @media (min-width: 1024px) {
+      .toolbar-top-row {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
     }
     .month-pills-bar {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
       overflow-x: auto;
-      padding-bottom: 4px;
       -webkit-overflow-scrolling: touch;
+      flex-shrink: 0;
     }
     .month-pills-bar::-webkit-scrollbar { display: none; }
     .month-pill {
       flex: 0 0 auto;
-      border: 1px solid var(--border-input);
-      background: var(--bg-sub);
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-btn-sec);
       color: var(--text-sub);
-      font-size: 12px;
-      font-weight: 700;
-      padding: 7px 14px;
-      border-radius: 999px;
+      font-size: 11.5px;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 7px;
       cursor: pointer;
-      transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease, box-shadow 0.18s ease, transform 0.15s ease;
+      transition: background 0.16s ease, border-color 0.16s ease, color 0.16s ease;
     }
-    .month-pill:hover {
-      border-color: var(--accent-cyan);
+    .month-pill:hover:not(.active) {
+      border-color: var(--border-input);
       color: var(--text-strong);
-      transform: translateY(-1px);
+      background: rgba(148, 163, 184, 0.12);
     }
     .month-pill.active {
-      background: linear-gradient(135deg, #06b6d4, #10b981);
-      border-color: transparent;
+      background: var(--accent-primary);
+      border-color: var(--accent-primary);
       color: #ffffff;
-      font-weight: 800;
-      box-shadow: 0 6px 16px -4px rgba(6, 182, 212, 0.42);
-    }
-
-    /* === METRICAS HERO === */
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 6px;
-      margin-top: 10px;
-      padding-top: 10px;
-      border-top: 1px solid var(--border-subtle);
-    }
-    @media (min-width: 768px) {
-      .stats-grid { gap: 14px; margin-top: 12px; padding-top: 12px; }
-    }
-    .stat-box {
-      position: relative;
-      overflow: hidden;
-      background: var(--bg-sub);
-      border: 1px solid var(--border-subtle);
-      border-radius: 10px;
-      padding: 8px 10px;
-      text-align: center;
-      box-shadow: var(--specular-top);
-      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
-    }
-    .stat-box:hover {
-      transform: translateY(-2px);
-      border-color: var(--accent-cyan);
-      box-shadow: 0 8px 20px -8px rgba(6, 182, 212, 0.28);
-    }
-    @media (min-width: 768px) {
-      .stat-box { text-align: left; padding: 12px 16px; border-radius: 12px; }
-    }
-    .stat-label {
-      font-size: 9.5px;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      color: var(--text-muted);
-    }
-    .stat-val {
-      font-size: 11.5px;
-      font-weight: 800;
-      margin-top: 1px;
-      color: var(--text-strong);
-    }
-    @media (min-width: 768px) {
-      .stat-val { font-size: 15px; }
+      font-weight: 700;
     }
     .text-emerald { color: var(--accent-emerald); }
     .text-cyan { color: var(--accent-cyan); }
@@ -609,12 +630,9 @@
     /* === VISTA COMPACTA CON BLOQUE VISUAL DE FIN DE SEMANA (VIE-SÁB-DOM) === */
     .week-block {
       position: relative;
-      margin-bottom: 18px;
+      margin-bottom: 16px;
       background: var(--bg-week);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
       border: 1px solid var(--border-subtle);
-      border-left: 3.5px solid var(--accent-cyan);
       border-radius: 12px;
       padding: 12px 10px;
       box-shadow: var(--specular-top), var(--shadow-card);
@@ -632,14 +650,14 @@
       transform: translate3d(0, var(--week-shift, 0px), 0) scale(1);
     }
     .week-block:hover {
-      border-left-color: #10b981;
-      box-shadow: var(--specular-top), 0 18px 36px -12px rgba(6, 182, 212, 0.22);
+      border-color: rgba(255, 255, 255, 0.12);
+      box-shadow: var(--specular-top), var(--glow-hover);
     }
     @media (min-width: 768px) {
       .week-block {
         padding: 18px;
-        border-radius: 16px;
-        margin-bottom: 24px;
+        border-radius: 14px;
+        margin-bottom: 20px;
       }
     }
     .week-header {
@@ -648,36 +666,33 @@
       align-items: center;
       justify-content: space-between;
       gap: 6px;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
       padding: 0 2px;
     }
     .week-title-wrap {
       display: flex;
       flex-wrap: wrap;
       align-items: center;
-      gap: 7px;
+      gap: 8px;
     }
     .sem-tag {
       background: var(--sem-bg);
       border: 1px solid var(--sem-border);
       color: var(--sem-text);
       font-size: 10px;
-      font-weight: 800;
+      font-weight: 700;
       padding: 2px 7px;
-      border-radius: 4px;
+      border-radius: 5px;
+      font-variant-numeric: tabular-nums;
     }
     .week-title {
       font-size: 14px;
-      font-weight: 800;
+      font-weight: 700;
       color: var(--text-strong);
+      font-variant-numeric: tabular-nums;
     }
     @media (min-width: 768px) {
-      .week-title { font-size: 17px; }
-    }
-    .tap-hint {
-      font-size: 10.5px;
-      color: var(--accent-cyan);
-      font-weight: 700;
+      .week-title { font-size: 16px; }
     }
 
     .week-split-layout {
@@ -704,18 +719,17 @@
       .weekdays-grid { gap: 8px; }
     }
 
-    /* === BLOQUE VISUAL DESTACADO FIN DE SEMANA (VIERNES - SÁBADO - DOMINGO) === */
+    /* === BLOQUE VISUAL INTEGRADO FIN DE SEMANA (VIERNES - SÁBADO - DOMINGO) === */
     .weekend-cluster-box {
       background: var(--bg-wk-cluster);
       border: 1px solid var(--border-wk-cluster);
       border-radius: 10px;
       padding: 7px;
-      box-shadow: var(--specular-top);
     }
     @media (min-width: 768px) {
       .weekend-cluster-box {
         padding: 9px;
-        border-radius: 12px;
+        border-radius: 11px;
       }
     }
     .weekend-cluster-header {
@@ -723,24 +737,23 @@
       align-items: center;
       justify-content: space-between;
       gap: 6px;
-      padding: 0 3px 5px 3px;
-      margin-bottom: 5px;
-      border-bottom: 1px dashed var(--border-wk-cluster);
+      padding: 0 3px 6px 3px;
+      margin-bottom: 6px;
+      border-bottom: 1px solid var(--border-subtle);
     }
     .weekend-cluster-title {
       font-size: 9.5px;
-      font-weight: 800;
-      letter-spacing: 0.04em;
+      font-weight: 700;
+      letter-spacing: 0.05em;
       color: var(--wk-title-color);
     }
     .weekend-cluster-badge {
       font-size: 9px;
-      font-weight: 700;
-      padding: 1px 6px;
+      font-weight: 600;
+      padding: 1px 7px;
       border-radius: 999px;
       background: var(--wk-badge-bg);
       color: var(--wk-badge-text);
-      border: 1px solid var(--border-wk-cluster);
     }
     .weekend-grid {
       display: grid;
@@ -752,7 +765,7 @@
       .weekend-grid { gap: 7px; }
     }
 
-    /* === UNIDAD DE DÍA: RECUADRO LOCALIZADAS ARRIBA + GUARDIA CON "+" DEBAJO === */
+    /* === UNIDAD DE DÍA: ELEVACIÓN POR SUPERFICIE Y FILAS LIMPIAS === */
     .day-unit {
       min-width: 0;
       width: 100%;
@@ -765,31 +778,26 @@
       justify-content: flex-start;
       box-shadow: var(--specular-top);
       transition:
-        transform 0.22s cubic-bezier(0.22, 1, 0.36, 1),
-        border-color 0.22s ease,
-        box-shadow 0.22s ease;
+        transform 0.2s cubic-bezier(0.22, 1, 0.36, 1),
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
     }
     @media (hover: hover) {
       .day-unit:hover {
-        transform: translateY(-3px);
-        border-color: var(--accent-cyan);
-        box-shadow: var(--specular-top), 0 12px 24px -8px rgba(6, 182, 212, 0.28);
+        transform: translateY(-2px);
+        border-color: rgba(255, 255, 255, 0.14);
+        box-shadow: var(--specular-top), 0 10px 22px -8px rgba(0, 0, 0, 0.45);
       }
     }
     .day-unit.weekend {
-      border-color: var(--border-wk-cluster);
       background: var(--bg-day-wk);
     }
-    .day-unit.has-mod {
-      border-color: #f59e0b;
-    }
     .day-unit.doc-match {
-      border-color: #10b981;
+      border-color: rgba(13, 148, 136, 0.45);
       background: var(--bg-day-match);
     }
     .day-unit.guardia-expanded {
-      border-color: var(--accent-cyan);
-      box-shadow: 0 10px 24px -6px rgba(6, 182, 212, 0.28);
+      border-color: rgba(59, 130, 246, 0.4);
     }
 
     /* Parte superior: Botón de Localizadas */
@@ -813,10 +821,10 @@
       .day-loc-trigger { padding: 9px 8px 7px 8px; }
     }
     .day-loc-trigger:hover {
-      background: rgba(6, 182, 212, 0.06);
+      background: rgba(255, 255, 255, 0.025);
     }
     .day-loc-trigger:active {
-      background: rgba(16, 185, 129, 0.12);
+      background: rgba(59, 130, 246, 0.08);
     }
 
     .compact-day-top {
@@ -828,62 +836,86 @@
     }
     .compact-dname {
       font-size: 9px;
-      font-weight: 800;
-      letter-spacing: 0.03em;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
       color: var(--text-muted);
     }
     .day-unit.weekend .compact-dname {
-      color: var(--accent-indigo);
+      color: var(--wk-title-color);
     }
     .gg-pill-xs {
       font-size: 9px;
-      font-weight: 800;
-      padding: 1px 4px;
-      border-radius: 5px;
-      border: 1px solid;
-      line-height: 1.1;
+      font-weight: 700;
+      padding: 1.5px 6px;
+      border-radius: 999px;
+      border: none;
+      line-height: 1.15;
+      font-variant-numeric: tabular-nums;
     }
     @media (min-width: 768px) {
-      .gg-pill-xs { font-size: 10.5px; padding: 2px 5px; }
+      .gg-pill-xs { font-size: 10px; padding: 2px 7px; }
     }
 
     .compact-ddate {
-      font-size: 11.5px;
-      font-weight: 800;
+      display: flex;
+      align-items: baseline;
+      gap: 3px;
       color: var(--text-strong);
-      margin-top: 1px;
-      padding-bottom: 4px;
-      margin-bottom: 4px;
+      margin-top: 2px;
+      padding-bottom: 5px;
+      margin-bottom: 5px;
       border-bottom: 1px solid var(--border-subtle);
       width: 100%;
+      font-variant-numeric: tabular-nums;
+    }
+    .compact-dnum {
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1;
+      color: var(--text-strong);
+    }
+    .compact-dmonth {
+      font-size: 9.5px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-muted);
     }
     @media (min-width: 768px) {
-      .compact-ddate { font-size: 14px; padding-bottom: 5px; margin-bottom: 5px; }
+      .compact-ddate { padding-bottom: 6px; margin-bottom: 6px; }
+      .compact-dnum { font-size: 18px; }
+      .compact-dmonth { font-size: 10.5px; }
     }
 
     .compact-names-box {
       display: flex;
       flex-direction: column;
-      gap: 2.5px;
+      gap: 1.5px;
       width: 100%;
     }
     @media (min-width: 768px) {
-      .compact-names-box { gap: 3.5px; }
+      .compact-names-box { gap: 2px; }
     }
     .compact-name {
       font-size: 10px;
-      font-weight: 700;
+      font-weight: 600;
       color: var(--text-secondary);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      background: var(--bg-name-chip);
+      background: transparent;
       padding: 2.5px 5px;
-      border-radius: 6px;
-      border-left: 2.5px solid #10b981;
+      border-radius: 5px;
+      border-left: 2px solid transparent;
+      transition: background 0.14s ease, color 0.14s ease;
+    }
+    .day-loc-trigger:hover .compact-name {
+      background: rgba(255, 255, 255, 0.03);
     }
     @media (min-width: 768px) {
-      .compact-name { font-size: 11.5px; padding: 3.5px 6px; border-radius: 6px; }
+      .compact-name { font-size: 11.5px; padding: 3px 6px; border-radius: 5px; }
     }
     .compact-name.unverified {
       color: var(--accent-amber);
@@ -892,11 +924,13 @@
     .compact-name.modified-item {
       color: var(--accent-amber);
       border-left-color: #f59e0b;
-      background: rgba(245, 158, 11, 0.16);
+      background: rgba(245, 158, 11, 0.08);
     }
     .compact-name.match-highlight {
-      background: rgba(16, 185, 129, 0.28);
+      background: rgba(13, 148, 136, 0.22);
+      border-left-color: #0D9488;
       color: var(--text-strong);
+      font-weight: 700;
     }
     .compact-holiday {
       font-size: 10px;
@@ -1139,29 +1173,29 @@
       border-radius: 7px !important;
     }
 
-    /* Colores Grupos de Guardia 1-9 (Modo Oscuro) */
-    .gg-1 { background: rgba(239, 68, 68, 0.22); color: #fca5a5; border-color: rgba(239, 68, 68, 0.5); }
-    .gg-2 { background: rgba(249, 115, 22, 0.22); color: #fdba74; border-color: rgba(249, 115, 22, 0.5); }
-    .gg-3 { background: rgba(234, 179, 8, 0.22); color: #fde047; border-color: rgba(234, 179, 8, 0.5); }
-    .gg-4 { background: rgba(16, 185, 129, 0.22); color: #6ee7b7; border-color: rgba(16, 185, 129, 0.5); }
-    .gg-5 { background: rgba(6, 182, 212, 0.22); color: #67e8f9; border-color: rgba(6, 182, 212, 0.5); }
-    .gg-6 { background: rgba(59, 130, 246, 0.22); color: #93c5fd; border-color: rgba(59, 130, 246, 0.5); }
-    .gg-7 { background: rgba(139, 92, 246, 0.22); color: #c4b5fd; border-color: rgba(139, 92, 246, 0.5); }
-    .gg-8 { background: rgba(236, 72, 153, 0.22); color: #f9a8d4; border-color: rgba(236, 72, 153, 0.5); }
-    .gg-9 { background: rgba(20, 184, 166, 0.22); color: #5eead4; border-color: rgba(20, 184, 166, 0.5); }
-    .gg-none { background: rgba(148, 163, 184, 0.16); color: #cbd5e1; border-color: rgba(148, 163, 184, 0.35); }
+    /* Colores Grupos de Guardia 1-9 (Modo Oscuro - Pills suaves al 15%) */
+    .gg-1 { background: rgba(239, 68, 68, 0.15); color: #FCA5A5; }
+    .gg-2 { background: rgba(249, 115, 22, 0.15); color: #FDBA74; }
+    .gg-3 { background: rgba(234, 179, 8, 0.15); color: #FDE047; }
+    .gg-4 { background: rgba(16, 185, 129, 0.15); color: #6EE7B7; }
+    .gg-5 { background: rgba(6, 182, 212, 0.15); color: #67E8F9; }
+    .gg-6 { background: rgba(59, 130, 246, 0.15); color: #93C5FD; }
+    .gg-7 { background: rgba(139, 92, 246, 0.15); color: #C4B5FD; }
+    .gg-8 { background: rgba(236, 72, 153, 0.15); color: #F9A8D4; }
+    .gg-9 { background: rgba(20, 184, 166, 0.15); color: #5EEAD4; }
+    .gg-none { background: rgba(148, 163, 184, 0.15); color: #CBD5E1; }
 
-    /* Colores Grupos de Guardia 1-9 (Modo Claro - Alto Contraste) */
-    [data-theme="light"] .gg-1 { background: #fee2e2; color: #b91c1c; border-color: #fca5a5; }
-    [data-theme="light"] .gg-2 { background: #ffedd5; color: #c2410c; border-color: #fdba74; }
-    [data-theme="light"] .gg-3 { background: #fef9c3; color: #a16207; border-color: #fde047; }
-    [data-theme="light"] .gg-4 { background: #d1fae5; color: #047857; border-color: #6ee7b7; }
-    [data-theme="light"] .gg-5 { background: #cffafe; color: #0e7490; border-color: #67e8f9; }
-    [data-theme="light"] .gg-6 { background: #dbeafe; color: #1d4ed8; border-color: #93c5fd; }
-    [data-theme="light"] .gg-7 { background: #ede9fe; color: #6d28d9; border-color: #c4b5fd; }
-    [data-theme="light"] .gg-8 { background: #fce7f3; color: #be185d; border-color: #f9a8d4; }
-    [data-theme="light"] .gg-9 { background: #ccfbf1; color: #0f766e; border-color: #5eead4; }
-    [data-theme="light"] .gg-none { background: #e2e8f0; color: #475569; border-color: #cbd5e1; }
+    /* Colores Grupos de Guardia 1-9 (Modo Claro - Pills suaves) */
+    [data-theme="light"] .gg-1 { background: rgba(239, 68, 68, 0.12); color: #B91C1C; }
+    [data-theme="light"] .gg-2 { background: rgba(249, 115, 22, 0.12); color: #C2410C; }
+    [data-theme="light"] .gg-3 { background: rgba(234, 179, 8, 0.15); color: #A16207; }
+    [data-theme="light"] .gg-4 { background: rgba(16, 185, 129, 0.13); color: #047857; }
+    [data-theme="light"] .gg-5 { background: rgba(6, 182, 212, 0.13); color: #0E7490; }
+    [data-theme="light"] .gg-6 { background: rgba(59, 130, 246, 0.12); color: #1D4ED8; }
+    [data-theme="light"] .gg-7 { background: rgba(139, 92, 246, 0.12); color: #6D28D9; }
+    [data-theme="light"] .gg-8 { background: rgba(236, 72, 153, 0.12); color: #BE185D; }
+    [data-theme="light"] .gg-9 { background: rgba(20, 184, 166, 0.13); color: #0F766E; }
+    [data-theme="light"] .gg-none { background: rgba(148, 163, 184, 0.18); color: #475569; }
 
     /* === MODAL AMPLIADO DEL DÍA (LOCALIZADAS) === */
     .modal-backdrop {
@@ -1762,25 +1796,18 @@
       will-change: transform;
     }
 
-    /* === DETALLES ARQUITECTÓNICOS Y DINAMISMO EN TARJETAS Y SEMANAS === */
+    /* === CABECERA CLÍNICA SÓLIDA Y MINI CABECERA === */
     #hero-header {
       position: relative;
       overflow: hidden;
+      background: var(--bg-header);
+      border: 1px solid var(--border-subtle);
+      border-bottom: 1px solid var(--border-header);
       transition: transform 0.18s ease-out, box-shadow 0.25s ease, background 0.25s ease;
       will-change: transform;
     }
-    #hero-header::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 3px;
-      background: linear-gradient(90deg, #10b981, #06b6d4, #6366f1);
-      pointer-events: none;
-    }
     #hero-header.is-scrolled {
-      box-shadow: var(--specular-top), 0 18px 42px -10px rgba(2, 132, 199, 0.26);
+      box-shadow: var(--specular-top), 0 12px 32px -12px rgba(0, 0, 0, 0.5);
     }
 
     /* === MINI CABECERA FIJA AL HACER SCROLL === */
@@ -1791,11 +1818,9 @@
       right: 0;
       z-index: 45;
       padding: 9px 14px 10px;
-      background: var(--bg-mobile-nav);
-      backdrop-filter: blur(18px) saturate(165%);
-      -webkit-backdrop-filter: blur(18px) saturate(165%);
-      border-bottom: 1px solid var(--border-glass);
-      box-shadow: var(--specular-top), 0 10px 30px -10px rgba(0, 0, 0, 0.38);
+      background: var(--bg-header);
+      border-bottom: 1px solid var(--border-header);
+      box-shadow: 0 8px 24px -8px rgba(0, 0, 0, 0.45);
       opacity: 0;
       visibility: hidden;
       pointer-events: none;
@@ -1806,16 +1831,6 @@
         opacity 0.36s cubic-bezier(0.22, 1, 0.36, 1),
         transform 0.44s cubic-bezier(0.22, 1, 0.36, 1),
         visibility 0s linear 0.44s;
-    }
-    .sticky-mini-header::before {
-      content: "";
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(52, 211, 153, 0.35), rgba(34, 211, 238, 0.4), transparent);
-      pointer-events: none;
     }
     .sticky-mini-header.is-visible {
       opacity: 1;
@@ -2139,6 +2154,7 @@
       <div class="sticky-mini-title-row">
         <span class="pulse-dot" aria-hidden="true"></span>
         <span class="sticky-mini-title">Localizadas de <span class="gradient-text">trasplante</span></span>
+        <span class="help-tip-icon" tabindex="0" title="Toca las localizadas de un día para cambiar turnos, pulsa + en Guardia o usa + Tx Renal vivo junto a la fecha de cada semana.">?</span>
       </div>
       <div class="sticky-mini-sub">
         Toca las localizadas de un día para cambiar turnos, pulsa <strong>+</strong> en <strong>Guardia</strong> o usa <strong>+ Tx Renal vivo</strong> junto a la fecha de cada semana.
@@ -2174,7 +2190,7 @@
   <!-- CONTENEDOR PRINCIPAL -->
   <div class="app-shell">
 
-    <!-- CABECERA PARALLAX HERO + ESTADO BD + TOGGLE MODO OSCURO/CLARO + NAVEGACIÓN DE MESES -->
+    <!-- CABECERA CLÍNICA + ESTADO BD + TOGGLE MODO OSCURO/CLARO + MÉTRICAS COMPACTAS -->
     <header id="hero-header" class="glass-panel">
       <div class="hero-top">
         <div style="flex:1;">
@@ -2197,10 +2213,10 @@
               <span id="theme-label">Oscuro</span>
             </button>
           </div>
-          <h1 style="margin-top:6px;">Localizadas <span class="gradient-text">Trasplante</span></h1>
-          <p class="hero-sub">
-            Toca las localizadas de un día para cambiar turnos, pulsa <strong>+</strong> en <strong>Guardia</strong> o usa <strong>+ Tx Renal vivo</strong> junto a la fecha de cada semana.
-          </p>
+          <div class="hero-heading-row">
+            <h1>Localizadas de <span class="gradient-text">trasplante</span></h1>
+            <span class="help-tip-icon" tabindex="0" title="Toca las localizadas de un día para cambiar turnos, pulsa + en Guardia o usa + Tx Renal vivo junto a la fecha de cada semana.">?</span>
+          </div>
         </div>
 
         <!-- Navegación Desktop -->
@@ -2213,33 +2229,21 @@
         </nav>
       </div>
 
-      <!-- Navegación Superior Dinámica por Meses -->
-      <div class="month-nav-wrapper">
-        <div class="month-nav-label">
-          <span>📆 Navegar por mes</span>
-          <span id="months-count-label" style="color:var(--accent-cyan);">3 meses cargados</span>
+      <!-- Métricas Compactas Inline -->
+      <div class="hero-kpis-inline">
+        <div class="hero-kpi-item">
+          <span class="hero-kpi-label">Periodo</span>
+          <span id="stat-period" class="hero-kpi-val">4-ene ➔ 28-mar</span>
         </div>
-        <div id="month-pills-bar" class="month-pills-bar">
-          <button type="button" onclick="selectMonth('ALL')" class="month-pill active">Todos los meses</button>
-          <button type="button" onclick="selectMonth('2026-01')" class="month-pill">Enero 2026</button>
-          <button type="button" onclick="selectMonth('2026-02')" class="month-pill">Febrero 2026</button>
-          <button type="button" onclick="selectMonth('2026-03')" class="month-pill">Marzo 2026</button>
+        <span style="color:var(--border-input);">·</span>
+        <div class="hero-kpi-item">
+          <span class="hero-kpi-label">Plantilla</span>
+          <span id="stat-team-active" class="hero-kpi-val text-emerald mono">14 / 14 Activos</span>
         </div>
-      </div>
-
-      <!-- Métricas Rápidas -->
-      <div class="stats-grid">
-        <div class="stat-box">
-          <div class="stat-label">Periodo</div>
-          <div id="stat-period" class="stat-val">4-ene ➔ 28-mar</div>
-        </div>
-        <div class="stat-box">
-          <div class="stat-label">Plantilla Activa</div>
-          <div id="stat-team-active" class="stat-val text-emerald mono">14 / 14 Activos</div>
-        </div>
-        <div class="stat-box">
-          <div class="stat-label">Cambios / Versiones</div>
-          <div class="stat-val text-cyan mono"><span id="stat-changes">0</span> reg. · <span id="stat-snapshots">0</span> ptos</div>
+        <span style="color:var(--border-input);">·</span>
+        <div class="hero-kpi-item">
+          <span class="hero-kpi-label">Auditoría</span>
+          <span class="hero-kpi-val mono"><span id="stat-changes">0</span> reg. · <span id="stat-snapshots">0</span> ptos</span>
         </div>
       </div>
     </header>
@@ -2248,41 +2252,49 @@
     <!-- PESTAÑA 1: CALENDARIO COMPACTO SEMANAL                              -->
     <!-- =================================================================== -->
     <main id="view-calendario">
-      <section class="glass-panel">
-        <div class="controls-row">
-          <div class="week-nav-group">
-            <button onclick="prevWeek()" class="icon-btn" aria-label="Semana anterior">◀</button>
-            <select id="week-selector" onchange="onSelectWeek(this.value)">
-              <option value="ALL">📆 Todas las semanas del mes</option>
-            </select>
-            <button onclick="nextWeek()" class="icon-btn" aria-label="Semana siguiente">▶</button>
+      <section class="unified-toolbar">
+        <div class="toolbar-top-row">
+          <div id="month-pills-bar" class="month-pills-bar">
+            <button type="button" onclick="selectMonth('ALL')" class="month-pill active">Todos</button>
+            <button type="button" onclick="selectMonth('2026-01')" class="month-pill">Enero 2026</button>
+            <button type="button" onclick="selectMonth('2026-02')" class="month-pill">Febrero 2026</button>
+            <button type="button" onclick="selectMonth('2026-03')" class="month-pill">Marzo 2026</button>
           </div>
 
-          <div class="filters-pair">
-            <select id="doctor-filter" onchange="renderCalendar()">
-              <option value="">👨‍⚕️ Todos (14)</option>
-            </select>
-            <select id="guard-filter" onchange="renderCalendar()">
-              <option value="">🔢 Guardia (1-9)</option>
-              <option value="1">G. Guardia #1</option>
-              <option value="2">G. Guardia #2</option>
-              <option value="3">G. Guardia #3</option>
-              <option value="4">G. Guardia #4</option>
-              <option value="5">G. Guardia #5</option>
-              <option value="6">G. Guardia #6</option>
-              <option value="7">G. Guardia #7</option>
-              <option value="8">G. Guardia #8</option>
-              <option value="9">G. Guardia #9</option>
-            </select>
+          <div class="controls-row" style="flex:1;">
+            <div class="week-nav-group">
+              <button onclick="prevWeek()" class="icon-btn" aria-label="Semana anterior">◀</button>
+              <select id="week-selector" onchange="onSelectWeek(this.value)">
+                <option value="ALL">📆 Todas las semanas</option>
+              </select>
+              <button onclick="nextWeek()" class="icon-btn" aria-label="Semana siguiente">▶</button>
+            </div>
+
+            <div class="filters-pair">
+              <select id="doctor-filter" onchange="renderCalendar()">
+                <option value="">👨‍⚕️ Todos (14)</option>
+              </select>
+              <select id="guard-filter" onchange="renderCalendar()">
+                <option value="">🔢 Guardia (1-9)</option>
+                <option value="1">G. Guardia #1</option>
+                <option value="2">G. Guardia #2</option>
+                <option value="3">G. Guardia #3</option>
+                <option value="4">G. Guardia #4</option>
+                <option value="5">G. Guardia #5</option>
+                <option value="6">G. Guardia #6</option>
+                <option value="7">G. Guardia #7</option>
+                <option value="8">G. Guardia #8</option>
+                <option value="9">G. Guardia #9</option>
+              </select>
+            </div>
           </div>
         </div>
 
         <div class="legend-bar">
           <div class="legend-items">
-            <span class="legend-item"><span class="dot-sm" style="background:#10b981;"></span> Activo</span>
+            <span class="legend-item"><span class="dot-sm" style="background:#0D9488;"></span> Activo</span>
             <span class="legend-item"><span class="dot-sm" style="background:#f59e0b;"></span> Modificado</span>
             <span class="legend-item"><span class="dot-sm" style="background:#f43f5e;"></span> De baja / Inhabilitado</span>
-            <span class="legend-item"><svg class="kidneys-icon" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 6.2C8.3 4.2 5.4 3.8 3.8 5.8C2.2 7.8 2.2 12.2 3.8 14.4C5.3 16.4 8.2 16.1 9.5 14.1C10.1 13.1 9.1 11.9 9.1 10.2C9.1 8.5 10.1 7.2 9.5 6.2Z" fill="currentColor" fill-opacity="0.22"/><path d="M14.5 6.2C15.7 4.2 18.6 3.8 20.2 5.8C21.8 7.8 21.8 12.2 20.2 14.4C18.7 16.4 15.8 16.1 14.5 14.1C13.9 13.1 14.9 11.9 14.9 10.2C14.9 8.5 13.9 7.2 14.5 6.2Z" fill="currentColor" fill-opacity="0.22"/><path d="M9.1 10.8C10.4 11.5 10.8 14.2 10.8 19.5"/><path d="M14.9 10.8C13.6 11.5 13.2 14.2 13.2 19.5"/></svg> Pulsa <strong>+ Tx Renal vivo</strong> junto a la fecha de cada semana para asignarlo a un día</span>
           </div>
           <button onclick="resetFilters()" id="btn-reset-filters" class="link-btn hidden">Limpiar filtros</button>
         </div>
@@ -4288,7 +4300,8 @@
     function renderMonthBar() {
       const bar = document.getElementById('month-pills-bar');
       const months = getAvailableMonths();
-      document.getElementById('months-count-label').textContent = `${months.length} meses cargados`;
+      const countLbl = document.getElementById('months-count-label');
+      if (countLbl) countLbl.textContent = `${months.length} meses cargados`;
 
       const parts = [
         `<button type="button" onclick="selectMonth('ALL')" class="month-pill ${selectedMonthFilter === 'ALL' ? 'active' : ''}">Todos (${months.length})</button>`
@@ -4875,6 +4888,12 @@
 
       const drawerInnerHtml = isExpanded ? buildGuardiaDrawerHtml(wIdx, dIdx, day) : '';
 
+      const cleanDateStr = day.date.replace(' · San José', '');
+      const dashIdx = cleanDateStr.indexOf('-');
+      const dateHtml = dashIdx > 0
+        ? `<span class="compact-dnum">${escapeHtml(cleanDateStr.slice(0, dashIdx))}</span><span class="compact-dmonth">${escapeHtml(cleanDateStr.slice(dashIdx + 1))}</span>`
+        : `<span class="compact-dnum">${escapeHtml(cleanDateStr)}</span>`;
+
       return `
         <div class="day-unit ${isWeekend ? 'weekend' : ''} ${hasMod ? 'has-mod' : ''} ${docMatch ? 'doc-match' : ''} ${isExpanded ? 'guardia-expanded' : ''}" id="day-unit-${key}">
           <button type="button" onclick="openDayDetailModal(${wIdx}, ${dIdx})" class="day-loc-trigger">
@@ -4882,7 +4901,7 @@
               <span class="compact-dname">${shortDayName(day.dayName)}</span>
               <span class="gg-pill-xs mono ${ggClass}">G${day.guardGroup || '-'}</span>
             </div>
-            <div class="compact-ddate">${day.date.replace(' · San José', '')}</div>
+            <div class="compact-ddate">${dateHtml}</div>
             <div class="compact-names-box">${namesHtml}</div>
           </button>
 
@@ -4986,7 +5005,6 @@
                 <h2 class="week-title">${week.weekLabel}</h2>
                 <button type="button" onclick="openTxVivoModal(${wIdx})" class="btn-add-txvivo-week" title="Añadir Trasplante Renal Vivo en esta semana">${KIDNEYS_ICON_SVG} + Tx Renal vivo</button>
               </div>
-              <span class="tap-hint">Toca localizadas o + en Guardia</span>
             </div>
             ${layoutHtml}
           </section>
