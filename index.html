@@ -1507,113 +1507,84 @@
     }
 
 
-    /* === TIRA INFERIOR "TX RENAL VIVO" DEBAJO DE GUARDIA EN CADA DÍA === */
-    .day-txvivo-strip {
+    /* === BOTÓN EN CABECERA DE SEMANA Y ETIQUETA "TX RENAL VIVO" DEBAJO DE GUARDIA === */
+    .week-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      margin-bottom: 8px;
+      padding: 0 2px;
+    }
+    .week-title-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 7px;
+    }
+    .btn-add-txvivo-week {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--pill-border);
+      background: var(--pill-bg);
+      color: var(--pill-text);
+      font-size: 11px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.18s ease;
+    }
+    .btn-add-txvivo-week:hover {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #ffffff;
+      border-color: transparent;
+      box-shadow: 0 3px 10px rgba(16, 185, 129, 0.3);
+    }
+    .btn-add-txvivo-week:active {
+      transform: scale(0.96);
+    }
+
+    /* Tarjeta "Tx Renal vivo" que aparece debajo de Guardia solo en los días asignados */
+    .day-txvivo-badge-box {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      padding: 5px 6px;
+      background: rgba(16, 185, 129, 0.14);
+      border-top: 1px solid var(--pill-border);
+      cursor: pointer;
+      transition: background 0.18s ease;
+      animation: fadeSlideIn 0.24s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+    .day-txvivo-badge-box:hover {
+      background: rgba(16, 185, 129, 0.22);
+    }
+    .day-txvivo-badge-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 4px;
-      padding: 5px 6px;
-      background: rgba(16, 185, 129, 0.09);
-      border-top: 1px solid var(--border-subtle);
-      cursor: pointer;
-      user-select: none;
-      transition: background 0.2s ease;
-    }
-    .day-txvivo-strip:hover {
-      background: rgba(16, 185, 129, 0.17);
-    }
-    .day-txvivo-strip.has-txvivo {
-      background: rgba(16, 185, 129, 0.18);
-    }
-    .day-txvivo-label {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      font-size: 9.5px;
+      font-size: 9px;
       font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
       color: var(--accent-emerald);
-      min-width: 0;
-      overflow: hidden;
-    }
-    .day-txvivo-label span:first-child {
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
     }
     @media (min-width: 768px) {
-      .day-txvivo-label { font-size: 10.5px; }
+      .day-txvivo-badge-header { font-size: 10px; }
     }
-    .txvivo-active-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: #10b981;
-      flex-shrink: 0;
-      box-shadow: 0 0 6px rgba(16, 185, 129, 0.7);
-    }
-    .txvivo-preview-pill {
-      padding: 3px 6px;
-      font-size: 9.5px;
+    .day-txvivo-badge-text {
+      font-size: 10px;
       font-weight: 700;
-      color: var(--accent-emerald);
-      background: rgba(16, 185, 129, 0.12);
-      border-top: 1px dashed rgba(16, 185, 129, 0.35);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      cursor: pointer;
+      color: var(--text-strong);
+      line-height: 1.25;
+      word-break: break-word;
     }
     @media (min-width: 768px) {
-      .txvivo-preview-pill { font-size: 10.5px; padding: 4px 7px; }
-    }
-    .txvivo-plus-btn {
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      border: 1px solid var(--pill-border);
-      background: var(--bg-surface);
-      color: var(--accent-emerald);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      flex-shrink: 0;
-      transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
-    }
-    .day-unit.txvivo-expanded .txvivo-plus-btn {
-      background: linear-gradient(135deg, #10b981, #059669);
-      color: #ffffff;
-      border-color: transparent;
-      box-shadow: 0 2px 8px rgba(16, 185, 129, 0.45);
-    }
-    .day-unit.txvivo-expanded .txvivo-plus-btn .plus-glyph {
-      transform: rotate(45deg);
-    }
-    .day-unit.txvivo-expanded {
-      border-color: var(--accent-emerald);
-      box-shadow: 0 10px 24px -6px rgba(16, 185, 129, 0.26);
-    }
-    .day-txvivo-drawer {
-      display: grid;
-      grid-template-rows: 0fr;
-      opacity: 0;
-      transform: translateY(-6px);
-      background: var(--bg-guardia-drawer);
-      transition:
-        grid-template-rows 0.36s cubic-bezier(0.22, 1, 0.36, 1),
-        opacity 0.26s ease,
-        transform 0.36s cubic-bezier(0.22, 1, 0.36, 1);
-    }
-    .day-unit.txvivo-expanded .day-txvivo-drawer {
-      grid-template-rows: 1fr;
-      opacity: 1;
-      transform: translateY(0);
-      border-top: 1px solid var(--pill-border);
-    }
-    .day-txvivo-drawer-inner {
-      overflow: hidden;
-      min-width: 0;
+      .day-txvivo-badge-text { font-size: 11px; }
     }
 
     .drop-zone.drag-over {
@@ -1664,7 +1635,7 @@
           </div>
           <h1 style="margin-top:6px;">Localizadas <span class="gradient-text">Trasplante</span></h1>
           <p class="hero-sub">
-            Toca las localizadas de un día para cambiar turnos o pulsa <strong>+</strong> en <strong>Guardia</strong> o <strong>Tx Renal vivo</strong> para anotar información del día.
+            Toca las localizadas de un día para cambiar turnos, pulsa <strong>+</strong> en <strong>Guardia</strong> o usa <strong>+ Tx Renal vivo</strong> junto a la fecha de cada semana.
           </p>
         </div>
 
@@ -1747,7 +1718,7 @@
             <span class="legend-item"><span class="dot-sm" style="background:#10b981;"></span> Activo</span>
             <span class="legend-item"><span class="dot-sm" style="background:#f59e0b;"></span> Modificado</span>
             <span class="legend-item"><span class="dot-sm" style="background:#f43f5e;"></span> De baja / Inhabilitado</span>
-            <span class="legend-item">➕ Pulsa <strong>+</strong> bajo cada día para abrir <strong>Guardia</strong> o <strong>Tx Renal vivo</strong></span>
+            <span class="legend-item">🫘 Pulsa <strong>+ Tx Renal vivo</strong> junto a la fecha de cada semana para asignarlo a un día</span>
           </div>
           <button onclick="resetFilters()" id="btn-reset-filters" class="link-btn hidden">Limpiar filtros</button>
         </div>
@@ -1762,6 +1733,7 @@
           <div class="week-title-wrap">
             <span class="sem-tag mono">SEM 1</span>
             <h2 class="week-title">4-ene a 10-ene</h2>
+            <button type="button" onclick="openTxVivoModal(0)" class="btn-add-txvivo-week" title="Añadir Trasplante Renal Vivo en esta semana">🫘 + Tx Renal vivo</button>
           </div>
           <span class="tap-hint">Toca localizadas o + en Guardia</span>
         </div>
@@ -1791,17 +1763,6 @@
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
         </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 0, 0)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
-        </div>
       </div>
     
       <div class="day-unit " id="day-unit-0-1">
@@ -1827,17 +1788,6 @@
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
         </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 0, 1)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
-        </div>
       </div>
     
       <div class="day-unit " id="day-unit-0-2">
@@ -1862,17 +1812,6 @@
         </div>
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
-        </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 0, 2)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
         </div>
       </div>
     
@@ -1901,17 +1840,6 @@
         </div>
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
-        </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 0, 3)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
         </div>
       </div>
     
@@ -1949,17 +1877,6 @@
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
         </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 0, 4)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
-        </div>
       </div>
     
       <div class="day-unit weekend" id="day-unit-0-5">
@@ -1987,17 +1904,6 @@
         </div>
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
-        </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 0, 5)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
         </div>
       </div>
     
@@ -2027,17 +1933,6 @@
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
         </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 0, 6)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
-        </div>
       </div>
     
             </div>
@@ -2051,6 +1946,7 @@
           <div class="week-title-wrap">
             <span class="sem-tag mono">SEM 2</span>
             <h2 class="week-title">11-ene a 17-ene</h2>
+            <button type="button" onclick="openTxVivoModal(1)" class="btn-add-txvivo-week" title="Añadir Trasplante Renal Vivo en esta semana">🫘 + Tx Renal vivo</button>
           </div>
           <span class="tap-hint">Toca localizadas o + en Guardia</span>
         </div>
@@ -2083,17 +1979,6 @@
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
         </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 1, 0)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
-        </div>
       </div>
     
       <div class="day-unit " id="day-unit-1-1">
@@ -2121,17 +2006,6 @@
         </div>
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
-        </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 1, 1)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
         </div>
       </div>
     
@@ -2161,17 +2035,6 @@
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
         </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 1, 2)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
-        </div>
       </div>
     
       <div class="day-unit " id="day-unit-1-3">
@@ -2199,17 +2062,6 @@
         </div>
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
-        </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 1, 3)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
         </div>
       </div>
     
@@ -2247,17 +2099,6 @@
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
         </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 1, 4)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
-        </div>
       </div>
     
       <div class="day-unit weekend" id="day-unit-1-5">
@@ -2285,17 +2126,6 @@
         </div>
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
-        </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 1, 5)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
         </div>
       </div>
     
@@ -2325,17 +2155,6 @@
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
         </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 1, 6)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
-        </div>
       </div>
     
             </div>
@@ -2349,6 +2168,7 @@
           <div class="week-title-wrap">
             <span class="sem-tag mono">SEM 3</span>
             <h2 class="week-title">18-ene a 24-ene</h2>
+            <button type="button" onclick="openTxVivoModal(2)" class="btn-add-txvivo-week" title="Añadir Trasplante Renal Vivo en esta semana">🫘 + Tx Renal vivo</button>
           </div>
           <span class="tap-hint">Toca localizadas o + en Guardia</span>
         </div>
@@ -2381,17 +2201,6 @@
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
         </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 2, 0)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
-        </div>
       </div>
     
       <div class="day-unit " id="day-unit-2-1">
@@ -2419,17 +2228,6 @@
         </div>
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
-        </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 2, 1)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
         </div>
       </div>
     
@@ -2459,17 +2257,6 @@
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
         </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 2, 2)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
-        </div>
       </div>
     
       <div class="day-unit " id="day-unit-2-3">
@@ -2497,17 +2284,6 @@
         </div>
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
-        </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 2, 3)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
         </div>
       </div>
     
@@ -2545,17 +2321,6 @@
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
         </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 2, 4)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
-        </div>
       </div>
     
       <div class="day-unit weekend" id="day-unit-2-5">
@@ -2583,17 +2348,6 @@
         </div>
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
-        </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 2, 5)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
         </div>
       </div>
     
@@ -2623,17 +2377,6 @@
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
         </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 2, 6)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
-        </div>
       </div>
     
             </div>
@@ -2647,6 +2390,7 @@
           <div class="week-title-wrap">
             <span class="sem-tag mono">SEM 4</span>
             <h2 class="week-title">25-ene a 31-ene</h2>
+            <button type="button" onclick="openTxVivoModal(3)" class="btn-add-txvivo-week" title="Añadir Trasplante Renal Vivo en esta semana">🫘 + Tx Renal vivo</button>
           </div>
           <span class="tap-hint">Toca localizadas o + en Guardia</span>
         </div>
@@ -2679,17 +2423,6 @@
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
         </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 3, 0)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
-        </div>
       </div>
     
       <div class="day-unit " id="day-unit-3-1">
@@ -2717,17 +2450,6 @@
         </div>
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
-        </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 3, 1)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
         </div>
       </div>
     
@@ -2757,17 +2479,6 @@
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
         </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 3, 2)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
-        </div>
       </div>
     
       <div class="day-unit " id="day-unit-3-3">
@@ -2795,17 +2506,6 @@
         </div>
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
-        </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 3, 3)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
         </div>
       </div>
     
@@ -2843,17 +2543,6 @@
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
         </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 3, 4)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
-        </div>
       </div>
     
       <div class="day-unit weekend" id="day-unit-3-5">
@@ -2881,17 +2570,6 @@
         </div>
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
-        </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 3, 5)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
         </div>
       </div>
     
@@ -2921,17 +2599,6 @@
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
         </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 3, 6)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
-        </div>
       </div>
     
             </div>
@@ -2945,6 +2612,7 @@
           <div class="week-title-wrap">
             <span class="sem-tag mono">SEM 5</span>
             <h2 class="week-title">1-feb a 7-feb</h2>
+            <button type="button" onclick="openTxVivoModal(4)" class="btn-add-txvivo-week" title="Añadir Trasplante Renal Vivo en esta semana">🫘 + Tx Renal vivo</button>
           </div>
           <span class="tap-hint">Toca localizadas o + en Guardia</span>
         </div>
@@ -2977,17 +2645,6 @@
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
         </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 4, 0)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
-        </div>
       </div>
     
       <div class="day-unit " id="day-unit-4-1">
@@ -3015,17 +2672,6 @@
         </div>
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
-        </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 4, 1)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
         </div>
       </div>
     
@@ -3055,17 +2701,6 @@
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
         </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 4, 2)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
-        </div>
       </div>
     
       <div class="day-unit " id="day-unit-4-3">
@@ -3093,17 +2728,6 @@
         </div>
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
-        </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 4, 3)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
         </div>
       </div>
     
@@ -3141,17 +2765,6 @@
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
         </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 4, 4)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
-        </div>
       </div>
     
       <div class="day-unit weekend" id="day-unit-4-5">
@@ -3179,17 +2792,6 @@
         </div>
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
-        </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 4, 5)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
         </div>
       </div>
     
@@ -3219,17 +2821,6 @@
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
         </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 4, 6)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
-        </div>
       </div>
     
             </div>
@@ -3243,6 +2834,7 @@
           <div class="week-title-wrap">
             <span class="sem-tag mono">SEM 6</span>
             <h2 class="week-title">8-feb a 14-feb</h2>
+            <button type="button" onclick="openTxVivoModal(5)" class="btn-add-txvivo-week" title="Añadir Trasplante Renal Vivo en esta semana">🫘 + Tx Renal vivo</button>
           </div>
           <span class="tap-hint">Toca localizadas o + en Guardia</span>
         </div>
@@ -3275,17 +2867,6 @@
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
         </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 5, 0)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
-        </div>
       </div>
     
       <div class="day-unit " id="day-unit-5-1">
@@ -3313,17 +2894,6 @@
         </div>
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
-        </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 5, 1)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
         </div>
       </div>
     
@@ -3353,17 +2923,6 @@
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
         </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 5, 2)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
-        </div>
       </div>
     
       <div class="day-unit " id="day-unit-5-3">
@@ -3391,17 +2950,6 @@
         </div>
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
-        </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 5, 3)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
         </div>
       </div>
     
@@ -3439,17 +2987,6 @@
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
         </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 5, 4)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
-        </div>
       </div>
     
       <div class="day-unit weekend" id="day-unit-5-5">
@@ -3477,17 +3014,6 @@
         </div>
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
-        </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 5, 5)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
         </div>
       </div>
     
@@ -3517,17 +3043,6 @@
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
         </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 5, 6)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
-        </div>
       </div>
     
             </div>
@@ -3541,6 +3056,7 @@
           <div class="week-title-wrap">
             <span class="sem-tag mono">SEM 7</span>
             <h2 class="week-title">15-feb a 21-feb</h2>
+            <button type="button" onclick="openTxVivoModal(6)" class="btn-add-txvivo-week" title="Añadir Trasplante Renal Vivo en esta semana">🫘 + Tx Renal vivo</button>
           </div>
           <span class="tap-hint">Toca localizadas o + en Guardia</span>
         </div>
@@ -3573,17 +3089,6 @@
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
         </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 6, 0)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
-        </div>
       </div>
     
       <div class="day-unit " id="day-unit-6-1">
@@ -3611,17 +3116,6 @@
         </div>
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
-        </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 6, 1)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
         </div>
       </div>
     
@@ -3651,17 +3145,6 @@
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
         </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 6, 2)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
-        </div>
       </div>
     
       <div class="day-unit " id="day-unit-6-3">
@@ -3689,17 +3172,6 @@
         </div>
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
-        </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 6, 3)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
         </div>
       </div>
     
@@ -3737,17 +3209,6 @@
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
         </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 6, 4)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
-        </div>
       </div>
     
       <div class="day-unit weekend" id="day-unit-6-5">
@@ -3775,17 +3236,6 @@
         </div>
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
-        </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 6, 5)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
         </div>
       </div>
     
@@ -3815,17 +3265,6 @@
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
         </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 6, 6)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
-        </div>
       </div>
     
             </div>
@@ -3839,6 +3278,7 @@
           <div class="week-title-wrap">
             <span class="sem-tag mono">SEM 8</span>
             <h2 class="week-title">22-feb a 28-feb</h2>
+            <button type="button" onclick="openTxVivoModal(7)" class="btn-add-txvivo-week" title="Añadir Trasplante Renal Vivo en esta semana">🫘 + Tx Renal vivo</button>
           </div>
           <span class="tap-hint">Toca localizadas o + en Guardia</span>
         </div>
@@ -3871,17 +3311,6 @@
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
         </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 7, 0)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
-        </div>
       </div>
     
       <div class="day-unit " id="day-unit-7-1">
@@ -3909,17 +3338,6 @@
         </div>
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
-        </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 7, 1)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
         </div>
       </div>
     
@@ -3949,17 +3367,6 @@
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
         </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 7, 2)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
-        </div>
       </div>
     
       <div class="day-unit " id="day-unit-7-3">
@@ -3987,17 +3394,6 @@
         </div>
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
-        </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 7, 3)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
         </div>
       </div>
     
@@ -4035,17 +3431,6 @@
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
         </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 7, 4)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
-        </div>
       </div>
     
       <div class="day-unit weekend" id="day-unit-7-5">
@@ -4073,17 +3458,6 @@
         </div>
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
-        </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 7, 5)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
         </div>
       </div>
     
@@ -4113,17 +3487,6 @@
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
         </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 7, 6)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
-        </div>
       </div>
     
             </div>
@@ -4137,6 +3500,7 @@
           <div class="week-title-wrap">
             <span class="sem-tag mono">SEM 9</span>
             <h2 class="week-title">1-mar a 7-mar</h2>
+            <button type="button" onclick="openTxVivoModal(8)" class="btn-add-txvivo-week" title="Añadir Trasplante Renal Vivo en esta semana">🫘 + Tx Renal vivo</button>
           </div>
           <span class="tap-hint">Toca localizadas o + en Guardia</span>
         </div>
@@ -4169,17 +3533,6 @@
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
         </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 8, 0)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
-        </div>
       </div>
     
       <div class="day-unit " id="day-unit-8-1">
@@ -4207,17 +3560,6 @@
         </div>
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
-        </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 8, 1)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
         </div>
       </div>
     
@@ -4247,17 +3589,6 @@
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
         </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 8, 2)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
-        </div>
       </div>
     
       <div class="day-unit " id="day-unit-8-3">
@@ -4285,17 +3616,6 @@
         </div>
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
-        </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 8, 3)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
         </div>
       </div>
     
@@ -4333,17 +3653,6 @@
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
         </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 8, 4)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
-        </div>
       </div>
     
       <div class="day-unit weekend" id="day-unit-8-5">
@@ -4371,17 +3680,6 @@
         </div>
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
-        </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 8, 5)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
         </div>
       </div>
     
@@ -4411,17 +3709,6 @@
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
         </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 8, 6)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
-        </div>
       </div>
     
             </div>
@@ -4435,6 +3722,7 @@
           <div class="week-title-wrap">
             <span class="sem-tag mono">SEM 10</span>
             <h2 class="week-title">8-mar a 14-mar</h2>
+            <button type="button" onclick="openTxVivoModal(9)" class="btn-add-txvivo-week" title="Añadir Trasplante Renal Vivo en esta semana">🫘 + Tx Renal vivo</button>
           </div>
           <span class="tap-hint">Toca localizadas o + en Guardia</span>
         </div>
@@ -4467,17 +3755,6 @@
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
         </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 9, 0)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
-        </div>
       </div>
     
       <div class="day-unit " id="day-unit-9-1">
@@ -4505,17 +3782,6 @@
         </div>
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
-        </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 9, 1)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
         </div>
       </div>
     
@@ -4545,17 +3811,6 @@
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
         </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 9, 2)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
-        </div>
       </div>
     
       <div class="day-unit " id="day-unit-9-3">
@@ -4583,17 +3838,6 @@
         </div>
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
-        </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 9, 3)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
         </div>
       </div>
     
@@ -4631,17 +3875,6 @@
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
         </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 9, 4)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
-        </div>
       </div>
     
       <div class="day-unit weekend" id="day-unit-9-5">
@@ -4669,17 +3902,6 @@
         </div>
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
-        </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 9, 5)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
         </div>
       </div>
     
@@ -4709,17 +3931,6 @@
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
         </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 9, 6)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
-        </div>
       </div>
     
             </div>
@@ -4733,6 +3944,7 @@
           <div class="week-title-wrap">
             <span class="sem-tag mono">SEM 11</span>
             <h2 class="week-title">15-mar a 21-mar</h2>
+            <button type="button" onclick="openTxVivoModal(10)" class="btn-add-txvivo-week" title="Añadir Trasplante Renal Vivo en esta semana">🫘 + Tx Renal vivo</button>
           </div>
           <span class="tap-hint">Toca localizadas o + en Guardia</span>
         </div>
@@ -4765,17 +3977,6 @@
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
         </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 10, 0)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
-        </div>
       </div>
     
       <div class="day-unit " id="day-unit-10-1">
@@ -4803,17 +4004,6 @@
         </div>
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
-        </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 10, 1)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
         </div>
       </div>
     
@@ -4843,17 +4033,6 @@
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
         </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 10, 2)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
-        </div>
       </div>
     
       <div class="day-unit " id="day-unit-10-3">
@@ -4881,17 +4060,6 @@
         </div>
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
-        </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 10, 3)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
         </div>
       </div>
     
@@ -4929,17 +4097,6 @@
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
         </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 10, 4)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
-        </div>
       </div>
     
       <div class="day-unit weekend" id="day-unit-10-5">
@@ -4964,17 +4121,6 @@
         </div>
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
-        </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 10, 5)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
         </div>
       </div>
     
@@ -5001,17 +4147,6 @@
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
         </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 10, 6)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
-        </div>
       </div>
     
             </div>
@@ -5025,6 +4160,7 @@
           <div class="week-title-wrap">
             <span class="sem-tag mono">SEM 12</span>
             <h2 class="week-title">22-mar a 28-mar</h2>
+            <button type="button" onclick="openTxVivoModal(11)" class="btn-add-txvivo-week" title="Añadir Trasplante Renal Vivo en esta semana">🫘 + Tx Renal vivo</button>
           </div>
           <span class="tap-hint">Toca localizadas o + en Guardia</span>
         </div>
@@ -5054,17 +4190,6 @@
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
         </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 11, 0)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
-        </div>
       </div>
     
       <div class="day-unit " id="day-unit-11-1">
@@ -5089,17 +4214,6 @@
         </div>
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
-        </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 11, 1)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
         </div>
       </div>
     
@@ -5126,17 +4240,6 @@
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
         </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 11, 2)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
-        </div>
       </div>
     
       <div class="day-unit " id="day-unit-11-3">
@@ -5161,17 +4264,6 @@
         </div>
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
-        </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 11, 3)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
         </div>
       </div>
     
@@ -5206,17 +4298,6 @@
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
         </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 11, 4)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
-        </div>
       </div>
     
       <div class="day-unit weekend" id="day-unit-11-5">
@@ -5242,17 +4323,6 @@
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
         </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 11, 5)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
-        </div>
       </div>
     
       <div class="day-unit weekend" id="day-unit-11-6">
@@ -5277,17 +4347,6 @@
         </div>
         <div class="day-guardia-drawer" aria-hidden="true">
           <div class="day-guardia-drawer-inner"></div>
-        </div>
-        <div class="day-txvivo-strip" onclick="toggleInlineTxVivo(event, 11, 6)">
-          <div class="day-txvivo-label">
-            <span>Tx Renal vivo</span>
-          </div>
-          <button type="button" class="txvivo-plus-btn" aria-expanded="false" aria-label="Desplegar Tx Renal vivo">
-            <span class="plus-glyph">+</span>
-          </button>
-        </div>
-        <div class="day-txvivo-drawer" aria-hidden="true">
-          <div class="day-txvivo-drawer-inner"></div>
         </div>
       </div>
     
@@ -6163,6 +5222,52 @@
     </div>
   </div>
 
+
+  <!-- ===================================================================== -->
+  <!-- MODAL AÑADIR / EDITAR TX RENAL VIVO DE LA SEMANA                      -->
+  <!-- ===================================================================== -->
+  <div id="txvivo-modal" class="modal-backdrop hidden" onclick="if(event.target===this) closeTxVivoModal()">
+    <div class="modal-box">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;">
+        <div>
+          <span class="pill-badge" style="margin-bottom:6px;">🫘 Trasplante Renal de Vivo</span>
+          <h3 id="txvivo-modal-title" style="font-size:20px; font-weight:800; color:var(--text-strong);">Añadir Tx Renal vivo</h3>
+          <p id="txvivo-modal-subtitle" style="font-size:12px; color:var(--text-muted);">Selecciona el día de la semana y escribe la anotación</p>
+        </div>
+        <button type="button" onclick="closeTxVivoModal()" class="icon-btn" style="width:36px; height:36px;">✕</button>
+      </div>
+
+      <div class="field-group">
+        <label for="txvivo-day-select" class="field-label">Día de la semana <span style="color:var(--accent-rose);">*</span></label>
+        <select id="txvivo-day-select" onchange="onTxVivoDaySelectChange()"></select>
+      </div>
+
+      <div class="field-group">
+        <label for="txvivo-note-input" class="field-label">Texto / Detalle del Tx Renal vivo</label>
+        <input
+          id="txvivo-note-input"
+          type="text"
+          placeholder="Ej. Quirófano 4 · Equipo / Receptor-Donante..."
+          onkeydown="if(event.key==='Enter'){ event.preventDefault(); confirmTxVivoModal(); }"
+        />
+        <p style="font-size:11px; color:var(--text-muted); margin-top:5px;">
+          Al aceptar se mostrará automáticamente debajo de <strong>Guardia</strong> en el día elegido.
+        </p>
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" onclick="closeTxVivoModal()" class="btn-cancel">Cancelar</button>
+        <button type="button" onclick="confirmTxVivoModal()" class="btn-save">Aceptar</button>
+      </div>
+
+      <div id="txvivo-delete-wrap" class="hidden" style="margin-top:10px; text-align:center;">
+        <button type="button" onclick="deleteTxVivoFromModal()" class="btn-danger-sm" style="width:100%;">
+          🗑️ Eliminar Tx Renal vivo de este día
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- ===================================================================== -->
   <!-- JAVASCRIPT: BD CLOUD/INDEXEDDB, EXCEL DINÁMICO, USUARIOS Y RESTORE    -->
   <!-- ===================================================================== -->
@@ -6208,10 +5313,10 @@
     let selectedMonthFilter = 'ALL';
     let selectedWeekFilter = 'ALL';
     let expandedGuardiaKeys = new Set();
-    let expandedTxVivoKeys = new Set();
     let activeDayTarget = null;
     let activeSlotIdx = null;
     let editingUserId = null;
+    let activeTxVivoWeekIdx = null;
 
     function escapeHtml(str) {
       return String(str || '')
@@ -6678,7 +5783,6 @@
       });
 
       expandedGuardiaKeys.clear();
-      expandedTxVivoKeys.clear();
       selectedMonthFilter = 'ALL';
       selectedWeekFilter = 'ALL';
       await saveState(true);
@@ -7631,139 +6735,68 @@
     }
 
 
-    // === DESPLEGABLE INLINE DE "TX RENAL VIVO" DEBAJO DE GUARDIA EN CADA DÍA ===
-    function buildTxVivoDrawerHtml(wIdx, dIdx, day) {
-      const currentText = String(day.txRenalVivo || '');
-      const inputId = `txvivo-inp-${wIdx}-${dIdx}`;
-      const btnId   = `txvivo-save-${wIdx}-${dIdx}`;
-
-      return `
-        <div class="guardia-drawer-content">
-          <div class="guardia-drawer-top" style="color:var(--accent-emerald);">
-            <span>🫘 Tx Renal vivo</span>
-            ${currentText ? `<button type="button" onclick="clearTxRenalVivo(${wIdx}, ${dIdx})" class="link-btn" style="font-size:10px; color:var(--accent-rose);">Borrar</button>` : ''}
-          </div>
-          <div class="inline-guardia-note-wrap">
-            <input
-              id="${inputId}"
-              type="text"
-              class="inline-guardia-input"
-              value="${escapeHtml(currentText)}"
-              placeholder="Anotar Tx Renal vivo..."
-              onkeydown="if(event.key==='Enter'){ event.preventDefault(); saveTxRenalVivo(${wIdx}, ${dIdx}); }"
-            />
-            <div class="inline-guardia-actions-row">
-              <button
-                id="${btnId}"
-                type="button"
-                onclick="saveTxRenalVivo(${wIdx}, ${dIdx})"
-                class="inline-guardia-save-btn"
-              >Guardar</button>
-              ${currentText ? `
-                <button
-                  type="button"
-                  onclick="clearTxRenalVivo(${wIdx}, ${dIdx})"
-                  class="inline-guardia-del-btn"
-                  title="Eliminar anotación Tx Renal vivo"
-                >✕</button>
-              ` : ''}
-            </div>
-          </div>
-        </div>
-      `;
-    }
-
-    function toggleInlineTxVivo(event, wIdx, dIdx) {
-      if (event) event.stopPropagation();
-      const key = `${wIdx}-${dIdx}`;
-      const unitEl = document.getElementById(`day-unit-${key}`);
-      if (!unitEl) return;
-
-      const isCurrentlyOpen = expandedTxVivoKeys.has(key);
-      if (isCurrentlyOpen) {
-        expandedTxVivoKeys.delete(key);
-        unitEl.classList.remove('txvivo-expanded');
-        const btn = unitEl.querySelector('.txvivo-plus-btn');
-        if (btn) btn.setAttribute('aria-expanded', 'false');
-        const drawer = unitEl.querySelector('.day-txvivo-drawer');
-        if (drawer) drawer.setAttribute('aria-hidden', 'true');
-      } else {
-        expandedTxVivoKeys.add(key);
-        const day = weeksData[wIdx].days[dIdx];
-        const inner = unitEl.querySelector('.day-txvivo-drawer-inner');
-        if (inner) inner.innerHTML = buildTxVivoDrawerHtml(wIdx, dIdx, day);
-        void unitEl.offsetWidth;
-        unitEl.classList.add('txvivo-expanded');
-        const btn = unitEl.querySelector('.txvivo-plus-btn');
-        if (btn) btn.setAttribute('aria-expanded', 'true');
-        const drawer = unitEl.querySelector('.day-txvivo-drawer');
-        if (drawer) drawer.setAttribute('aria-hidden', 'false');
-        setTimeout(() => {
-          const inp = document.getElementById(`txvivo-inp-${wIdx}-${dIdx}`);
-          if (inp) inp.focus();
-        }, 60);
-      }
-    }
-
-    function refreshDayTxVivoUI(wIdx, dIdx) {
-      const key = `${wIdx}-${dIdx}`;
-      const unitEl = document.getElementById(`day-unit-${key}`);
-      if (!unitEl) return;
-      const day = weeksData[wIdx].days[dIdx];
-      const text = String(day.txRenalVivo || '').trim();
-
-      const stripEl = unitEl.querySelector('.day-txvivo-strip');
-      if (stripEl) {
-        stripEl.classList.toggle('has-txvivo', text !== '');
-      }
-
-      const labelWrap = unitEl.querySelector('.day-txvivo-label');
-      if (labelWrap) {
-        const existingDot = labelWrap.querySelector('.txvivo-active-dot');
-        if (text && !existingDot) {
-          const dot = document.createElement('span');
-          dot.className = 'txvivo-active-dot';
-          dot.title = 'Tx Renal vivo anotado';
-          labelWrap.appendChild(dot);
-        } else if (!text && existingDot) {
-          existingDot.remove();
-        }
-      }
-
-      let previewEl = unitEl.querySelector('.txvivo-preview-pill');
-      if (text) {
-        if (!previewEl && stripEl) {
-          previewEl = document.createElement('div');
-          previewEl.className = 'txvivo-preview-pill';
-          previewEl.onclick = (e) => toggleInlineTxVivo(e, wIdx, dIdx);
-          stripEl.insertAdjacentElement('afterend', previewEl);
-        }
-        if (previewEl) {
-          previewEl.textContent = `🫘 ${text}`;
-          previewEl.title = text;
-        }
-      } else if (previewEl) {
-        previewEl.remove();
-      }
-
-      const inner = unitEl.querySelector('.day-txvivo-drawer-inner');
-      if (inner) inner.innerHTML = buildTxVivoDrawerHtml(wIdx, dIdx, day);
-    }
-
-    async function saveTxRenalVivo(wIdx, dIdx) {
-      const inputEl = document.getElementById(`txvivo-inp-${wIdx}-${dIdx}`);
-      const btnEl   = document.getElementById(`txvivo-save-${wIdx}-${dIdx}`);
-      if (!inputEl) return;
-
-      const newText = inputEl.value.trim();
+    // === MODAL Y GESTIÓN DE "TX RENAL VIVO" POR SEMANA ===
+    function openTxVivoModal(wIdx, preselectedDayIdx = null) {
       const week = weeksData[wIdx];
-      const day = week.days[dIdx];
+      if (!week) return;
+      activeTxVivoWeekIdx = wIdx;
+
+      document.getElementById('txvivo-modal-title').textContent = `Tx Renal vivo · Sem ${wIdx + 1}`;
+      document.getElementById('txvivo-modal-subtitle').textContent = `Semana ${week.weekLabel}`;
+
+      const daySel = document.getElementById('txvivo-day-select');
+      daySel.innerHTML = '';
+      week.days.forEach((d, idx) => {
+        const opt = document.createElement('option');
+        opt.value = idx;
+        const hasTx = d.txRenalVivo && d.txRenalVivo.trim() !== '';
+        opt.textContent = `${d.dayName} ${d.date}${hasTx ? ' (Ya anotado ✓)' : ''}`;
+        if (preselectedDayIdx !== null && Number(preselectedDayIdx) === idx) {
+          opt.selected = true;
+        }
+        daySel.appendChild(opt);
+      });
+
+      onTxVivoDaySelectChange();
+      document.getElementById('txvivo-modal').classList.remove('hidden');
+      setTimeout(() => {
+        const inp = document.getElementById('txvivo-note-input');
+        if (inp) inp.focus();
+      }, 60);
+    }
+
+    function onTxVivoDaySelectChange() {
+      if (activeTxVivoWeekIdx === null) return;
+      const week = weeksData[activeTxVivoWeekIdx];
+      const dIdx = parseInt(document.getElementById('txvivo-day-select').value, 10);
+      const day = week && week.days[dIdx];
+      const existingText = day ? String(day.txRenalVivo || '').trim() : '';
+
+      document.getElementById('txvivo-note-input').value = existingText;
+      document.getElementById('txvivo-delete-wrap').classList.toggle('hidden', existingText === '');
+    }
+
+    function closeTxVivoModal() {
+      activeTxVivoWeekIdx = null;
+      document.getElementById('txvivo-modal').classList.add('hidden');
+    }
+
+    async function confirmTxVivoModal() {
+      if (activeTxVivoWeekIdx === null) return;
+      const wIdx = activeTxVivoWeekIdx;
+      const week = weeksData[wIdx];
+      const dIdx = parseInt(document.getElementById('txvivo-day-select').value, 10);
+      const day = week && week.days[dIdx];
+      if (!day) return;
+
+      const rawText = document.getElementById('txvivo-note-input').value.trim();
+      const finalText = rawText || 'Programado';
       const oldText = String(day.txRenalVivo || '').trim();
 
-      day.txRenalVivo = newText;
+      day.txRenalVivo = finalText;
 
-      if (oldText !== newText) {
-        recordSnapshot(`Tx Renal vivo ${day.date}: ${newText || '(borrado)'}`, 'Tx Renal vivo');
+      if (oldText !== finalText) {
+        recordSnapshot(`Tx Renal vivo ${day.date}: ${finalText}`, 'Tx Renal vivo');
         auditLogs.unshift({
           id: Date.now() + Math.random(),
           timestamp: new Date().toLocaleString('es-ES', { dateStyle: 'short', timeStyle: 'short' }),
@@ -7771,35 +6804,50 @@
           dayLabel: `${day.dayName} ${day.date}`,
           guardGroup: day.guardGroup,
           slotNumber: 'Tx Renal vivo',
-          oldDoctor: oldText || 'Sin anotación',
-          newDoctor: newText || 'Anotación eliminada',
+          oldDoctor: oldText || 'Sin Tx Renal vivo',
+          newDoctor: finalText,
           changedBy: 'Tx Renal vivo',
-          reason: newText || 'Eliminado'
+          reason: finalText
         });
         renderAuditLogs();
       }
 
+      closeTxVivoModal();
       await saveState(true);
-      refreshDayTxVivoUI(wIdx, dIdx);
-
-      const refreshedBtn = document.getElementById(`txvivo-save-${wIdx}-${dIdx}`);
-      if (refreshedBtn) {
-        refreshedBtn.textContent = '✓ Guardado';
-        refreshedBtn.classList.add('saved');
-        setTimeout(() => {
-          const b = document.getElementById(`txvivo-save-${wIdx}-${dIdx}`);
-          if (b) {
-            b.textContent = 'Guardar';
-            b.classList.remove('saved');
-          }
-        }, 1400);
-      }
+      renderCalendar();
     }
 
-    async function clearTxRenalVivo(wIdx, dIdx) {
-      const inp = document.getElementById(`txvivo-inp-${wIdx}-${dIdx}`);
-      if (inp) inp.value = '';
-      await saveTxRenalVivo(wIdx, dIdx);
+    async function deleteTxVivoFromModal() {
+      if (activeTxVivoWeekIdx === null) return;
+      const wIdx = activeTxVivoWeekIdx;
+      const week = weeksData[wIdx];
+      const dIdx = parseInt(document.getElementById('txvivo-day-select').value, 10);
+      const day = week && week.days[dIdx];
+      if (!day) return;
+
+      const oldText = String(day.txRenalVivo || '').trim();
+      day.txRenalVivo = '';
+
+      if (oldText) {
+        recordSnapshot(`Eliminado Tx Renal vivo (${day.date})`, 'Tx Renal vivo');
+        auditLogs.unshift({
+          id: Date.now() + Math.random(),
+          timestamp: new Date().toLocaleString('es-ES', { dateStyle: 'short', timeStyle: 'short' }),
+          weekLabel: week.weekLabel,
+          dayLabel: `${day.dayName} ${day.date}`,
+          guardGroup: day.guardGroup,
+          slotNumber: 'Tx Renal vivo',
+          oldDoctor: oldText,
+          newDoctor: 'Eliminado',
+          changedBy: 'Tx Renal vivo',
+          reason: 'Anotación Tx Renal vivo eliminada'
+        });
+        renderAuditLogs();
+      }
+
+      closeTxVivoModal();
+      await saveState(true);
+      renderCalendar();
     }
 
     function buildCompactDayCell(wIdx, day, docFilter) {
@@ -7814,7 +6862,6 @@
         normalizeGuardMembers(day).some(m => m.name.trim() === docFilter)
       );
       const isExpanded = expandedGuardiaKeys.has(key);
-      const isTxVivoExpanded = expandedTxVivoKeys.has(key);
       const txVivoText = String(day.txRenalVivo || '').trim();
       const guardMembers = normalizeGuardMembers(day);
       const hasAnyNote = guardMembers.some(m => m.note && m.note.trim() !== '');
@@ -7838,10 +6885,9 @@
       }
 
       const drawerInnerHtml = isExpanded ? buildGuardiaDrawerHtml(wIdx, dIdx, day) : '';
-      const txVivoDrawerHtml = isTxVivoExpanded ? buildTxVivoDrawerHtml(wIdx, dIdx, day) : '';
 
       return `
-        <div class="day-unit ${isWeekend ? 'weekend' : ''} ${hasMod ? 'has-mod' : ''} ${docMatch ? 'doc-match' : ''} ${isExpanded ? 'guardia-expanded' : ''} ${isTxVivoExpanded ? 'txvivo-expanded' : ''}" id="day-unit-${key}">
+        <div class="day-unit ${isWeekend ? 'weekend' : ''} ${hasMod ? 'has-mod' : ''} ${docMatch ? 'doc-match' : ''} ${isExpanded ? 'guardia-expanded' : ''}" id="day-unit-${key}">
           <button type="button" onclick="openDayDetailModal(${wIdx}, ${dIdx})" class="day-loc-trigger">
             <div class="compact-day-top">
               <span class="compact-dname">${shortDayName(day.dayName)}</span>
@@ -7866,20 +6912,15 @@
             <div class="day-guardia-drawer-inner">${drawerInnerHtml}</div>
           </div>
 
-          <div class="day-txvivo-strip ${txVivoText ? 'has-txvivo' : ''}" onclick="toggleInlineTxVivo(event, ${wIdx}, ${dIdx})">
-            <div class="day-txvivo-label">
-              <span>Tx Renal vivo</span>
-              ${txVivoText ? '<span class="txvivo-active-dot" title="Tx Renal vivo anotado"></span>' : ''}
+          ${txVivoText ? `
+            <div class="day-txvivo-badge-box" onclick="openTxVivoModal(${wIdx}, ${dIdx})" title="Pulsa para editar o eliminar Tx Renal vivo">
+              <div class="day-txvivo-badge-header">
+                <span>🫘 Tx Renal vivo</span>
+                <span>✎</span>
+              </div>
+              <div class="day-txvivo-badge-text">${escapeHtml(txVivoText)}</div>
             </div>
-            <button type="button" class="txvivo-plus-btn" aria-expanded="${isTxVivoExpanded}" aria-label="Desplegar Tx Renal vivo de ${day.dayName} ${day.date}">
-              <span class="plus-glyph">+</span>
-            </button>
-          </div>
-          ${txVivoText ? `<div class="txvivo-preview-pill" onclick="toggleInlineTxVivo(event, ${wIdx}, ${dIdx})" title="${escapeHtml(txVivoText)}">🫘 ${escapeHtml(txVivoText)}</div>` : ''}
-
-          <div class="day-txvivo-drawer" aria-hidden="${!isTxVivoExpanded}">
-            <div class="day-txvivo-drawer-inner">${txVivoDrawerHtml}</div>
-          </div>
+          ` : ''}
         </div>
       `;
     }
@@ -7957,6 +6998,7 @@
             <div class="week-title-wrap">
               <span class="sem-tag mono">SEM ${wIdx + 1}</span>
               <h2 class="week-title">${week.weekLabel}</h2>
+              <button type="button" onclick="openTxVivoModal(${wIdx})" class="btn-add-txvivo-week" title="Añadir Trasplante Renal Vivo en esta semana">🫘 + Tx Renal vivo</button>
             </div>
             <span class="tap-hint">Toca localizadas o + en Guardia</span>
           </div>
@@ -8562,7 +7604,6 @@
         });
 
         expandedGuardiaKeys.clear();
-      expandedTxVivoKeys.clear();
         selectedMonthFilter = 'ALL';
         selectedWeekFilter = 'ALL';
         await saveState(true);
@@ -8645,7 +7686,6 @@
       doctorsList = JSON.parse(JSON.stringify(INITIAL_DOCTORS));
       weeksData = JSON.parse(JSON.stringify(INITIAL_WEEKS));
       expandedGuardiaKeys.clear();
-      expandedTxVivoKeys.clear();
       selectedMonthFilter = 'ALL';
       selectedWeekFilter = 'ALL';
       auditLogs.unshift({
