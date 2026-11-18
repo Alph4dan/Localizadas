@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="es" data-theme="light">
+<html lang="es" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <meta id="meta-theme-color" name="theme-color" content="#eef3f9" />
+  <meta id="meta-theme-color" name="theme-color" content="#040914" />
   <title>Localizadas Trasplante · Anestesiología</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -65,6 +65,7 @@
       --orb-2: rgba(6, 182, 212, 0.22);
       --ecg-opacity: 0.14;
       --shadow-card: 0 14px 36px -10px rgba(0, 0, 0, 0.65), 0 2px 6px rgba(0, 0, 0, 0.35);
+      --glow-hover: 0 14px 32px -8px rgba(34, 211, 238, 0.26), 0 0 0 1px rgba(34, 211, 238, 0.28);
     }
 
     [data-theme="light"] {
@@ -123,6 +124,7 @@
       --orb-2: rgba(6, 182, 212, 0.14);
       --ecg-opacity: 0.1;
       --shadow-card: 0 12px 30px -10px rgba(15, 23, 42, 0.09), 0 2px 6px rgba(15, 23, 42, 0.04);
+      --glow-hover: 0 12px 26px -8px rgba(2, 132, 199, 0.18), 0 0 0 1px rgba(2, 132, 199, 0.22);
     }
 
     * {
@@ -1833,6 +1835,37 @@
       border: 1px solid rgba(16, 185, 129, 0.3);
     }
 
+    /* === EFECTOS TÁCTILES Y SPOTLIGHT EN MÓVIL (IMITA HOVER EN PANTALLAS TÁCTILES) === */
+    @media (hover: none) {
+      .week-block.mobile-spotlight {
+        border-left-color: #10b981;
+        box-shadow: var(--specular-top), var(--glow-hover);
+      }
+      .day-unit:active {
+        transform: translateY(-2px) scale(0.985);
+        border-color: var(--accent-cyan);
+        box-shadow: var(--specular-top), var(--glow-hover);
+      }
+      .doc-card:active,
+      .stat-box:active,
+      .expanded-slot-card:active {
+        transform: translateY(-2px) scale(0.99);
+        border-color: var(--accent-cyan);
+        box-shadow: var(--specular-top), var(--glow-hover);
+      }
+      .month-pill:active,
+      .nav-btn:active,
+      .mob-btn:active {
+        transform: scale(0.96);
+      }
+      [data-theme="dark"] .day-loc-trigger:active {
+        background: rgba(34, 211, 238, 0.14);
+      }
+      [data-theme="dark"] .day-guardia-strip:active {
+        background: rgba(34, 211, 238, 0.18);
+      }
+    }
+
     @media (prefers-reduced-motion: reduce) {
       .pulse-dot { animation: none; }
       .week-block {
@@ -1912,9 +1945,9 @@
 
             <!-- Toggle Modo Oscuro / Claro -->
             <button type="button" id="theme-toggle-btn" onclick="toggleTheme()" class="theme-toggle-btn" aria-label="Cambiar entre modo oscuro y claro" title="Alternar modo oscuro / claro">
-              <span id="theme-icon">☀️</span>
+              <span id="theme-icon">🌙</span>
               <span class="theme-track" aria-hidden="true"><span class="theme-thumb"></span></span>
-              <span id="theme-label">Claro</span>
+              <span id="theme-label">Oscuro</span>
             </button>
           </div>
           <h1 style="margin-top:6px;">Localizadas <span class="gradient-text">Trasplante</span></h1>
@@ -5729,7 +5762,7 @@
       const metaTheme = document.getElementById('meta-theme-color');
       if (iconEl) iconEl.textContent = cleanTheme === 'light' ? '☀️' : '🌙';
       if (labelEl) labelEl.textContent = cleanTheme === 'light' ? 'Claro' : 'Oscuro';
-      if (metaTheme) metaTheme.setAttribute('content', cleanTheme === 'light' ? '#eef3f9' : '#060d18');
+      if (metaTheme) metaTheme.setAttribute('content', cleanTheme === 'light' ? '#f1f5f9' : '#040914');
       try { localStorage.setItem(STORAGE_KEY_THEME, cleanTheme); } catch (e) {}
     }
 
@@ -5739,8 +5772,8 @@
     }
 
     function initTheme() {
-      let saved = 'light';
-      try { saved = localStorage.getItem(STORAGE_KEY_THEME) || 'light'; } catch (e) {}
+      let saved = 'dark';
+      try { saved = localStorage.getItem(STORAGE_KEY_THEME) || 'dark'; } catch (e) {}
       applyTheme(saved);
     }
 
@@ -6647,6 +6680,7 @@
       const progFill = document.getElementById('scroll-progress-fill');
 
       const reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const isTouchDevice = window.matchMedia && window.matchMedia('(hover: none)').matches;
 
       let scrollY = window.scrollY || 0;
       let vh = window.innerHeight || 800;
@@ -6657,6 +6691,7 @@
       let targetMouseX = 0, targetMouseY = 0;
       let currMouseX = 0, currMouseY = 0;
       let lastHeroScrolled = null;
+      let lastSpotlightBlock = null;
       let scrollDirty = true;
       let mouseDirty = false;
       let rafId = 0;
@@ -6721,6 +6756,8 @@
 
             // Batch DOM reads before DOM writes to prevent layout thrashing
             const shiftsToApply = [];
+            let closestBlock = null;
+            let closestDist = Infinity;
             for (let i = 0; i < cachedWeekBlocks.length; i++) {
               const wb = cachedWeekBlocks[i];
               if (!wb.classList.contains('in-view')) continue;
@@ -6729,9 +6766,21 @@
               const centerOffset = ((rect.top + rect.height * 0.5) - vh * 0.5) / vh;
               const clamped = Math.max(-1, Math.min(1, centerOffset));
               shiftsToApply.push(wb, (clamped * 7).toFixed(2));
+              if (isTouchDevice) {
+                const dist = Math.abs(centerOffset);
+                if (dist < closestDist) {
+                  closestDist = dist;
+                  closestBlock = wb;
+                }
+              }
             }
             for (let i = 0; i < shiftsToApply.length; i += 2) {
               shiftsToApply[i].style.setProperty('--week-shift', `${shiftsToApply[i + 1]}px`);
+            }
+            if (isTouchDevice && closestBlock !== lastSpotlightBlock) {
+              if (lastSpotlightBlock) lastSpotlightBlock.classList.remove('mobile-spotlight');
+              if (closestBlock) closestBlock.classList.add('mobile-spotlight');
+              lastSpotlightBlock = closestBlock;
             }
           }
 
@@ -6775,6 +6824,17 @@
           mouseDirty = true;
           requestTick();
         }, { passive: true });
+
+        if (isTouchDevice) {
+          window.addEventListener('touchmove', (e) => {
+            const t = e.touches && e.touches[0];
+            if (!t) return;
+            targetMouseX = ((t.clientX / vw) - 0.5) * 0.85;
+            targetMouseY = ((t.clientY / vh) - 0.5) * 0.85;
+            mouseDirty = true;
+            requestTick();
+          }, { passive: true });
+        }
       }
 
       window.addEventListener('resize', updateMetrics, { passive: true });
