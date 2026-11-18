@@ -1707,6 +1707,137 @@
       border-color: var(--accent-cyan);
     }
 
+
+    .kidneys-icon {
+      display: inline-block;
+      vertical-align: -0.22em;
+      flex-shrink: 0;
+    }
+
+    /* === GENERADOR INTELIGENTE DE LOCALIZADAS (PATRONES + EQUIDAD) === */
+    .gen-grid-controls {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    @media (min-width: 768px) {
+      .gen-grid-controls {
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        align-items: end;
+      }
+    }
+    .gen-summary-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11.5px;
+      margin-top: 10px;
+    }
+    .gen-summary-table th, .gen-summary-table td {
+      padding: 6px 8px;
+      border-bottom: 1px solid var(--border-subtle);
+      text-align: left;
+    }
+    .gen-summary-table th {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-muted);
+      background: var(--bg-sub);
+    }
+    .gen-summary-table tr:hover td {
+      background: rgba(6, 182, 212, 0.06);
+    }
+    .gen-tag-guard {
+      display: inline-block;
+      padding: 1px 5px;
+      border-radius: 3px;
+      font-size: 10px;
+      font-weight: 800;
+      background: rgba(16, 185, 129, 0.16);
+      color: var(--accent-emerald);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+    }
+
+
+    /* === TABLA EDITABLE DE HISTÓRICO Y COMPENSACIONES PREVIAS (ADMIN) === */
+    .hist-table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--border-subtle);
+      border-radius: 5px;
+      background: var(--bg-doc-card);
+    }
+    .hist-balance-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11.5px;
+      min-width: 780px;
+    }
+    .hist-balance-table th, .hist-balance-table td {
+      padding: 7px 8px;
+      border-bottom: 1px solid var(--border-subtle);
+      text-align: center;
+      vertical-align: middle;
+    }
+    .hist-balance-table th {
+      font-size: 9.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-muted);
+      background: var(--bg-sub);
+      font-weight: 800;
+    }
+    .hist-balance-table th:first-child,
+    .hist-balance-table td:first-child {
+      text-align: left;
+      position: sticky;
+      left: 0;
+      background: var(--bg-doc-card);
+      z-index: 2;
+      border-right: 1px solid var(--border-subtle);
+    }
+    .hist-balance-table th:first-child {
+      background: var(--bg-sub);
+    }
+    .hist-num-input {
+      width: 58px !important;
+      padding: 4px 5px !important;
+      font-size: 11.5px !important;
+      font-weight: 700 !important;
+      text-align: center;
+      border-radius: 4px !important;
+      background: var(--bg-input);
+      border: 1px solid var(--border-input);
+      color: var(--text-strong);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+    .hist-num-input:focus {
+      border-color: var(--accent-emerald);
+      box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+    }
+    .delta-pill {
+      display: inline-block;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 10.5px;
+      font-weight: 800;
+    }
+    .delta-pos {
+      background: rgba(245, 158, 11, 0.16);
+      color: var(--accent-amber);
+      border: 1px solid rgba(245, 158, 11, 0.35);
+    }
+    .delta-neg {
+      background: rgba(244, 63, 94, 0.15);
+      color: var(--accent-rose);
+      border: 1px solid rgba(244, 63, 94, 0.35);
+    }
+    .delta-zero {
+      background: rgba(16, 185, 129, 0.14);
+      color: var(--accent-emerald);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
   </style>
 </head>
 <body>
@@ -1852,7 +1983,7 @@
             <span class="legend-item"><span class="dot-sm" style="background:#10b981;"></span> Activo</span>
             <span class="legend-item"><span class="dot-sm" style="background:#f59e0b;"></span> Modificado</span>
             <span class="legend-item"><span class="dot-sm" style="background:#f43f5e;"></span> De baja / Inhabilitado</span>
-            <span class="legend-item">🫘 Pulsa <strong>+ Tx Renal vivo</strong> junto a la fecha de cada semana para asignarlo a un día</span>
+            <span class="legend-item"><svg class="kidneys-icon" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 6.2C8.3 4.2 5.4 3.8 3.8 5.8C2.2 7.8 2.2 12.2 3.8 14.4C5.3 16.4 8.2 16.1 9.5 14.1C10.1 13.1 9.1 11.9 9.1 10.2C9.1 8.5 10.1 7.2 9.5 6.2Z" fill="currentColor" fill-opacity="0.22"/><path d="M14.5 6.2C15.7 4.2 18.6 3.8 20.2 5.8C21.8 7.8 21.8 12.2 20.2 14.4C18.7 16.4 15.8 16.1 14.5 14.1C13.9 13.1 14.9 11.9 14.9 10.2C14.9 8.5 13.9 7.2 14.5 6.2Z" fill="currentColor" fill-opacity="0.22"/><path d="M9.1 10.8C10.4 11.5 10.8 14.2 10.8 19.5"/><path d="M14.9 10.8C13.6 11.5 13.2 14.2 13.2 19.5"/></svg> Pulsa <strong>+ Tx Renal vivo</strong> junto a la fecha de cada semana para asignarlo a un día</span>
           </div>
           <button onclick="resetFilters()" id="btn-reset-filters" class="link-btn hidden">Limpiar filtros</button>
         </div>
@@ -1867,7 +1998,7 @@
           <div class="week-title-wrap">
             <span class="sem-tag mono">SEM 1</span>
             <h2 class="week-title">4-ene a 10-ene</h2>
-            <button type="button" onclick="openTxVivoModal(0)" class="btn-add-txvivo-week" title="Añadir Trasplante Renal Vivo en esta semana">🫘 + Tx Renal vivo</button>
+            <button type="button" onclick="openTxVivoModal(0)" class="btn-add-txvivo-week" title="Añadir Trasplante Renal Vivo en esta semana"><svg class="kidneys-icon" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 6.2C8.3 4.2 5.4 3.8 3.8 5.8C2.2 7.8 2.2 12.2 3.8 14.4C5.3 16.4 8.2 16.1 9.5 14.1C10.1 13.1 9.1 11.9 9.1 10.2C9.1 8.5 10.1 7.2 9.5 6.2Z" fill="currentColor" fill-opacity="0.22"/><path d="M14.5 6.2C15.7 4.2 18.6 3.8 20.2 5.8C21.8 7.8 21.8 12.2 20.2 14.4C18.7 16.4 15.8 16.1 14.5 14.1C13.9 13.1 14.9 11.9 14.9 10.2C14.9 8.5 13.9 7.2 14.5 6.2Z" fill="currentColor" fill-opacity="0.22"/><path d="M9.1 10.8C10.4 11.5 10.8 14.2 10.8 19.5"/><path d="M14.9 10.8C13.6 11.5 13.2 14.2 13.2 19.5"/></svg> + Tx Renal vivo</button>
           </div>
           <span class="tap-hint">Toca localizadas o + en Guardia</span>
         </div>
@@ -2080,7 +2211,7 @@
           <div class="week-title-wrap">
             <span class="sem-tag mono">SEM 2</span>
             <h2 class="week-title">11-ene a 17-ene</h2>
-            <button type="button" onclick="openTxVivoModal(1)" class="btn-add-txvivo-week" title="Añadir Trasplante Renal Vivo en esta semana">🫘 + Tx Renal vivo</button>
+            <button type="button" onclick="openTxVivoModal(1)" class="btn-add-txvivo-week" title="Añadir Trasplante Renal Vivo en esta semana"><svg class="kidneys-icon" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 6.2C8.3 4.2 5.4 3.8 3.8 5.8C2.2 7.8 2.2 12.2 3.8 14.4C5.3 16.4 8.2 16.1 9.5 14.1C10.1 13.1 9.1 11.9 9.1 10.2C9.1 8.5 10.1 7.2 9.5 6.2Z" fill="currentColor" fill-opacity="0.22"/><path d="M14.5 6.2C15.7 4.2 18.6 3.8 20.2 5.8C21.8 7.8 21.8 12.2 20.2 14.4C18.7 16.4 15.8 16.1 14.5 14.1C13.9 13.1 14.9 11.9 14.9 10.2C14.9 8.5 13.9 7.2 14.5 6.2Z" fill="currentColor" fill-opacity="0.22"/><path d="M9.1 10.8C10.4 11.5 10.8 14.2 10.8 19.5"/><path d="M14.9 10.8C13.6 11.5 13.2 14.2 13.2 19.5"/></svg> + Tx Renal vivo</button>
           </div>
           <span class="tap-hint">Toca localizadas o + en Guardia</span>
         </div>
@@ -2302,7 +2433,7 @@
           <div class="week-title-wrap">
             <span class="sem-tag mono">SEM 3</span>
             <h2 class="week-title">18-ene a 24-ene</h2>
-            <button type="button" onclick="openTxVivoModal(2)" class="btn-add-txvivo-week" title="Añadir Trasplante Renal Vivo en esta semana">🫘 + Tx Renal vivo</button>
+            <button type="button" onclick="openTxVivoModal(2)" class="btn-add-txvivo-week" title="Añadir Trasplante Renal Vivo en esta semana"><svg class="kidneys-icon" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 6.2C8.3 4.2 5.4 3.8 3.8 5.8C2.2 7.8 2.2 12.2 3.8 14.4C5.3 16.4 8.2 16.1 9.5 14.1C10.1 13.1 9.1 11.9 9.1 10.2C9.1 8.5 10.1 7.2 9.5 6.2Z" fill="currentColor" fill-opacity="0.22"/><path d="M14.5 6.2C15.7 4.2 18.6 3.8 20.2 5.8C21.8 7.8 21.8 12.2 20.2 14.4C18.7 16.4 15.8 16.1 14.5 14.1C13.9 13.1 14.9 11.9 14.9 10.2C14.9 8.5 13.9 7.2 14.5 6.2Z" fill="currentColor" fill-opacity="0.22"/><path d="M9.1 10.8C10.4 11.5 10.8 14.2 10.8 19.5"/><path d="M14.9 10.8C13.6 11.5 13.2 14.2 13.2 19.5"/></svg> + Tx Renal vivo</button>
           </div>
           <span class="tap-hint">Toca localizadas o + en Guardia</span>
         </div>
@@ -2524,7 +2655,7 @@
           <div class="week-title-wrap">
             <span class="sem-tag mono">SEM 4</span>
             <h2 class="week-title">25-ene a 31-ene</h2>
-            <button type="button" onclick="openTxVivoModal(3)" class="btn-add-txvivo-week" title="Añadir Trasplante Renal Vivo en esta semana">🫘 + Tx Renal vivo</button>
+            <button type="button" onclick="openTxVivoModal(3)" class="btn-add-txvivo-week" title="Añadir Trasplante Renal Vivo en esta semana"><svg class="kidneys-icon" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 6.2C8.3 4.2 5.4 3.8 3.8 5.8C2.2 7.8 2.2 12.2 3.8 14.4C5.3 16.4 8.2 16.1 9.5 14.1C10.1 13.1 9.1 11.9 9.1 10.2C9.1 8.5 10.1 7.2 9.5 6.2Z" fill="currentColor" fill-opacity="0.22"/><path d="M14.5 6.2C15.7 4.2 18.6 3.8 20.2 5.8C21.8 7.8 21.8 12.2 20.2 14.4C18.7 16.4 15.8 16.1 14.5 14.1C13.9 13.1 14.9 11.9 14.9 10.2C14.9 8.5 13.9 7.2 14.5 6.2Z" fill="currentColor" fill-opacity="0.22"/><path d="M9.1 10.8C10.4 11.5 10.8 14.2 10.8 19.5"/><path d="M14.9 10.8C13.6 11.5 13.2 14.2 13.2 19.5"/></svg> + Tx Renal vivo</button>
           </div>
           <span class="tap-hint">Toca localizadas o + en Guardia</span>
         </div>
@@ -2746,7 +2877,7 @@
           <div class="week-title-wrap">
             <span class="sem-tag mono">SEM 5</span>
             <h2 class="week-title">1-feb a 7-feb</h2>
-            <button type="button" onclick="openTxVivoModal(4)" class="btn-add-txvivo-week" title="Añadir Trasplante Renal Vivo en esta semana">🫘 + Tx Renal vivo</button>
+            <button type="button" onclick="openTxVivoModal(4)" class="btn-add-txvivo-week" title="Añadir Trasplante Renal Vivo en esta semana"><svg class="kidneys-icon" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 6.2C8.3 4.2 5.4 3.8 3.8 5.8C2.2 7.8 2.2 12.2 3.8 14.4C5.3 16.4 8.2 16.1 9.5 14.1C10.1 13.1 9.1 11.9 9.1 10.2C9.1 8.5 10.1 7.2 9.5 6.2Z" fill="currentColor" fill-opacity="0.22"/><path d="M14.5 6.2C15.7 4.2 18.6 3.8 20.2 5.8C21.8 7.8 21.8 12.2 20.2 14.4C18.7 16.4 15.8 16.1 14.5 14.1C13.9 13.1 14.9 11.9 14.9 10.2C14.9 8.5 13.9 7.2 14.5 6.2Z" fill="currentColor" fill-opacity="0.22"/><path d="M9.1 10.8C10.4 11.5 10.8 14.2 10.8 19.5"/><path d="M14.9 10.8C13.6 11.5 13.2 14.2 13.2 19.5"/></svg> + Tx Renal vivo</button>
           </div>
           <span class="tap-hint">Toca localizadas o + en Guardia</span>
         </div>
@@ -2968,7 +3099,7 @@
           <div class="week-title-wrap">
             <span class="sem-tag mono">SEM 6</span>
             <h2 class="week-title">8-feb a 14-feb</h2>
-            <button type="button" onclick="openTxVivoModal(5)" class="btn-add-txvivo-week" title="Añadir Trasplante Renal Vivo en esta semana">🫘 + Tx Renal vivo</button>
+            <button type="button" onclick="openTxVivoModal(5)" class="btn-add-txvivo-week" title="Añadir Trasplante Renal Vivo en esta semana"><svg class="kidneys-icon" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 6.2C8.3 4.2 5.4 3.8 3.8 5.8C2.2 7.8 2.2 12.2 3.8 14.4C5.3 16.4 8.2 16.1 9.5 14.1C10.1 13.1 9.1 11.9 9.1 10.2C9.1 8.5 10.1 7.2 9.5 6.2Z" fill="currentColor" fill-opacity="0.22"/><path d="M14.5 6.2C15.7 4.2 18.6 3.8 20.2 5.8C21.8 7.8 21.8 12.2 20.2 14.4C18.7 16.4 15.8 16.1 14.5 14.1C13.9 13.1 14.9 11.9 14.9 10.2C14.9 8.5 13.9 7.2 14.5 6.2Z" fill="currentColor" fill-opacity="0.22"/><path d="M9.1 10.8C10.4 11.5 10.8 14.2 10.8 19.5"/><path d="M14.9 10.8C13.6 11.5 13.2 14.2 13.2 19.5"/></svg> + Tx Renal vivo</button>
           </div>
           <span class="tap-hint">Toca localizadas o + en Guardia</span>
         </div>
@@ -3190,7 +3321,7 @@
           <div class="week-title-wrap">
             <span class="sem-tag mono">SEM 7</span>
             <h2 class="week-title">15-feb a 21-feb</h2>
-            <button type="button" onclick="openTxVivoModal(6)" class="btn-add-txvivo-week" title="Añadir Trasplante Renal Vivo en esta semana">🫘 + Tx Renal vivo</button>
+            <button type="button" onclick="openTxVivoModal(6)" class="btn-add-txvivo-week" title="Añadir Trasplante Renal Vivo en esta semana"><svg class="kidneys-icon" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 6.2C8.3 4.2 5.4 3.8 3.8 5.8C2.2 7.8 2.2 12.2 3.8 14.4C5.3 16.4 8.2 16.1 9.5 14.1C10.1 13.1 9.1 11.9 9.1 10.2C9.1 8.5 10.1 7.2 9.5 6.2Z" fill="currentColor" fill-opacity="0.22"/><path d="M14.5 6.2C15.7 4.2 18.6 3.8 20.2 5.8C21.8 7.8 21.8 12.2 20.2 14.4C18.7 16.4 15.8 16.1 14.5 14.1C13.9 13.1 14.9 11.9 14.9 10.2C14.9 8.5 13.9 7.2 14.5 6.2Z" fill="currentColor" fill-opacity="0.22"/><path d="M9.1 10.8C10.4 11.5 10.8 14.2 10.8 19.5"/><path d="M14.9 10.8C13.6 11.5 13.2 14.2 13.2 19.5"/></svg> + Tx Renal vivo</button>
           </div>
           <span class="tap-hint">Toca localizadas o + en Guardia</span>
         </div>
@@ -3412,7 +3543,7 @@
           <div class="week-title-wrap">
             <span class="sem-tag mono">SEM 8</span>
             <h2 class="week-title">22-feb a 28-feb</h2>
-            <button type="button" onclick="openTxVivoModal(7)" class="btn-add-txvivo-week" title="Añadir Trasplante Renal Vivo en esta semana">🫘 + Tx Renal vivo</button>
+            <button type="button" onclick="openTxVivoModal(7)" class="btn-add-txvivo-week" title="Añadir Trasplante Renal Vivo en esta semana"><svg class="kidneys-icon" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 6.2C8.3 4.2 5.4 3.8 3.8 5.8C2.2 7.8 2.2 12.2 3.8 14.4C5.3 16.4 8.2 16.1 9.5 14.1C10.1 13.1 9.1 11.9 9.1 10.2C9.1 8.5 10.1 7.2 9.5 6.2Z" fill="currentColor" fill-opacity="0.22"/><path d="M14.5 6.2C15.7 4.2 18.6 3.8 20.2 5.8C21.8 7.8 21.8 12.2 20.2 14.4C18.7 16.4 15.8 16.1 14.5 14.1C13.9 13.1 14.9 11.9 14.9 10.2C14.9 8.5 13.9 7.2 14.5 6.2Z" fill="currentColor" fill-opacity="0.22"/><path d="M9.1 10.8C10.4 11.5 10.8 14.2 10.8 19.5"/><path d="M14.9 10.8C13.6 11.5 13.2 14.2 13.2 19.5"/></svg> + Tx Renal vivo</button>
           </div>
           <span class="tap-hint">Toca localizadas o + en Guardia</span>
         </div>
@@ -3634,7 +3765,7 @@
           <div class="week-title-wrap">
             <span class="sem-tag mono">SEM 9</span>
             <h2 class="week-title">1-mar a 7-mar</h2>
-            <button type="button" onclick="openTxVivoModal(8)" class="btn-add-txvivo-week" title="Añadir Trasplante Renal Vivo en esta semana">🫘 + Tx Renal vivo</button>
+            <button type="button" onclick="openTxVivoModal(8)" class="btn-add-txvivo-week" title="Añadir Trasplante Renal Vivo en esta semana"><svg class="kidneys-icon" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 6.2C8.3 4.2 5.4 3.8 3.8 5.8C2.2 7.8 2.2 12.2 3.8 14.4C5.3 16.4 8.2 16.1 9.5 14.1C10.1 13.1 9.1 11.9 9.1 10.2C9.1 8.5 10.1 7.2 9.5 6.2Z" fill="currentColor" fill-opacity="0.22"/><path d="M14.5 6.2C15.7 4.2 18.6 3.8 20.2 5.8C21.8 7.8 21.8 12.2 20.2 14.4C18.7 16.4 15.8 16.1 14.5 14.1C13.9 13.1 14.9 11.9 14.9 10.2C14.9 8.5 13.9 7.2 14.5 6.2Z" fill="currentColor" fill-opacity="0.22"/><path d="M9.1 10.8C10.4 11.5 10.8 14.2 10.8 19.5"/><path d="M14.9 10.8C13.6 11.5 13.2 14.2 13.2 19.5"/></svg> + Tx Renal vivo</button>
           </div>
           <span class="tap-hint">Toca localizadas o + en Guardia</span>
         </div>
@@ -3856,7 +3987,7 @@
           <div class="week-title-wrap">
             <span class="sem-tag mono">SEM 10</span>
             <h2 class="week-title">8-mar a 14-mar</h2>
-            <button type="button" onclick="openTxVivoModal(9)" class="btn-add-txvivo-week" title="Añadir Trasplante Renal Vivo en esta semana">🫘 + Tx Renal vivo</button>
+            <button type="button" onclick="openTxVivoModal(9)" class="btn-add-txvivo-week" title="Añadir Trasplante Renal Vivo en esta semana"><svg class="kidneys-icon" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 6.2C8.3 4.2 5.4 3.8 3.8 5.8C2.2 7.8 2.2 12.2 3.8 14.4C5.3 16.4 8.2 16.1 9.5 14.1C10.1 13.1 9.1 11.9 9.1 10.2C9.1 8.5 10.1 7.2 9.5 6.2Z" fill="currentColor" fill-opacity="0.22"/><path d="M14.5 6.2C15.7 4.2 18.6 3.8 20.2 5.8C21.8 7.8 21.8 12.2 20.2 14.4C18.7 16.4 15.8 16.1 14.5 14.1C13.9 13.1 14.9 11.9 14.9 10.2C14.9 8.5 13.9 7.2 14.5 6.2Z" fill="currentColor" fill-opacity="0.22"/><path d="M9.1 10.8C10.4 11.5 10.8 14.2 10.8 19.5"/><path d="M14.9 10.8C13.6 11.5 13.2 14.2 13.2 19.5"/></svg> + Tx Renal vivo</button>
           </div>
           <span class="tap-hint">Toca localizadas o + en Guardia</span>
         </div>
@@ -4078,7 +4209,7 @@
           <div class="week-title-wrap">
             <span class="sem-tag mono">SEM 11</span>
             <h2 class="week-title">15-mar a 21-mar</h2>
-            <button type="button" onclick="openTxVivoModal(10)" class="btn-add-txvivo-week" title="Añadir Trasplante Renal Vivo en esta semana">🫘 + Tx Renal vivo</button>
+            <button type="button" onclick="openTxVivoModal(10)" class="btn-add-txvivo-week" title="Añadir Trasplante Renal Vivo en esta semana"><svg class="kidneys-icon" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 6.2C8.3 4.2 5.4 3.8 3.8 5.8C2.2 7.8 2.2 12.2 3.8 14.4C5.3 16.4 8.2 16.1 9.5 14.1C10.1 13.1 9.1 11.9 9.1 10.2C9.1 8.5 10.1 7.2 9.5 6.2Z" fill="currentColor" fill-opacity="0.22"/><path d="M14.5 6.2C15.7 4.2 18.6 3.8 20.2 5.8C21.8 7.8 21.8 12.2 20.2 14.4C18.7 16.4 15.8 16.1 14.5 14.1C13.9 13.1 14.9 11.9 14.9 10.2C14.9 8.5 13.9 7.2 14.5 6.2Z" fill="currentColor" fill-opacity="0.22"/><path d="M9.1 10.8C10.4 11.5 10.8 14.2 10.8 19.5"/><path d="M14.9 10.8C13.6 11.5 13.2 14.2 13.2 19.5"/></svg> + Tx Renal vivo</button>
           </div>
           <span class="tap-hint">Toca localizadas o + en Guardia</span>
         </div>
@@ -4294,7 +4425,7 @@
           <div class="week-title-wrap">
             <span class="sem-tag mono">SEM 12</span>
             <h2 class="week-title">22-mar a 28-mar</h2>
-            <button type="button" onclick="openTxVivoModal(11)" class="btn-add-txvivo-week" title="Añadir Trasplante Renal Vivo en esta semana">🫘 + Tx Renal vivo</button>
+            <button type="button" onclick="openTxVivoModal(11)" class="btn-add-txvivo-week" title="Añadir Trasplante Renal Vivo en esta semana"><svg class="kidneys-icon" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 6.2C8.3 4.2 5.4 3.8 3.8 5.8C2.2 7.8 2.2 12.2 3.8 14.4C5.3 16.4 8.2 16.1 9.5 14.1C10.1 13.1 9.1 11.9 9.1 10.2C9.1 8.5 10.1 7.2 9.5 6.2Z" fill="currentColor" fill-opacity="0.22"/><path d="M14.5 6.2C15.7 4.2 18.6 3.8 20.2 5.8C21.8 7.8 21.8 12.2 20.2 14.4C18.7 16.4 15.8 16.1 14.5 14.1C13.9 13.1 14.9 11.9 14.9 10.2C14.9 8.5 13.9 7.2 14.5 6.2Z" fill="currentColor" fill-opacity="0.22"/><path d="M9.1 10.8C10.4 11.5 10.8 14.2 10.8 19.5"/><path d="M14.9 10.8C13.6 11.5 13.2 14.2 13.2 19.5"/></svg> + Tx Renal vivo</button>
           </div>
           <span class="tap-hint">Toca localizadas o + en Guardia</span>
         </div>
@@ -5010,6 +5141,116 @@
           </div>
         </div>
 
+
+
+        <!-- -1. SUMATORIO HISTÓRICO Y COMPENSACIONES PREVIAS (AÑOS / MESES ANTERIORES) -->
+        <div class="glass-panel" style="border-left: 3px solid #06b6d4;">
+          <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:10px; margin-bottom:10px;">
+            <div>
+              <h2 style="font-size:18px; font-weight:800; color:var(--text-strong);">📊 Sumatorio Histórico y Compensaciones Previas</h2>
+              <p style="font-size:12.5px; color:var(--text-muted); margin-top:3px;">
+                Añade o edita los <strong>días localizados, jueves, fines de semana (Vie–Sáb–Dom) y compensaciones</strong> de meses o años anteriores al primer Excel cargado. El sumatorio total se usará automáticamente para equilibrar los futuros cuadrantes.
+              </p>
+            </div>
+            <div style="display:flex; flex-wrap:wrap; gap:6px;">
+              <button type="button" onclick="saveHistoricalBalances()" class="btn-save" style="padding:8px 14px; font-size:12px;">
+                💾 Guardar Histórico y Compensaciones
+              </button>
+            </div>
+          </div>
+
+          <div class="hist-table-wrap">
+            <table class="hist-balance-table">
+              <thead>
+                <tr>
+                  <th>Facultativo</th>
+                  <th title="Días localizados previos a los Excel cargados">Días Loc.<br>Previos</th>
+                  <th title="Jueves localizados previos">Jueves<br>Previos</th>
+                  <th title="Días Vie-Sáb-Dom previos (ej. 3 días por finde)">Vie-Sáb-Dom<br>Previos</th>
+                  <th title="Compensación manual (+/- días para ajustar equidad)">Compensación<br>(+/- días)</th>
+                  <th title="Días contabilizados actualmente en los calendarios de la app">En App<br>(Tot / Jue / VSD)</th>
+                  <th title="Suma total acumulada (Previos + App + Compensación)">Sumatorio<br>Total</th>
+                  <th title="Desviación respecto a la media del equipo activo">Balance vs<br>Media</th>
+                </tr>
+              </thead>
+              <tbody id="admin-hist-balance-tbody"></tbody>
+            </table>
+          </div>
+          <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:8px; margin-top:8px; font-size:11px; color:var(--text-muted);">
+            <span>💡 <strong>Cómo funciona:</strong> Si un médico hizo 1 finde menos el año pasado, ponle <code>-3</code> en <em>Vie-Sáb-Dom Previos</em> o en <em>Compensación</em> y el generador le dará prioridad para igualarlo.</span>
+            <span id="hist-avg-summary" class="mono" style="color:var(--accent-cyan); font-weight:700;"></span>
+          </div>
+        </div>
+
+        <!-- 0. GENERADOR AUTOMÁTICO DE CUADRANTES FUTUROS (IA DE PATRONES + EQUIDAD TRIMESTRAL) -->
+        <div class="glass-panel" style="border-left: 3px solid #10b981;">
+          <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:10px; margin-bottom:10px;">
+            <div>
+              <h2 style="font-size:18px; font-weight:800; color:var(--text-strong);">🧠 Generador Automático de Meses Futuros</h2>
+              <p style="font-size:12.5px; color:var(--text-muted); margin-top:3px;">
+                Calcula y distribuye automáticamente las 4 localizadas diarias aplicando los patrones detectados: <strong>afinidad con guardia física (1–9)</strong>, <strong>bloques de fin de semana completos (Vie–Sáb–Dom)</strong> y <strong>equidad exacta de días totales, fines de semana y jueves</strong>.
+              </p>
+            </div>
+            <span class="status-chip active">Algoritmo Patrón + Equidad</span>
+          </div>
+
+          <div style="background:var(--bg-sub); border:1px solid var(--border-subtle); border-radius:5px; padding:12px;">
+            <div class="gen-grid-controls">
+              <div>
+                <label for="gen-start-monday" class="field-label">Lunes inicial de generación</label>
+                <input id="gen-start-monday" type="date" style="background:var(--bg-input); border:1px solid var(--border-input); color:var(--text-strong); border-radius:5px; padding:7px 9px; font-size:12.5px; font-weight:600; width:100%;" />
+              </div>
+              <div>
+                <label for="gen-weeks-count" class="field-label">Duración a generar</label>
+                <select id="gen-weeks-count">
+                  <option value="4">4 semanas (~1 mes)</option>
+                  <option value="8">8 semanas (~2 meses)</option>
+                  <option value="12" selected>12 semanas (Trimestre completo · Equidad 100%)</option>
+                  <option value="13">13 semanas (Trimestre 91 días)</option>
+                </select>
+              </div>
+              <div>
+                <label for="gen-start-guard" class="field-label">Grupo Guardia del primer Lunes</label>
+                <select id="gen-start-guard">
+                  <option value="AUTO" selected>🔄 Continuar secuencia automática</option>
+                  <option value="1">Grupo Guardia #1</option>
+                  <option value="2">Grupo Guardia #2</option>
+                  <option value="3">Grupo Guardia #3</option>
+                  <option value="4">Grupo Guardia #4</option>
+                  <option value="5">Grupo Guardia #5</option>
+                  <option value="6">Grupo Guardia #6</option>
+                  <option value="7">Grupo Guardia #7</option>
+                  <option value="8">Grupo Guardia #8</option>
+                  <option value="9">Grupo Guardia #9</option>
+                </select>
+              </div>
+              <div>
+                <button type="button" onclick="runSchedulePreviewGenerator()" class="btn-save" style="width:100%; padding:9px 12px; font-size:12.5px;">
+                  ⚡ Calcular Propuesta
+                </button>
+              </div>
+            </div>
+
+            <div style="display:flex; flex-wrap:wrap; gap:14px; font-size:11.5px; color:var(--text-sub); margin-bottom:6px;">
+              <label class="radio-label">
+                <input type="checkbox" id="gen-opt-guard-affinity" checked style="accent-color:#10b981;" />
+                <span>Priorizar coincidencia con su <strong>Grupo de Guardia</strong> (en FDS y diario)</span>
+              </label>
+              <label class="radio-label">
+                <input type="checkbox" id="gen-opt-avoid-consec" checked style="accent-color:#10b981;" />
+                <span>Evitar repetir días consecutivos y respetar descanso</span>
+              </label>
+              <label class="radio-label">
+                <input type="checkbox" id="gen-opt-carry-balance" checked style="accent-color:#10b981;" />
+                <span>Compensar histórico previo, compensaciones y desviaciones acumuladas</span>
+              </label>
+            </div>
+
+            <!-- Contenedor de previsualización de equidad y aplicación -->
+            <div id="gen-preview-box" class="hidden" style="margin-top:12px; padding-top:12px; border-top:1px solid var(--border-subtle);"></div>
+          </div>
+        </div>
+
         <!-- 1. SUBIDA DINÁMICA DE MÚLTIPLES ARCHIVOS EXCEL -->
         <div class="glass-panel">
           <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:10px;">
@@ -5364,7 +5605,7 @@
     <div class="modal-box">
       <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;">
         <div>
-          <span class="pill-badge" style="margin-bottom:6px;">🫘 Trasplante Renal de Vivo</span>
+          <span class="pill-badge" style="margin-bottom:6px;"><svg class="kidneys-icon" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 6.2C8.3 4.2 5.4 3.8 3.8 5.8C2.2 7.8 2.2 12.2 3.8 14.4C5.3 16.4 8.2 16.1 9.5 14.1C10.1 13.1 9.1 11.9 9.1 10.2C9.1 8.5 10.1 7.2 9.5 6.2Z" fill="currentColor" fill-opacity="0.22"/><path d="M14.5 6.2C15.7 4.2 18.6 3.8 20.2 5.8C21.8 7.8 21.8 12.2 20.2 14.4C18.7 16.4 15.8 16.1 14.5 14.1C13.9 13.1 14.9 11.9 14.9 10.2C14.9 8.5 13.9 7.2 14.5 6.2Z" fill="currentColor" fill-opacity="0.22"/><path d="M9.1 10.8C10.4 11.5 10.8 14.2 10.8 19.5"/><path d="M14.9 10.8C13.6 11.5 13.2 14.2 13.2 19.5"/></svg> Trasplante Renal de Vivo</span>
           <h3 id="txvivo-modal-title" style="font-size:20px; font-weight:800; color:var(--text-strong);">Añadir Tx Renal vivo</h3>
           <p id="txvivo-modal-subtitle" style="font-size:12px; color:var(--text-muted);">Selecciona el día de la semana y escribe la anotación</p>
         </div>
@@ -5509,7 +5750,9 @@
       document.getElementById('admin-login-box').classList.toggle('hidden', authed);
       document.getElementById('admin-panel-content').classList.toggle('hidden', !authed);
       if (authed) {
+        initGeneratorDefaults();
         loadCloudConfigToForm();
+        renderHistoricalBalanceTable();
         renderAdminUsersList();
         renderSnapshotsList();
       }
@@ -5775,6 +6018,10 @@
         if (!d.id) d.id = `doc_${i + 1}_${Date.now()}`;
         if (typeof d.active !== 'boolean') d.active = true;
         if (typeof d.inactiveReason !== 'string') d.inactiveReason = '';
+        if (typeof d.priorTotal !== 'number' || isNaN(d.priorTotal)) d.priorTotal = 0;
+        if (typeof d.priorJue !== 'number' || isNaN(d.priorJue)) d.priorJue = 0;
+        if (typeof d.priorVsd !== 'number' || isNaN(d.priorVsd)) d.priorVsd = 0;
+        if (typeof d.priorComp !== 'number' || isNaN(d.priorComp)) d.priorComp = 0;
       });
 
       weeksData.forEach(w => {
@@ -6120,6 +6367,10 @@
         grupoGuardia: ggSel.value,
         active: true,
         inactiveReason: '',
+        priorTotal: 0,
+        priorJue: 0,
+        priorVsd: 0,
+        priorComp: 0,
         lj: 12,
         defLj: 0,
         vsd: 9,
@@ -7134,7 +7385,7 @@
           ${txVivoText ? `
             <div class="day-txvivo-badge-box" onclick="openTxVivoModal(${wIdx}, ${dIdx})" title="Pulsa para editar o eliminar Tx Renal vivo">
               <div class="day-txvivo-badge-header">
-                <span>🫘 Tx Renal vivo</span>
+                <span><svg class="kidneys-icon" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 6.2C8.3 4.2 5.4 3.8 3.8 5.8C2.2 7.8 2.2 12.2 3.8 14.4C5.3 16.4 8.2 16.1 9.5 14.1C10.1 13.1 9.1 11.9 9.1 10.2C9.1 8.5 10.1 7.2 9.5 6.2Z" fill="currentColor" fill-opacity="0.22"/><path d="M14.5 6.2C15.7 4.2 18.6 3.8 20.2 5.8C21.8 7.8 21.8 12.2 20.2 14.4C18.7 16.4 15.8 16.1 14.5 14.1C13.9 13.1 14.9 11.9 14.9 10.2C14.9 8.5 13.9 7.2 14.5 6.2Z" fill="currentColor" fill-opacity="0.22"/><path d="M9.1 10.8C10.4 11.5 10.8 14.2 10.8 19.5"/><path d="M14.9 10.8C13.6 11.5 13.2 14.2 13.2 19.5"/></svg> Tx Renal vivo</span>
                 <span>✎</span>
               </div>
               <div class="day-txvivo-badge-text">${escapeHtml(txVivoText)}</div>
@@ -7217,7 +7468,7 @@
             <div class="week-title-wrap">
               <span class="sem-tag mono">SEM ${wIdx + 1}</span>
               <h2 class="week-title">${week.weekLabel}</h2>
-              <button type="button" onclick="openTxVivoModal(${wIdx})" class="btn-add-txvivo-week" title="Añadir Trasplante Renal Vivo en esta semana">🫘 + Tx Renal vivo</button>
+              <button type="button" onclick="openTxVivoModal(${wIdx})" class="btn-add-txvivo-week" title="Añadir Trasplante Renal Vivo en esta semana"><svg class="kidneys-icon" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 6.2C8.3 4.2 5.4 3.8 3.8 5.8C2.2 7.8 2.2 12.2 3.8 14.4C5.3 16.4 8.2 16.1 9.5 14.1C10.1 13.1 9.1 11.9 9.1 10.2C9.1 8.5 10.1 7.2 9.5 6.2Z" fill="currentColor" fill-opacity="0.22"/><path d="M14.5 6.2C15.7 4.2 18.6 3.8 20.2 5.8C21.8 7.8 21.8 12.2 20.2 14.4C18.7 16.4 15.8 16.1 14.5 14.1C13.9 13.1 14.9 11.9 14.9 10.2C14.9 8.5 13.9 7.2 14.5 6.2Z" fill="currentColor" fill-opacity="0.22"/><path d="M9.1 10.8C10.4 11.5 10.8 14.2 10.8 19.5"/><path d="M14.9 10.8C13.6 11.5 13.2 14.2 13.2 19.5"/></svg> + Tx Renal vivo</button>
             </div>
             <span class="tap-hint">Toca localizadas o + en Guardia</span>
           </div>
@@ -7542,6 +7793,663 @@
           </div>
         </div>
       `).join('');
+    }
+
+
+
+    // === GESTIÓN DE SUMATORIO HISTÓRICO Y COMPENSACIONES PREVIAS ===
+    function getAppCalendarCountsMap() {
+      const counts = {};
+      doctorsList.forEach(d => {
+        counts[d.nombre] = { total: 0, jue: 0, vsd: 0 };
+      });
+      weeksData.forEach(w => {
+        w.days.forEach(day => {
+          const isVsd = ['Viernes', 'Sábado', 'Domingo'].includes(day.dayName);
+          const isJue = day.dayName === 'Jueves';
+          (day.slots || []).forEach(s => {
+            const clean = String(s || '').trim();
+            if (counts[clean]) {
+              counts[clean].total++;
+              if (isVsd) counts[clean].vsd++;
+              if (isJue) counts[clean].jue++;
+            }
+          });
+        });
+      });
+      return counts;
+    }
+
+    function renderHistoricalBalanceTable() {
+      const tbody = document.getElementById('admin-hist-balance-tbody');
+      const avgSummaryEl = document.getElementById('hist-avg-summary');
+      if (!tbody) return;
+
+      const appCounts = getAppCalendarCountsMap();
+      const activeDocs = getActiveDoctors();
+
+      // Compute average among active doctors for delta display
+      let sumActiveGrand = 0;
+      activeDocs.forEach(d => {
+        const ac = appCounts[d.nombre] || { total: 0, jue: 0, vsd: 0 };
+        const grand = (Number(d.priorTotal) || 0) + ac.total + (Number(d.priorComp) || 0);
+        sumActiveGrand += grand;
+      });
+      const avgGrand = activeDocs.length > 0 ? (sumActiveGrand / activeDocs.length) : 0;
+      if (avgSummaryEl) {
+        avgSummaryEl.textContent = `Media plantilla activa: ${avgGrand.toFixed(1)} días totales`;
+      }
+
+      tbody.innerHTML = doctorsList.map(doc => {
+        const ac = appCounts[doc.nombre] || { total: 0, jue: 0, vsd: 0 };
+        const pTot  = Number(doc.priorTotal) || 0;
+        const pJue  = Number(doc.priorJue) || 0;
+        const pVsd  = Number(doc.priorVsd) || 0;
+        const pComp = Number(doc.priorComp) || 0;
+
+        const sumTot = pTot + ac.total + pComp;
+        const sumJue = pJue + ac.jue;
+        const sumVsd = pVsd + ac.vsd;
+        const delta  = sumTot - avgGrand;
+
+        let deltaBadge = `<span class="delta-pill delta-zero">0.0</span>`;
+        if (delta > 0.45) {
+          deltaBadge = `<span class="delta-pill delta-pos">+${delta.toFixed(1)}</span>`;
+        } else if (delta < -0.45) {
+          deltaBadge = `<span class="delta-pill delta-neg">${delta.toFixed(1)}</span>`;
+        }
+
+        const isAct = doc.active !== false;
+
+        return `
+          <tr style="${isAct ? '' : 'opacity:0.62;'}">
+            <td>
+              <strong style="color:var(--text-strong);">${escapeHtml(doc.nombre)}</strong>
+              <div style="font-size:10px; color:var(--text-muted);">Grp ${escapeHtml(doc.grupoLaboral)} ${isAct ? '' : '· (Baja)'}</div>
+            </td>
+            <td>
+              <input type="number" step="1" class="hist-num-input" data-doc-id="${doc.id}" data-field="priorTotal" value="${pTot}" oninput="recalcHistoricalRowPreview('${doc.id}')" />
+            </td>
+            <td>
+              <input type="number" step="1" class="hist-num-input" data-doc-id="${doc.id}" data-field="priorJue" value="${pJue}" oninput="recalcHistoricalRowPreview('${doc.id}')" />
+            </td>
+            <td>
+              <input type="number" step="1" class="hist-num-input" data-doc-id="${doc.id}" data-field="priorVsd" value="${pVsd}" oninput="recalcHistoricalRowPreview('${doc.id}')" />
+            </td>
+            <td>
+              <input type="number" step="1" class="hist-num-input" data-doc-id="${doc.id}" data-field="priorComp" value="${pComp}" oninput="recalcHistoricalRowPreview('${doc.id}')" />
+            </td>
+            <td class="mono" style="font-size:11px; color:var(--text-sub);">
+              <strong>${ac.total}</strong> / ${ac.jue} / ${ac.vsd}
+            </td>
+            <td id="hist-sum-cell-${doc.id}" class="mono" style="font-size:11.5px;">
+              <strong style="color:var(--accent-emerald);">${sumTot} d.</strong>
+              <div style="font-size:10px; color:var(--text-muted);">${sumJue} jue · ${sumVsd} vsd</div>
+            </td>
+            <td id="hist-delta-cell-${doc.id}" class="mono">
+              ${isAct ? deltaBadge : '<span style="font-size:10px; color:var(--text-muted);">N/A</span>'}
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function recalcHistoricalRowPreview(docId) {
+      const appCounts = getAppCalendarCountsMap();
+      const tempVals = {};
+      doctorsList.forEach(d => {
+        tempVals[d.id] = {
+          priorTotal: Number(d.priorTotal) || 0,
+          priorJue: Number(d.priorJue) || 0,
+          priorVsd: Number(d.priorVsd) || 0,
+          priorComp: Number(d.priorComp) || 0
+        };
+      });
+
+      document.querySelectorAll('.hist-num-input').forEach(inp => {
+        const id = inp.getAttribute('data-doc-id');
+        const field = inp.getAttribute('data-field');
+        if (tempVals[id] && field) {
+          tempVals[id][field] = parseFloat(inp.value) || 0;
+        }
+      });
+
+      const activeDocs = getActiveDoctors();
+      let sumActiveGrand = 0;
+      activeDocs.forEach(d => {
+        const ac = appCounts[d.nombre] || { total: 0, jue: 0, vsd: 0 };
+        const tv = tempVals[d.id];
+        sumActiveGrand += tv.priorTotal + ac.total + tv.priorComp;
+      });
+      const avgGrand = activeDocs.length > 0 ? (sumActiveGrand / activeDocs.length) : 0;
+      const avgSummaryEl = document.getElementById('hist-avg-summary');
+      if (avgSummaryEl) {
+        avgSummaryEl.textContent = `Media plantilla activa: ${avgGrand.toFixed(1)} días totales`;
+      }
+
+      doctorsList.forEach(doc => {
+        const ac = appCounts[doc.nombre] || { total: 0, jue: 0, vsd: 0 };
+        const tv = tempVals[doc.id];
+        const sumTot = tv.priorTotal + ac.total + tv.priorComp;
+        const sumJue = tv.priorJue + ac.jue;
+        const sumVsd = tv.priorVsd + ac.vsd;
+        const delta  = sumTot - avgGrand;
+
+        const sumCell = document.getElementById(`hist-sum-cell-${doc.id}`);
+        if (sumCell) {
+          sumCell.innerHTML = `
+            <strong style="color:var(--accent-emerald);">${sumTot} d.</strong>
+            <div style="font-size:10px; color:var(--text-muted);">${sumJue} jue · ${sumVsd} vsd</div>
+          `;
+        }
+        const deltaCell = document.getElementById(`hist-delta-cell-${doc.id}`);
+        if (deltaCell && doc.active !== false) {
+          let deltaBadge = `<span class="delta-pill delta-zero">0.0</span>`;
+          if (delta > 0.45) deltaBadge = `<span class="delta-pill delta-pos">+${delta.toFixed(1)}</span>`;
+          else if (delta < -0.45) deltaBadge = `<span class="delta-pill delta-neg">${delta.toFixed(1)}</span>`;
+          deltaCell.innerHTML = deltaBadge;
+        }
+      });
+    }
+
+    async function saveHistoricalBalances() {
+      recordSnapshot('Antes de actualizar histórico y compensaciones previas', 'Administrador');
+
+      document.querySelectorAll('.hist-num-input').forEach(inp => {
+        const id = inp.getAttribute('data-doc-id');
+        const field = inp.getAttribute('data-field');
+        const doc = doctorsList.find(d => d.id === id);
+        if (doc && field) {
+          doc[field] = parseFloat(inp.value) || 0;
+        }
+      });
+
+      auditLogs.unshift({
+        id: Date.now(),
+        timestamp: new Date().toLocaleString('es-ES', { dateStyle: 'short', timeStyle: 'short' }),
+        weekLabel: 'Histórico Previo',
+        dayLabel: 'Compensaciones y acumulados',
+        guardGroup: '-',
+        slotNumber: '-',
+        oldDoctor: 'Acumulados anteriores',
+        newDoctor: 'Histórico previo y compensaciones actualizados',
+        changedBy: 'Administrador',
+        reason: 'Ajuste de días previos, jueves, VSD y compensaciones'
+      });
+
+      await saveState(true);
+      refreshAllViews();
+      alert('✅ Histórico previo y compensaciones guardados. El generador automático los tendrá en cuenta para equilibrar los siguientes meses.');
+    }
+
+    // =========================================================================
+    // ALGORITMO DE PLANIFICACIÓN Y EQUIDAD DE LOCALIZADAS (PATRÓN + BALANCE)
+    // =========================================================================
+    let lastGeneratedWeeksPreview = null;
+
+    function initGeneratorDefaults() {
+      const dateInp = document.getElementById('gen-start-monday');
+      if (!dateInp) return;
+      // Default to Monday after last week in weeksData (e.g. 2026-03-30)
+      if (!dateInp.value) {
+        dateInp.value = '2026-03-30';
+      }
+    }
+
+    function inferNextGuardGroupFromHistory() {
+      for (let w = weeksData.length - 1; w >= 0; w--) {
+        const days = weeksData[w].days || [];
+        for (let d = days.length - 1; d >= 0; d--) {
+          const g = parseInt(String(days[d].guardGroup || '').replace(/[^0-9]/g, ''), 10);
+          if (g >= 1 && g <= 9) {
+            const daysAfter = (days.length - 1) - d;
+            return ((g - 1 + daysAfter + 1) % 9) + 1;
+          }
+        }
+      }
+      return 1;
+    }
+
+    function computeHistoricalDeviations(activeDocs) {
+      const appCounts = getAppCalendarCountsMap();
+      const combined = {};
+      activeDocs.forEach(d => {
+        const ac = appCounts[d.nombre] || { total: 0, vsd: 0, jue: 0 };
+        combined[d.nombre] = {
+          total: ac.total + (Number(d.priorTotal) || 0) + (Number(d.priorComp) || 0),
+          vsd:   ac.vsd   + (Number(d.priorVsd) || 0),
+          jue:   ac.jue   + (Number(d.priorJue) || 0)
+        };
+      });
+
+      const n = Math.max(1, activeDocs.length);
+      const avgTotal = Object.values(combined).reduce((a, b) => a + b.total, 0) / n;
+      const avgVsd   = Object.values(combined).reduce((a, b) => a + b.vsd, 0) / n;
+      const avgJue   = Object.values(combined).reduce((a, b) => a + b.jue, 0) / n;
+
+      const dev = {};
+      activeDocs.forEach(d => {
+        dev[d.nombre] = {
+          totalDelta: combined[d.nombre].total - avgTotal,
+          vsdDelta:   combined[d.nombre].vsd - avgVsd,
+          jueDelta:   combined[d.nombre].jue - avgJue
+        };
+      });
+      return dev;
+    }
+
+    function generateBalancedSchedule({
+      startDateISO,
+      numWeeks,
+      startGuardGroup,
+      useGuardAffinity,
+      avoidConsecutive,
+      carryHistoricalBalance
+    }) {
+      const activeDocs = getActiveDoctors();
+      if (activeDocs.length < 4) {
+        throw new Error('Se necesitan al menos 4 médicos activos en la plantilla para cubrir las 4 localizadas diarias.');
+      }
+
+      const histDev = carryHistoricalBalance ? computeHistoricalDeviations(activeDocs) : {};
+      const dayNames = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+
+      // Parse start date (ensure Monday alignment)
+      const [yy, mm, dd] = startDateISO.split('-').map(Number);
+      const baseDate = new Date(yy, mm - 1, dd, 12, 0, 0);
+      const dow = baseDate.getDay(); // 0=Sun, 1=Mon...
+      const diffToMon = dow === 0 ? -6 : (1 - dow);
+      baseDate.setDate(baseDate.getDate() + diffToMon);
+
+      // Build skeleton weeks with cyclic guard groups 1..9
+      let currentGuard = startGuardGroup;
+      const generatedWeeks = [];
+
+      for (let w = 0; w < numWeeks; w++) {
+        const wDays = [];
+        for (let d = 0; d < 7; d++) {
+          const dt = new Date(baseDate);
+          dt.setDate(baseDate.getDate() + w * 7 + d);
+          const dayNum = dt.getDate();
+          const mIdx = dt.getMonth();
+          const yr = dt.getFullYear();
+          const ggStr = String(currentGuard);
+
+          wDays.push({
+            dayName: dayNames[d],
+            date: `${dayNum}-${MONTH_SHORT_ES[mIdx]}`,
+            monthKey: `${yr}-${String(mIdx + 1).padStart(2, '0')}`,
+            monthLabel: `${MONTH_NAMES_ES[mIdx]} ${yr}`,
+            sortValue: yr * 10000 + (mIdx + 1) * 100 + dayNum,
+            guardGroup: ggStr,
+            guardMembers: getDefaultGuardMembersForGroup(ggStr),
+            txRenalVivo: '',
+            slots: ['', '', '', '']
+          });
+
+          currentGuard = (currentGuard % 9) + 1;
+        }
+
+        const firstStr = wDays[0].date;
+        const lastStr  = wDays[6].date;
+        generatedWeeks.push({
+          weekLabel: `${firstStr} a ${lastStr}`,
+          year: baseDate.getFullYear(),
+          sortValue: wDays[0].sortValue,
+          days: wDays
+        });
+      }
+
+      // Initialize tracking counters for each active doctor
+      const tracker = {};
+      activeDocs.forEach(doc => {
+        const dHist = histDev[doc.nombre] || { totalDelta: 0, vsdDelta: 0, jueDelta: 0 };
+        tracker[doc.nombre] = {
+          doc,
+          total: 0,
+          lj: 0,
+          jue: 0,
+          vsd: 0,
+          findes: 0,
+          guardHits: 0,
+          wkGuardHits: 0,
+          effTotal: dHist.totalDelta,
+          effVsd: dHist.vsdDelta,
+          effJue: dHist.jueDelta,
+          lastDayIndex: -99,
+          lastWeekendIdx: -99
+        };
+      });
+
+      const totalSlotCapacity = numWeeks * 7 * 4;
+      const targetTotalPerDoc = totalSlotCapacity / activeDocs.length;
+      const totalVsdCapacity = numWeeks * 3 * 4;
+      const targetVsdPerDoc = totalVsdCapacity / activeDocs.length;
+      const totalJueCapacity = numWeeks * 4;
+      const targetJuePerDoc = totalJueCapacity / activeDocs.length;
+
+      // STEP 1: Assign Weekend Blocks (Fri-Sat-Sun) first so every weekend is a coherent 3-day team
+      // and prioritizes doctors whose guardGroup falls on Fri, Sat, or Sun.
+      for (let w = 0; w < numWeeks; w++) {
+        const wkDays = generatedWeeks[w].days.slice(4, 7); // Fri, Sat, Sun
+        const wkGuards = new Set(wkDays.map(d => String(d.guardGroup).trim()));
+        const chosenTeam = [];
+
+        for (let slot = 0; slot < 4; slot++) {
+          let bestDoc = null;
+          let bestScore = Infinity;
+
+          activeDocs.forEach(doc => {
+            if (chosenTeam.includes(doc.nombre)) return;
+            const st = tracker[doc.nombre];
+            const docGG = String(doc.grupoGuardia).trim();
+            const hasGuardInWeekend = wkGuards.has(docGG);
+
+            // Base equity score: lower effective VSD & total means higher priority
+            let score = (st.effVsd - targetVsdPerDoc) * 14.0 + (st.effTotal - targetTotalPerDoc) * 6.0;
+
+            // Avoid back-to-back weekends
+            if (st.lastWeekendIdx === w - 1) score += 28.0;
+            if (st.lastWeekendIdx === w - 2) score += 6.0;
+
+            // Pattern 1: Strong bonus if doctor has physical guard on Fri/Sat/Sun
+            if (useGuardAffinity && hasGuardInWeekend) {
+              score -= 13.5;
+            }
+
+            // Slight diversity bonus for mixing Grupo Laboral (A, B, C, D) in weekends
+            const sameGLCount = chosenTeam.filter(n => tracker[n].doc.grupoLaboral === doc.grupoLaboral).length;
+            score += sameGLCount * 2.2;
+
+            // Deterministic tie-breaker
+            score += ((w * 7 + slot * 3 + doc.nombre.length) % 5) * 0.05;
+
+            if (score < bestScore) {
+              bestScore = score;
+              bestDoc = doc;
+            }
+          });
+
+          chosenTeam.push(bestDoc.nombre);
+          const st = tracker[bestDoc.nombre];
+          st.total += 3;
+          st.vsd += 3;
+          st.findes += 1;
+          st.effTotal += 3;
+          st.effVsd += 3;
+          st.lastWeekendIdx = w;
+          st.lastDayIndex = w * 7 + 6; // Sunday
+          if (wkGuards.has(String(bestDoc.grupoGuardia).trim())) {
+            st.wkGuardHits += 1;
+            st.guardHits += 1;
+          }
+        }
+
+        // Order slots cleanly by doctor hierarchy/template order
+        chosenTeam.sort((a, b) => activeDocs.findIndex(x => x.nombre === a) - activeDocs.findIndex(x => x.nombre === b));
+        wkDays.forEach(d => {
+          d.slots = [...chosenTeam];
+        });
+      }
+
+      // STEP 2: Assign Weekdays (Mon, Tue, Wed, Thu) balancing:
+      // - Same-day physical guard match (Pattern 2)
+      // - Equal Thursday distribution (Pattern 3)
+      // - Equal total period days (Pattern 4)
+      // - Avoiding consecutive days (e.g., Sunday weekend -> Monday, or Wed -> Thu)
+      for (let w = 0; w < numWeeks; w++) {
+        for (let dIdx = 0; dIdx < 4; dIdx++) {
+          const globalDayIdx = w * 7 + dIdx;
+          const dayObj = generatedWeeks[w].days[dIdx];
+          const dayGG = String(dayObj.guardGroup).trim();
+          const isThursday = (dIdx === 3);
+          const nextDayIsFri = (dIdx === 3);
+          const friSlots = generatedWeeks[w].days[4].slots;
+
+          const dayTeam = [];
+          for (let slot = 0; slot < 4; slot++) {
+            let bestDoc = null;
+            let bestScore = Infinity;
+
+            activeDocs.forEach(doc => {
+              if (dayTeam.includes(doc.nombre)) return;
+              const st = tracker[doc.nombre];
+              const docGG = String(doc.grupoGuardia).trim();
+              const isOwnGuardToday = (docGG === dayGG);
+
+              let score = (st.effTotal - targetTotalPerDoc) * 14.0;
+
+              if (isThursday) {
+                score += (st.effJue - targetJuePerDoc) * 18.0;
+              }
+
+              // Pattern 2: Bonus if doctor has physical guard today
+              if (useGuardAffinity && isOwnGuardToday) {
+                score -= 11.5;
+              }
+
+              // Avoid consecutive days (yesterday or tomorrow Friday weekend)
+              if (avoidConsecutive) {
+                if (st.lastDayIndex === globalDayIdx - 1) score += 22.0;
+                if (st.lastDayIndex === globalDayIdx - 2) score += 4.5;
+                if (nextDayIsFri && friSlots.includes(doc.nombre)) score += 20.0;
+              }
+
+              // Cohesive Grupo Laboral affinity (in the real Excel, 2-4 doctors from the same Grupo Laboral often share Mon-Thu)
+              if (dayTeam.length > 0) {
+                const sameGL = dayTeam.filter(n => tracker[n].doc.grupoLaboral === doc.grupoLaboral).length;
+                if (sameGL >= 1 && sameGL <= 2) score -= 2.4;
+              }
+
+              score += ((globalDayIdx * 5 + slot * 2 + doc.nombre.charCodeAt(0)) % 7) * 0.04;
+
+              if (score < bestScore) {
+                bestScore = score;
+                bestDoc = doc;
+              }
+            });
+
+            dayTeam.push(bestDoc.nombre);
+            const st = tracker[bestDoc.nombre];
+            st.total += 1;
+            st.lj += 1;
+            st.effTotal += 1;
+            if (isThursday) {
+              st.jue += 1;
+              st.effJue += 1;
+            }
+            if (String(bestDoc.grupoGuardia).trim() === dayGG) {
+              st.guardHits += 1;
+            }
+            st.lastDayIndex = globalDayIdx;
+          }
+
+          dayTeam.sort((a, b) => activeDocs.findIndex(x => x.nombre === a) - activeDocs.findIndex(x => x.nombre === b));
+          dayObj.slots = dayTeam;
+        }
+      }
+
+      // STEP 3: Local Swap Polish Pass to tighten Total, VSD, and Thursday equity to +/- 1 day max!
+      for (let pass = 0; pass < 40; pass++) {
+        let improved = false;
+        const names = activeDocs.map(d => d.nombre);
+        names.sort((a, b) => tracker[b].effTotal - tracker[a].effTotal);
+        const maxDoc = names[0];
+        const minDoc = names[names.length - 1];
+
+        if (tracker[maxDoc].effTotal - tracker[minDoc].effTotal <= 1.05) break;
+
+        for (let w = 0; w < numWeeks && !improved; w++) {
+          for (let dIdx = 0; dIdx < 4 && !improved; dIdx++) {
+            const dayObj = generatedWeeks[w].days[dIdx];
+            const idxMax = dayObj.slots.indexOf(maxDoc);
+            if (idxMax !== -1 && !dayObj.slots.includes(minDoc)) {
+              const globalDayIdx = w * 7 + dIdx;
+              const prevSlots = globalDayIdx > 0
+                ? generatedWeeks[Math.floor((globalDayIdx - 1) / 7)].days[(globalDayIdx - 1) % 7].slots
+                : [];
+              const nextSlots = (dIdx === 3)
+                ? generatedWeeks[w].days[4].slots
+                : generatedWeeks[w].days[dIdx + 1].slots;
+
+              if (!avoidConsecutive || (!prevSlots.includes(minDoc) && !nextSlots.includes(minDoc))) {
+                dayObj.slots[idxMax] = minDoc;
+                tracker[maxDoc].total--; tracker[maxDoc].lj--; tracker[maxDoc].effTotal--;
+                tracker[minDoc].total++; tracker[minDoc].lj++; tracker[minDoc].effTotal++;
+                if (dIdx === 3) {
+                  tracker[maxDoc].jue--; tracker[maxDoc].effJue--;
+                  tracker[minDoc].jue++; tracker[minDoc].effJue++;
+                }
+                improved = true;
+              }
+            }
+          }
+        }
+        if (!improved) break;
+      }
+
+      return { generatedWeeks, tracker };
+    }
+
+    function runSchedulePreviewGenerator() {
+      const startDateISO = document.getElementById('gen-start-monday').value;
+      const numWeeks = parseInt(document.getElementById('gen-weeks-count').value, 10) || 12;
+      const guardChoice = document.getElementById('gen-start-guard').value;
+      const useGuardAffinity = document.getElementById('gen-opt-guard-affinity').checked;
+      const avoidConsecutive = document.getElementById('gen-opt-avoid-consec').checked;
+      const carryHistoricalBalance = document.getElementById('gen-opt-carry-balance').checked;
+
+      if (!startDateISO) {
+        alert('Selecciona la fecha del lunes inicial.');
+        return;
+      }
+
+      const startGuardGroup = guardChoice === 'AUTO'
+        ? inferNextGuardGroupFromHistory()
+        : parseInt(guardChoice, 10);
+
+      try {
+        const { generatedWeeks, tracker } = generateBalancedSchedule({
+          startDateISO,
+          numWeeks,
+          startGuardGroup,
+          useGuardAffinity,
+          avoidConsecutive,
+          carryHistoricalBalance
+        });
+
+        lastGeneratedWeeksPreview = generatedWeeks;
+
+        const appCountsNow = getAppCalendarCountsMap();
+        const rowsHtml = Object.values(tracker).map(st => {
+          const ac = appCountsNow[st.doc.nombre] || { total: 0 };
+          const globalAfter = ac.total + (Number(st.doc.priorTotal) || 0) + (Number(st.doc.priorComp) || 0) + st.total;
+          return `
+          <tr>
+            <td><strong>${escapeHtml(st.doc.nombre)}</strong> <span style="font-size:10px; color:var(--text-muted);">(Grp ${st.doc.grupoLaboral})</span></td>
+            <td class="mono">${st.doc.grupoGuardia === 'Sin grupo' || st.doc.grupoGuardia === 'Sin guardias' ? '—' : '#' + st.doc.grupoGuardia}</td>
+            <td class="mono" style="font-weight:800; color:var(--accent-emerald);">+${st.total} d.</td>
+            <td class="mono">${st.lj} d.</td>
+            <td class="mono">${st.jue} jue.</td>
+            <td class="mono" style="color:var(--accent-indigo); font-weight:700;">${st.vsd} d. (${st.findes} FDS)</td>
+            <td class="mono" style="font-weight:800; color:var(--accent-cyan);">${globalAfter} d.</td>
+            <td>${st.guardHits > 0 ? `<span class="gen-tag-guard">✓ ${st.guardHits} coinc. (${st.wkGuardHits} FDS)</span>` : '<span style="font-size:10.5px; color:var(--text-muted);">Sin guardia fija</span>'}</td>
+          </tr>
+        `;
+        }).join('');
+
+        const firstLabel = generatedWeeks[0].weekLabel;
+        const lastLabel  = generatedWeeks[generatedWeeks.length - 1].weekLabel;
+
+        const previewBox = document.getElementById('gen-preview-box');
+        previewBox.classList.remove('hidden');
+        previewBox.innerHTML = `
+          <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:8px; margin-bottom:8px;">
+            <div>
+              <strong style="font-size:13.5px; color:var(--accent-emerald);">✅ Propuesta generada: ${numWeeks} semanas (${firstLabel} ➔ ${lastLabel})</strong>
+              <div style="font-size:11.5px; color:var(--text-muted);">Secuencia de guardia iniciada en <strong>Grupo #${startGuardGroup}</strong> · Revisa el reparto equitativo antes de añadirlo al calendario:</div>
+            </div>
+            <button type="button" onclick="applyGeneratedWeeksToCalendar()" class="btn-primary-sm" style="padding:9px 14px;">
+              📅 Añadir estas ${numWeeks} semanas al Calendario
+            </button>
+          </div>
+          <div style="overflow-x:auto;">
+            <table class="gen-summary-table">
+              <thead>
+                <tr>
+                  <th>Facultativo</th>
+                  <th>G. Guardia</th>
+                  <th>Nuevos Días</th>
+                  <th>Lun–Jue</th>
+                  <th>Jueves</th>
+                  <th>Vie–Sáb–Dom</th>
+                  <th>Acum. Global</th>
+                  <th>Patrón Guardia</th>
+                </tr>
+              </thead>
+              <tbody>${rowsHtml}</tbody>
+            </table>
+          </div>
+        `;
+      } catch (err) {
+        alert(err.message);
+      }
+    }
+
+    async function applyGeneratedWeeksToCalendar() {
+      if (!lastGeneratedWeeksPreview || lastGeneratedWeeksPreview.length === 0) return;
+
+      recordSnapshot(
+        `Antes de añadir ${lastGeneratedWeeksPreview.length} semanas autogeneradas`,
+        'Generador Automático'
+      );
+
+      let addedCount = 0;
+      let updatedCount = 0;
+
+      lastGeneratedWeeksPreview.forEach(newW => {
+        const newStartKey = `${newW.days[0]?.monthKey}|${newW.days[0]?.date.split(' ')[0]}`;
+        const existingIdx = weeksData.findIndex(ew =>
+          `${ew.days[0]?.monthKey}|${ew.days[0]?.date.split(' ')[0]}` === newStartKey
+        );
+        if (existingIdx !== -1) {
+          weeksData[existingIdx] = JSON.parse(JSON.stringify(newW));
+          updatedCount++;
+        } else {
+          weeksData.push(JSON.parse(JSON.stringify(newW)));
+          addedCount++;
+        }
+      });
+
+      weeksData.sort((a, b) => {
+        const sa = a.sortValue || parseSpanishDateMeta(a.days[0]?.date, a.year || 2026).sortValue;
+        const sb = b.sortValue || parseSpanishDateMeta(b.days[0]?.date, b.year || 2026).sortValue;
+        return sa - sb;
+      });
+
+      const firstW = lastGeneratedWeeksPreview[0].weekLabel;
+      const lastW  = lastGeneratedWeeksPreview[lastGeneratedWeeksPreview.length - 1].weekLabel;
+
+      auditLogs.unshift({
+        id: Date.now(),
+        timestamp: new Date().toLocaleString('es-ES', { dateStyle: 'short', timeStyle: 'short' }),
+        weekLabel: 'Generador IA',
+        dayLabel: `${firstW} ➔ ${lastW}`,
+        guardGroup: '1-9',
+        slotNumber: '-',
+        oldDoctor: `${updatedCount} sem. actualizadas`,
+        newDoctor: `+${addedCount} sem. generadas automáticamente`,
+        changedBy: 'Algoritmo Equidad',
+        reason: 'Distribución automática por patrones de guardia y equidad'
+      });
+
+      lastGeneratedWeeksPreview = null;
+      document.getElementById('gen-preview-box').classList.add('hidden');
+      selectedMonthFilter = 'ALL';
+      selectedWeekFilter = 'ALL';
+      await saveState(true);
+      refreshAllViews();
+      switchTab('calendario');
     }
 
     // === LECTOR DINÁMICO MULTI-EXCEL Y MULTI-HOJA (SIN ERRORES DE CELDAS) ===
@@ -7932,6 +8840,7 @@
       renderTeam();
       renderAuditLogs();
       if (isAdminAuthenticated()) {
+        renderHistoricalBalanceTable();
         renderAdminUsersList();
         renderSnapshotsList();
       }
